@@ -1,89 +1,220 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry output="bin/main" kind="src" path="src/main/java">
+	<classpathentry output="bin/java" kind="src" path="src/main/java">
 		<attributes>
 			<attribute name="gradle_scope" value="main"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry output="bin/test" kind="src" path="src/test/java">
+	<classpathentry output="bin/resources" kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/java" kind="src" path="src/test/java">
 		<attributes>
 			<attribute name="gradle_scope" value="test"/>
 			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/resources" kind="src" path="src/test/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/java" kind="src" path="src/file/java">
+		<attributes>
+			<attribute name="gradle_scope" value="file"/>
+			<attribute name="gradle_used_by_scope" value="test,file"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/resources" kind="src" path="src/file/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="file"/>
+			<attribute name="gradle_used_by_scope" value="test,file"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin/default"/>
+	<classpathentry output="bin/java" kind="src" path="src/main/java">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/resources" kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/java" kind="src" path="src/test/java">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/resources" kind="src" path="src/test/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/java" kind="src" path="src/file/java">
+		<attributes>
+			<attribute name="gradle_scope" value="file"/>
+			<attribute name="gradle_used_by_scope" value="test,file"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/resources" kind="src" path="src/file/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="file"/>
+			<attribute name="gradle_used_by_scope" value="test,file"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-10/"/>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.layered/0.3.0/888f64f0f0b1632dec6ceaea46575851ce7f33ae/org.eclipse.elk.alg.layered-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.layered/0.3.0/5bef7a927da8b901586e2f4c52729e62684a7fe3/org.eclipse.elk.alg.layered-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.layered/0.3.0/b3833afb1cac24290814b02a59d3d5eaadc0646b/org.eclipse.elk.alg.layered-0.3.0-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.common.compaction/0.3.0/7f28c84f2aa742a80aab45630e8f6ff2fa1068fd/org.eclipse.elk.alg.common.compaction-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.common.compaction/0.3.0/edc1b6f0ed588000d986254831a3378aba97ff94/org.eclipse.elk.alg.common.compaction-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.common.compaction/0.3.0/2e25b6a941ceb5d93f28fec757cc7a0a5cfb05ae/org.eclipse.elk.alg.common.compaction-0.3.0-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.mrtree/0.3.0/34cb78dcd28c9010632aef664cacf54ecb3b89c7/org.eclipse.elk.alg.mrtree-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.mrtree/0.3.0/fe5743b6536422fc0e93ab5a6e62d29208fc6f4c/org.eclipse.elk.alg.mrtree-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.mrtree/0.3.0/182ea558feeadd02167fdfe5eab5b8fa81847847/org.eclipse.elk.alg.mrtree-0.3.0-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.force/0.3.0/da766dea2701fa3ee5137f49b2f6fffce732606f/org.eclipse.elk.alg.force-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.force/0.3.0/b63e68fe25ec825367747ea5bff8b7ad603a5dad/org.eclipse.elk.alg.force-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.alg.force/0.3.0/ae915156705c3f28cae6d11ec2da0b30770b31b3/org.eclipse.elk.alg.force-0.3.0-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph.json/0.3.0/57fefb3dbe3e446ed663eeaf8257fa278ad9b8c7/org.eclipse.elk.graph.json-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph.json/0.3.0/7989a8f83b10a663df5f2c35983ac0ea35262604/org.eclipse.elk.graph.json-0.3.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph.json/0.3.0/5cece8325e6f8cd5ab8cb74f406a99785808e1a7/org.eclipse.elk.graph.json-0.3.0-javadoc.jar!/"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.core/0.3.0/ede39786b6ee0bb6282f7cf07b65c0f7c16388ab/org.eclipse.elk.core-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.core/0.3.0/25c79cc1bdc7a827e029f817a13f1b4c10aac899/org.eclipse.elk.core-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.core/0.3.0/aeb4344acc3490fa3d7499476d5ae008922ab43f/org.eclipse.elk.core-0.3.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph/0.3.0/9c466feaf4776e81dad1c50b2b4b1082261c34c9/org.eclipse.elk.graph-0.3.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph/0.3.0/7e058421403cd3e83d4565289a6dceceb35732f2/org.eclipse.elk.graph-0.3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.elk/org.eclipse.elk.graph/0.3.0/dc17d87360154620ada3e7ba9a292ffdce28207c/org.eclipse.elk.graph-0.3.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib/2.12.0/965da680eb0d082c095de69bee79e1a430045b5/org.eclipse.xtend.lib-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib/2.12.0/22fff9ecd43c87963ec4b0901d8d5d81d78c9101/org.eclipse.xtend.lib-2.12.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib/2.12.0/2769b160f3c6f35d1145e1c0d8b12a0025f3cf93/org.eclipse.xtend.lib-2.12.0-javadoc.jar!/"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.12.0/ec8d2cf29c4d7048bf35b764ec01ae41adf34eab/org.eclipse.xtend.lib.macro-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.12.0/c8a1f67e79418e4c8e8604873e821ee27ae40135/org.eclipse.xtend.lib.macro-2.12.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.12.0/26a7e4e3a3be36180ed7d184191fd1217a86cce/org.eclipse.xtend.lib.macro-2.12.0-javadoc.jar!/"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.12.0/6c8735719a76295da84dc452c884f6c86b82e44b/org.eclipse.xtext.xbase.lib-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.12.0/87afb3d51e27ed0a8882042f24c6f22b9f5e5e8f/org.eclipse.xtext.xbase.lib-2.12.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.12.0/6b14480816113e67238e481ee7db8e7adedd454b/org.eclipse.xtext.xbase.lib-2.12.0-javadoc.jar!/"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/ad97fe8faaf01a3d3faacecd58e8fa6e78a973ca/guava-18.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/cce0823396aa693798f8882e64213b1772032b09/guava-18.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/418be347c254422b51adee3cacb10e3f69e279ec/guava-18.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0/daddaf80c0d94360a70b603d4a44d1299683229c/org.eclipse.emf.ecore.xmi-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0/ad136ea23fcdaebec17ec6c730dfdf74b2077c37/org.eclipse.emf.ecore.xmi-2.12.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0/d51ecb975790a8ddffe6ae004cda9fe4c213689b/org.eclipse.emf.ecore.xmi-2.12.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/a6dc5db8a12928e583bd3f23e72d3ab611ecd58f/gson-2.2.4-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/a60a5e993c98c864010053cb901b7eab25306568/gson-2.2.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/edf793f307583c05c23d2bff956e1a10ead8702c/gson-2.2.4-javadoc.jar!/"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.common/2.12.0/af459a19ba693bf5adc846a38636e60360e84963/org.eclipse.emf.common-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.common/2.12.0/ce79e5cc3c2de3e8d96a6df4dad3bf5c9fa6b7d7/org.eclipse.emf.common-2.12.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.common/2.12.0/d51ecb975790a8ddffe6ae004cda9fe4c213689b/org.eclipse.emf.common-2.12.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore/2.12.0/aa1cd16cf2bf412b6d55ae94e06303ae098d0d63/org.eclipse.emf.ecore-2.12.0-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore/2.12.0/644751074e8b448526815f9bdeda26770df2e213/org.eclipse.emf.ecore-2.12.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.eclipse.emf/org.eclipse.emf.ecore/2.12.0/d51ecb975790a8ddffe6ae004cda9fe4c213689b/org.eclipse.emf.ecore-2.12.0-javadoc.jar!/"/>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
+			<attribute name="gradle_used_by_scope" value="file,main,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/2973d150c0dc1fefe998f834810d68f278ea58ec/junit-4.12.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/941a8be4506c65f0a9001c08812fb7da1e505e21/junit-4.12-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Bennet/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/ad09811315f1d4f5756986575b0ea16b99cd686f/hamcrest-core-1.3-javadoc.jar!/"/>
 			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="E:/Users/Bennet/git/AGD-Project/build/classes/java/file">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="file,test"/>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="E:/Users/Bennet/git/AGD-Project/build/resources/file">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="file,test"/>
+			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 </classpath>

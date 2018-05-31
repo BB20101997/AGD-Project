@@ -25,7 +25,6 @@ hs_err_pid*
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
-*.log
 *.lot
 *.fls
 *.out
@@ -263,4 +262,6 @@ TSWLatexianTemp*
 *.sta
 
 # generated if using elsarticle.cls
-*.spl
+/.gradle/
+/build/
+/bin/

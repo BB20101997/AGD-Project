@@ -1,0 +1,55 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage[english]{babel}
+%\usepackage[ngerman]{babel}
+\usepackage{svg}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage[a4paper]{geometry}
+\usepackage[section]{placeins}
+%\usepackage{showframe}
+
+\usepackage{hyperref}
+
+\author{Bennet Bleßmann, Sven Korfmann}
+\title{LayerBased Algorithm Specification/Documantation}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+%master file for generating the Specs
+
+%order of chapters not yet final
+% where to put which file and what to do and not to do
+\include{parts/Guidlines}
+% why are we doing what we are doing
+\include{parts/Reasoning}
+% How we use the the Graph and how we perform cycle breaking
+\include{parts/Model}
+% How we represent the the Graph and animate the steps
+\include{parts/View}
+% How we influence the representation
+\include{parts/Controller}
+
+\include{parts/Classes}
+% which options do we have and what do they do
+\include{parts/Options}
+% This needs to be done
+\include{parts/MVP} % Minimum Viable Product
+% If we have time we can do this
+\include{parts/NTH} % Nice To Have
+% We won't do this unless we have copiouse amounts of spare time (e.g. Ports)
+\include{parts/OOS} % Out of Scope
+
+\end{document}

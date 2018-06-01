@@ -270,3 +270,5 @@ TSWLatexianTemp*
 *.iml
 *.ipr
 /src/
+*.project
+*.classpath

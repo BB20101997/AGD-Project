@@ -267,3 +267,5 @@ TSWLatexianTemp*
 /bin/
 /.idea/
 /out/
+*.iml
+*.ipr

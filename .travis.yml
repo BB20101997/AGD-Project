@@ -1,0 +1,16 @@
+sudo: required
+dist: trusty
+before_install:
+- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-full
+script:
+- ./scripts/build.sh
+
+deploy:
+  provider: releases
+  api_key:
+    secure: JpE7jR5gSSzDDsoLdVju/bwjZJpEUCrKmv61s/PU4Bpolvvr7SgpvEoo+m73sbXT7egMrh0ycUpDimOl6KcOi16oLQuteDYndpnUxTpA1iAJZsYPWqsvDhOBZUoEoX1AIZXaduiOUv9Iw/hfcQmUkMTyfT0SQtnB+lckhK2SswecluRArUKLecUupEkabTjrpF6Mn72vLMEPl/05nm5I+kzkPvXfINMZl9xBP1HhM1jxwHG8oogsUPiwVbN+K7mo/iBZryU4A97LIQ8BTCacqleh8CxXYNi9EM2EnUQtEvg2g1Rn2ENkq/siZ7y+UPErM8bwvSN1GZ3zccncdJZUOCTbCqAFfWKOrKKj/0CKZ9Hk9t2Y2E1Dtc81WC7KHBp7CcHWU+WSDvribyFmNqOwhUZ8zfTpOHalPIic61ducQZNcwHeMmhYt/jwW2aZcLOgkHQh14gv0OvvYuF4PBC2CDaUO5cJa/K5HWloYj2UCfy8rslBAfqXe8M34YVtd61+snmLL+SXAxqsS2JFcebEu1mmLRApjrO9agSr22YCtDsk3cPlGuraoR1lve5Is5C4Fb9uPMMaDQYlUr7MRK6T0CWYj0mBMxWCGRHOGFBiotM/uhYN8oblJWQr2GqDz8ug3Fe/osEBYO5LwSNgAyYR+o1jFdcmad5EOKmoqhJMheE=
+  file_glob: true
+  file: "Latex/*.pdf"
+  skip_cleanup: true
+  on:
+    tags: true

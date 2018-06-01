@@ -1,0 +1,39 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage[english]{babel}
+%\usepackage[ngerman]{babel}
+\usepackage{svg}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage[a4paper]{geometry}
+\usepackage[section]{placeins}
+%\usepackage{showframe}
+
+\usepackage{hyperref}
+
+\author{Bennet Bleßmann, Sven Korfmann}
+\title{AGD-Project Setup Guide}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+%master file for generating the Setup Guide
+
+\include{setup-parts/Clone}
+\include{setup-parts/JDK10}
+\include{setup-parts/Configure-Eclipse}
+\include{setup-parts/Import-Eclipse}
+\include{setup-parts/Import-IDEA}
+
+\end{document}

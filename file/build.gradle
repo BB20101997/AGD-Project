@@ -1,0 +1,10 @@
+group 'de.webtwob.adg.project'
+
+dependencies {
+
+    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.graph.json
+    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph.json', version: '0.3.0'
+
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
+
+}

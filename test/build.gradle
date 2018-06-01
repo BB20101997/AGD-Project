@@ -1,0 +1,23 @@
+group 'de.webtwob.agd.project'
+
+ //workaround for gradle issue GRADLE-1682
+tasks.withType(Test) {
+    scanForTestClasses = false
+    //manualy include test class files
+    include "**/*Test.class" //All Files ending in Test.class
+}
+
+dependencies {
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+
+    testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph.json', version: '0.3.0'
+    
+    testImplementation  group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
+
+    testImplementation project(":file")
+
+    testImplementation project(":main")
+
+
+}

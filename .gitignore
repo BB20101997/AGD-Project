@@ -265,3 +265,11 @@ TSWLatexianTemp*
 /.gradle/
 /build/
 /bin/
+/.idea/
+/out/
+*.iml
+*.ipr
+/src/
+*.project
+*.classpath
+/.settings/

@@ -1,0 +1,6 @@
+/build/
+/.settings/
+*.iml
+/bin/
+*.project
+*.classpath

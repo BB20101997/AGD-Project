@@ -272,3 +272,4 @@ TSWLatexianTemp*
 /src/
 *.project
 *.classpath
+/.settings/

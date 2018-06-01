@@ -20,7 +20,8 @@ public class GraphImport {
     /**
      * Uses ElkGraphJson to import an ElkGraph from a Json file
      * */
-    public static Optional<ElkNode> importGraphFromFile(File file) {
+    @SuppressWarnings("exports") //automatic modules should not be exported
+	public static Optional<ElkNode> importGraphFromFile(File file) {
         if (file.exists() && file.isFile() && file.canRead()) {
             try {
                 String content = Files.readAllLines(file.toPath().toAbsolutePath())

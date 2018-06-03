@@ -3,13 +3,12 @@ dist: trusty
 before_install:
 - sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-full
 script:
-- ./scripts/build.sh
-
+- "./scripts/build.sh"
 deploy:
   provider: releases
   api_key:
-    secure: JpE7jR5gSSzDDsoLdVju/bwjZJpEUCrKmv61s/PU4Bpolvvr7SgpvEoo+m73sbXT7egMrh0ycUpDimOl6KcOi16oLQuteDYndpnUxTpA1iAJZsYPWqsvDhOBZUoEoX1AIZXaduiOUv9Iw/hfcQmUkMTyfT0SQtnB+lckhK2SswecluRArUKLecUupEkabTjrpF6Mn72vLMEPl/05nm5I+kzkPvXfINMZl9xBP1HhM1jxwHG8oogsUPiwVbN+K7mo/iBZryU4A97LIQ8BTCacqleh8CxXYNi9EM2EnUQtEvg2g1Rn2ENkq/siZ7y+UPErM8bwvSN1GZ3zccncdJZUOCTbCqAFfWKOrKKj/0CKZ9Hk9t2Y2E1Dtc81WC7KHBp7CcHWU+WSDvribyFmNqOwhUZ8zfTpOHalPIic61ducQZNcwHeMmhYt/jwW2aZcLOgkHQh14gv0OvvYuF4PBC2CDaUO5cJa/K5HWloYj2UCfy8rslBAfqXe8M34YVtd61+snmLL+SXAxqsS2JFcebEu1mmLRApjrO9agSr22YCtDsk3cPlGuraoR1lve5Is5C4Fb9uPMMaDQYlUr7MRK6T0CWYj0mBMxWCGRHOGFBiotM/uhYN8oblJWQr2GqDz8ug3Fe/osEBYO5LwSNgAyYR+o1jFdcmad5EOKmoqhJMheE=
-  file_glob: true
+    secure: c8kHbjS+GL00/mgwgiiFMuB4/Y7asCLyoAidMNB/vBlqG/MzLGqQauJUcAPeK8tapAfcwsTh9spq2wYCF60XmSSxf22HxBBeO0kM48ugelfwo9/1Fb18Ngm2yRmG/CUgygdoY3hihI84UwHkQkECghCVWmw3hq0+gX0HwUVjikfMqbVB2uJhQQVlj3d+SJ1OcvEguWI1Vfwz5+tpBtwXzLmSToon40E2sVz7iq0Msvon/mwchoSYoQqmDdVidAlheDfS5Y93kfWQLUx541p83vT1TbPwr8cLW5u6DGnYIfwLD7zZO5rR5zGP1iPI68he8cv4HS/X8Lje6mmm2N8aNj+iDq8ZOoFGJH8cXTaC8lik7mJSFj4Kr0l1rBSR0YgFgwzDU6v8T3JTLaY5apV4PaOVi2baKsLim7QViNfC/y6L7LhgIFvH2nt5E2SMti2/B2EIeRWtsCRJFxgBEj6Hr1YgmtexjtxfNrP60xiqUjHS74Aehnh7YWSkqC4SbtvrRQ4Rw/asGN9IdojWtnrIKWvlleOFRYGnXq6dNgELW7JWP0srPsmwTl//w5A5XAyhEIizLEgefbD1CjbE5T6GdiWK5EYrrm9pg1zj9qwAKLoVofAQq+j4/q4/9VBawDwIHSn6IrLVm95sa8yEdxc2fkI9tfxyIHWriKeaDaqy7Po=
+  file_glob: true  
   file: "Latex/*.pdf"
   skip_cleanup: true
   on:

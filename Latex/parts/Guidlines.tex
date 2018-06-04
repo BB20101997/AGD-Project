@@ -1,14 +1,36 @@
 \section{Guidlines}
 
+\newcommand{\basemodule}[1][]{\textit{de.webtwob.agd.projekt#1}}
+
 \begin{list}{-}{}
-\item The Base package is \textit{de.webtwob.agd.projekt.cyclebreake} and all packages from here on will be relative.
-\item Project will be conform to MVC pattern.
-\item Model will be in the package \textit{model}.
-\item View will be in the package \textit{view}.
-\item Controler will be in the package \textit{controls}.
-\item Code Comments and this Specification should be in English.
-\item Options that make the Algorithm not deterministic should be advanced.
-\item By default the Algorithm should be deterministic.
-\item When needing randomness use a fixed/default seed, resetting for each invocation.
-\item Avoid magic values, prefer options with defaults if applicable.
+\item The Project will be split into modules,
+
+all modules MUST begin with \basemodule,
+
+all packages in a modul MUST start with the modules name.
+
+\item All main functions MUST be in the \basemodule[.main] module.
+
+\item All test MUST be in the \basemodule[.test] module.
+
+\item Loading Graphs from file SHOULD be done in the file 
+
+\item Project SHOULD be conform to MVC pattern.
+
+\item Model SHOULD be in the package \basemodule[.modle].
+
+\item View SHOULD be in the package \basemodule[.view].
+
+\item Controler SHOULD be in the package \basemodule[.controls].
+
+\item Code Comments and this Specification SHALL be in English.
+
+\item The Algorithm MUST default to be deterministic.
+
+\item Options that make the Algorithm MUST be advanced/hidden.
+
+\item For Randomness a PRNG SHALL be used with a configurable or fixed seed,
+on re-runs the seed MUST be restored to it's initial value.
+
+\item Magic constants SHOULD be avoided, instead use a constant with a comment.
 \end{list}

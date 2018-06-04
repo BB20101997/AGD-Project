@@ -24,11 +24,11 @@ public class GraphImport {
 	public static Optional<ElkNode> importGraphFromFile(File file) {
         if (file.exists() && file.isFile() && file.canRead()) {
             try {
-                String content = Files.readAllLines(file.toPath().toAbsolutePath())
+                return Files.readAllLines(file.toPath().toAbsolutePath())
                                       .stream()
                                       .reduce((s1, s2) -> s1 + s2)
-                                      .orElse("");
-                return Optional.of(ElkGraphJson.forGraph(content).toElk());
+                                      .map(ElkGraphJson::forGraph)
+                                      .map(e->e.toElk());
             } catch (IOException | JsonParseException | JsonImportException e) {
                 e.printStackTrace();
             }

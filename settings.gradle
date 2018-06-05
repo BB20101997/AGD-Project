@@ -21,4 +21,5 @@ rootProject.name = 'AGD-Project'
 include 'file'
 include 'main'
 include 'test'
-
+include 'view'
+include 'service'

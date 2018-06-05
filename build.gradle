@@ -11,17 +11,19 @@
 
 
 allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
     group = 'de.webtwob.agd.project'
     version = '0.0.1'
 }
 
 import org.gradle.plugins.ide.eclipse.model.SourceFolder
 
-allprojects {
+subprojects {
 
     apply plugin: 'eclipse'
-    apply plugin: 'java-library'
     apply plugin: 'idea'
+    apply plugin: 'java-library'
 
     // In this section you declare where to find the dependencies of your project
     repositories {

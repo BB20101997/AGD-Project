@@ -4,4 +4,6 @@ module de.webtwob.agd.project.view{
 	requires de.webtwob.agd.project.service;
 	requires java.desktop;
 	
+	exports de.webtwob.agd.project.view;
+	
 }

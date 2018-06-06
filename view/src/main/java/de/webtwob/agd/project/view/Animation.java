@@ -1,11 +1,11 @@
 package de.webtwob.agd.project.view;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
+import static de.webtwob.agd.project.service.util.ViewUtil.getCurrent;
+
 import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import java.awt.geom.Rectangle2D;
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
@@ -14,12 +14,9 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.service.util.GraphMapping;
 import de.webtwob.agd.project.service.util.GraphMapping.Pair;
 
-import static de.webtwob.agd.project.service.util.ViewUtil.getCurrent;
-
 public class Animation {
 
 	long lengthInMills;
-	int scale = 10;
 	double speed;
 
 	GraphMapping mapping;
@@ -35,19 +32,15 @@ public class Animation {
 		lengthInMills = length;
 	}
 
-	public BufferedImage generateFrame(long frame, BufferedImage img) {
-		if(img == null||(img.getHeight()!=getHeight())||(img.getWidth()!=getWidth())) {
-			img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_ARGB);
-		}
-		
-		Graphics2D graphic = (Graphics2D) img.getGraphics();
-		graphic.scale(scale,scale);
-		graphic.setStroke(new BasicStroke(0.1f));
-		
-		graphic.setBackground(Color.WHITE);
-		graphic.clearRect(0, 0, getWidth(), getHeight());
+	@SuppressWarnings("exports")
+	public void generateFrame(long frame, Graphics2D graphic) {
 
-		graphic.setColor(Color.BLACK);
+		double width = graphic.getClipBounds().getWidth();
+		double height = graphic.getClipBounds().getHeight();
+
+		double scale = Math.min(width / getWidth(), height / getHeight());
+
+		graphic.scale(scale, scale);
 
 		for (ElkNode child : root.getChildren()) {
 			drawNode(child, graphic, frame);
@@ -56,23 +49,17 @@ public class Animation {
 		for (ElkEdge edge : root.getContainedEdges()) {
 			drawEdge(edge, graphic, frame);
 		}
-		return img;
 	}
 
 	private void drawNode(ElkNode node, Graphics2D graphic, long frame) {
-		int x = (int) getCurrent(mapping.getMapping(node).start.getX(), mapping.getMapping(node).end.getX(), frame,
-				lengthInMills);
-		int y = (int) getCurrent(mapping.getMapping(node).start.getY(), mapping.getMapping(node).end.getY(), frame,
-				lengthInMills);
-		int width = (int) getCurrent(mapping.getMapping(node).start.getWidth(), mapping.getMapping(node).end.getWidth(),
-				frame, lengthInMills);
-		int height = (int) getCurrent(mapping.getMapping(node).start.getHeight(),
-				mapping.getMapping(node).end.getHeight(), frame, lengthInMills);
 
-		graphic.drawRect(x, y, width, height);
+		Rectangle2D.Double rect = getCurrent(mapping.getMapping(node).start, mapping.getMapping(node).end, frame,
+				lengthInMills);
+		graphic.draw(rect);
 
 		// draw the sub-graph
-		Graphics2D subGraphic = (Graphics2D) graphic.create(x, y, width, height);
+		Graphics2D subGraphic = (Graphics2D) graphic.create((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(),
+				(int) rect.getHeight());
 		node.getChildren().forEach(child -> drawEdge((ElkEdge) child, subGraphic, frame));
 		node.getContainedEdges().forEach(edge -> drawEdge(edge, subGraphic, frame));
 		subGraphic.dispose();
@@ -84,41 +71,35 @@ public class Animation {
 
 	private void drawEdgeSection(ElkEdgeSection s, Graphics2D g, long frame) {
 		// TODO optionally draw arrows at the end of an edge
-
-		int[] xCoords = new int[s.getBendPoints().size() + 2];
-		int[] yCoords = new int[s.getBendPoints().size() + 2];
 		// mapping.pointInTime.EndOfSection.pos
-		xCoords[0] = (int) getCurrent(mapping.getMapping(s).start.start.getX(), mapping.getMapping(s).end.start.getX(),
-				frame, lengthInMills);
-		yCoords[0] = (int) getCurrent(mapping.getMapping(s).start.start.getY(), mapping.getMapping(s).end.start.getY(),
-				frame, lengthInMills);
-		xCoords[xCoords.length - 1] = (int) getCurrent(mapping.getMapping(s).start.end.getX(),
-				mapping.getMapping(s).end.end.getX(), frame, lengthInMills);
-		yCoords[yCoords.length - 1] = (int) getCurrent(mapping.getMapping(s).start.end.getY(),
-				mapping.getMapping(s).end.end.getY(), frame, lengthInMills);
+		Path2D.Double path = new Path2D.Double();
+
+		Point2D.Double point = getCurrent(mapping.getMapping(s).start.start, mapping.getMapping(s).end.start, frame,
+				lengthInMills);
+		path.moveTo(point.getX(), point.getY());
 
 		for (int i = 0; i < s.getBendPoints().size(); i++) {
-			Point p = getBendPoint(s.getBendPoints().get(i), frame);
-			xCoords[i + 1] = (int) p.getX();
-			yCoords[i + 1] = (int) p.getY();
+			point = getBendPoint(s.getBendPoints().get(i), frame);
+			path.lineTo(point.getX(), point.getY());
 		}
 
-		g.drawPolyline(xCoords, yCoords, xCoords.length);
+		point = getCurrent(mapping.getMapping(s).start.end, mapping.getMapping(s).end.end, frame, lengthInMills);
+		path.lineTo(point.getX(), point.getY());
+
+		g.draw(path);
 	}
 
-	private Point getBendPoint(ElkBendPoint p, long frame) {
+	private Point2D.Double getBendPoint(ElkBendPoint p, long frame) {
 		Pair<Point2D.Double> bendMapping = mapping.getMapping(p);
-		return new Point((int) getCurrent(bendMapping.start.getX(), bendMapping.end.getX(), frame, lengthInMills),
-				(int) getCurrent(bendMapping.start.getY(), bendMapping.end.getY(), frame, lengthInMills));
+		return getCurrent(bendMapping.start, bendMapping.end, frame, lengthInMills);
 	}
 
-	public int getWidth() {
-		return (int) Math.max(mapping.getMapping(root).start.getWidth(), mapping.getMapping(root).end.getWidth())*scale;
+	public double getWidth() {
+		return Math.max(mapping.getMapping(root).start.getWidth(), mapping.getMapping(root).end.getWidth());
 	}
 
-
-	public int getHeight() {
-		return (int) Math.max(mapping.getMapping(root).start.getHeight(), mapping.getMapping(root).end.getHeight())*scale;
+	public double getHeight() {
+		return Math.max(mapping.getMapping(root).start.getHeight(), mapping.getMapping(root).end.getHeight());
 	}
 
 	public void setLength(int length) {

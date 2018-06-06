@@ -45,9 +45,11 @@ public class GraphMapping {
 		public A end;
 	}
 
-	public static class DummyMapping extends GraphMapping {
-		
-		private static DummyMapping instance = new DummyMapping();
+	/*
+	   public static class DummyMapping extends GraphMapping {
+	 
+	 	
+	 	private static DummyMapping instance = new DummyMapping();
 		
 		public static DummyMapping getInstance() {
 			return instance;
@@ -88,5 +90,6 @@ public class GraphMapping {
 		}
 
 	}
+	*/
 
 }

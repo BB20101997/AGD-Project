@@ -12,6 +12,7 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.file.GraphImport;
 import de.webtwob.agd.project.service.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedGraphView;
+import de.webtwob.agd.project.view.LoopEnum;
 
 public class ShowAnAnimatedGraph {
 
@@ -20,13 +21,10 @@ public class ShowAnAnimatedGraph {
 		AnimatedGraphView sgv = new AnimatedGraphView();
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
-		sgv.setLooping(false);
-		sgv.setReverseOnEnd(true);
 		
 		ElkNode start = GraphImport.importGraphFromFile(new File("src/test/resources/animationTestStart.json")).orElse(null);
 		ElkNode end   = GraphImport.importGraphFromFile(new File("src/test/resources/animationTestEnd.json")).orElse(null);
 		
-		sgv.animateGraph(start, ViewUtil.createMapping(start,end), 2000,1);
 		
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
@@ -34,6 +32,11 @@ public class ShowAnAnimatedGraph {
 		frame.setTitle("Loads predefined Json Files and displayes an Animated Graph!");
 		frame.setVisible(true);
 		frame.pack();
+
+		sgv.setLoop(LoopEnum.REVERSE);
+		sgv.animateGraph(start, ViewUtil.createMapping(start,end),20000);
+		
+		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 

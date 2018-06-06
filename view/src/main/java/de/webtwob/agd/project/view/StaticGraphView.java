@@ -44,7 +44,6 @@ public class StaticGraphView extends JComponent implements IGraphUpdateEventHand
 		repaint();
 	}
 	
-	@SuppressWarnings("exports") //not everyone need to send events
 	@Override
 	public void graphUpdate(GraphUpdateEvent event) {
 		if(graph==event.getSource()) {

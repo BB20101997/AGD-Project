@@ -10,8 +10,12 @@ import org.eclipse.elk.graph.ElkNode;
 
 public class ViewUtil {
 
+
+	/**
+	 * timeLength >= 2
+	 * */
 	public static double getCurrent(double oldPos, double newPos, double timePos, double timeLength) {
-		return oldPos + (newPos - oldPos) * timePos / timeLength;
+		return oldPos + (newPos - oldPos) * timePos / (timeLength-1);
 	}
 
 	@SuppressWarnings("exports")

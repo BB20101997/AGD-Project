@@ -46,6 +46,15 @@ public class GraphMapping {
 	}
 
 	public static class DummyMapping extends GraphMapping {
+		
+		private static DummyMapping instance = new DummyMapping();
+		
+		public static DummyMapping getInstance() {
+			return instance;
+		}
+		
+		private DummyMapping() {
+		}
 
 		@SuppressWarnings("exports")
 		@Override

@@ -52,10 +52,7 @@ public class Model {
             do {
                 found = false;
                 for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
-                    if (progressMonitor.isCanceled()) {
-                        progressMonitor.done();
-                        return;
-                    }
+                    
                     ElkNode node = iter.next();
 
                     // is node a Source given the currently present nodes in children
@@ -63,7 +60,6 @@ public class Model {
                         sinkList.addFirst(node);
                         iter.remove(); // avoid ConcurrentModificationException
                         found = true;
-                        progressMonitor.worked(1);
                     }
 
                 }
@@ -74,10 +70,7 @@ public class Model {
             ElkNode maxNode = null;
             int maxDiff = Integer.MIN_VALUE;
             for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
-                if (progressMonitor.isCanceled()) {
-                    progressMonitor.done();
-                    return;
-                }
+                
                 ElkNode curNode = iter.next();
                 int curVal = curNode.getOutgoingEdges().size() - curNode.getIncomingEdges().size();
                 if (curVal > maxDiff) {
@@ -90,7 +83,6 @@ public class Model {
             if (maxNode != null) {
                 sourceList.addFirst(maxNode);
                 children.remove(maxNode);
-                progressMonitor.worked(1);
             }
 
         }
@@ -105,10 +97,8 @@ public class Model {
             if (combinedList.indexOf(Util.getSource(e)) > combinedList.indexOf(Util.getTarget(e))) {
                 Util.reverseEdge(e);
             }
-            progressMonitor.worked(1);
         });
 
-        progressMonitor.done();
 		
 		
 		return null;

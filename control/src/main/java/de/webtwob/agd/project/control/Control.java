@@ -103,6 +103,7 @@ public class Control {
 		Optional<ElkNode> graph = GraphImport.importGraphFromFile(file);
 		if (graph.isPresent()) {
 			// TODO steps = Model.getSteps(graph.get())
+			currentStep=0;
 			return true; //
 		}
 		return false;

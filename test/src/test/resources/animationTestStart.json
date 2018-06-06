@@ -1,0 +1,48 @@
+{
+	"id": "root",
+	"children": [
+		{
+			"id": "n1",
+			"x": 0,
+			"y": 0,
+			"width": 10,
+			"height": 10
+		},
+		{
+			"id": "n2",
+			"x": 20,
+			"y": 0,
+			"width": 10,
+			"height": 10
+		}
+	],
+	"edges": [
+		{
+			"id": "e1",
+			"sources": [
+				"n1"
+			],
+			"targets": [
+				"n2"
+			],
+			"sections": [
+				{ "id":"s1e1",
+					"startPoint": {
+						"x": 10,
+						"y": 5
+					},
+					"endPoint": {
+						"x": 20,
+						"y": 5
+					},
+					"bendPoints":[{
+						"x": 15,
+						"y": 10
+					}]
+				}
+			]
+		}
+	],
+	"width": 30,
+	"height": 10
+}

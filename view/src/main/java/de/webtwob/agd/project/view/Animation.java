@@ -1,6 +1,6 @@
 package de.webtwob.agd.project.view;
 
-import static de.webtwob.agd.project.service.util.ViewUtil.getCurrent;
+import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
@@ -11,8 +11,8 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.service.util.GraphMapping;
-import de.webtwob.agd.project.service.util.GraphMapping.Pair;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphMapping.Pair;
 
 public class Animation {
 

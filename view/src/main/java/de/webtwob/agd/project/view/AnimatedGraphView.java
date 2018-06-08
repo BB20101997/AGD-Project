@@ -19,10 +19,10 @@ import java.util.List;
 import javax.swing.JComponent;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.service.api.AnimationEvent;
-import de.webtwob.agd.project.service.api.AnimationEventHandler;
-import de.webtwob.agd.project.service.util.GraphMapping;
-import de.webtwob.agd.project.service.util.ViewUtil;
+import de.webtwob.agd.project.api.AnimationEvent;
+import de.webtwob.agd.project.api.AnimationEventHandler;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.ViewUtil;
 
 public class AnimatedGraphView extends JComponent {
 

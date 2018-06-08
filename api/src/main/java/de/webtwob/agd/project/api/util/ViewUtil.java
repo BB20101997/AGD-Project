@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.service.util;
+package de.webtwob.agd.project.api.util;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;

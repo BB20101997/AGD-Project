@@ -9,8 +9,8 @@ import javax.swing.WindowConstants;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.file.GraphImport;
-import de.webtwob.agd.project.service.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedGraphView;
 import de.webtwob.agd.project.view.LoopEnum;
 

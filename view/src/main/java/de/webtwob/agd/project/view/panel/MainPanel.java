@@ -9,6 +9,10 @@ import javax.swing.JPanel;
 
 public class MainPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//this will contain the algorithm specific animation layot
 	JPanel algorithmPanel = new JPanel();
 	ControllPanel controllPanel = new ControllPanel();

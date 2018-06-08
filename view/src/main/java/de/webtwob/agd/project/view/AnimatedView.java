@@ -23,10 +23,11 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.api.AnimationEventHandler;
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationEvent;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.ViewUtil;
 
-public class AnimatedGraphView extends JComponent {
+public class AnimatedView extends JComponent {
 
 	/**
 	 * generated serialVarsionUID
@@ -41,7 +42,7 @@ public class AnimatedGraphView extends JComponent {
 	Point2D.Double origin = new Point2D.Double(0, 0);
 	Point2D.Double oldOrigin = new Point2D.Double();
 
-	volatile Animation animation;
+	private volatile IAnimation animation;
 
 	private double speed = 1; // milliseconds skipped per millisecond
 	Thread animationThread = new Thread(this::animate);
@@ -50,7 +51,7 @@ public class AnimatedGraphView extends JComponent {
 
 	LoopEnum end = LoopEnum.STOP;
 
-	public AnimatedGraphView() {
+	public AnimatedView() {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
 		animationThread.setDaemon(true);
@@ -92,7 +93,7 @@ public class AnimatedGraphView extends JComponent {
 	public void setGraph(ElkNode eg) {
 		setSpeed(0);
 		setFrame(0);
-		animation = new Animation(eg,ViewUtil.createMapping(eg, eg), 2);
+		setAnimation(new Animation(eg,ViewUtil.createMapping(eg, eg), 2));
 		repaint();
 	}
 
@@ -105,8 +106,12 @@ public class AnimatedGraphView extends JComponent {
 	 */
 	@SuppressWarnings("exports") // don't export automatic modules
 	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
-		animation = new Animation(graph, mapping, length);
+		setAnimation(new Animation(graph, mapping, length));
 		setSpeed(1);
+	}
+	
+	public void setAnimation(IAnimation animation) {
+		this.animation = animation;
 	}
 
 	@Override
@@ -159,10 +164,6 @@ public class AnimatedGraphView extends JComponent {
 				end = System.currentTimeMillis();
 			}
 		}
-	}
-
-	public Animation getAnimation() {
-		return animation;
 	}
 
 	public void setLoop(LoopEnum reverse) {

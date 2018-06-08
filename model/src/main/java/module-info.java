@@ -4,7 +4,7 @@
 module de.webtwob.agd.project.control {
 	
     requires org.eclipse.elk.graph;
-    
+    requires org.eclipse.elk.core;
     
     
 

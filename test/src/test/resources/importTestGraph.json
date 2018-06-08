@@ -1,10 +1,22 @@
 {
-  "id" : "root",
-  "children" : [
-    {"id" : "n1"},
-    {"id" : "n2"}
-  ],
-  "edges" : [
-    {"id":"e1", "sources" : ["n1"], "targets" : ["n2"]}
-  ]
+	"id": "root",
+	"children": [
+		{
+			"id": "n1"
+		},
+		{
+			"id": "n2"
+		}
+	],
+	"edges": [
+		{
+			"id": "e1",
+			"sources": [
+				"n1"
+			],
+			"targets": [
+				"n2"
+			]
+		}
+	]
 }

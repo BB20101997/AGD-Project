@@ -18,6 +18,10 @@ dependencies {
     testImplementation project(":file")
 
     testImplementation project(":main")
+    
+    testImplementation project(":view")
+    
+    testImplementation project(":service")
 
 
 }

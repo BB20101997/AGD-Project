@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -57,56 +58,33 @@ public class AnimatedGraphView extends JComponent {
 		animationThread.start();
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		//setFocusable(true);
-		addMouseWheelListener(new MouseWheelListener() {
-			
+		
+		MouseAdapter adapter = new MouseAdapter() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				//TODO this is somehow jumpy, also keep the point the mouse is at where it is
 				scale += e.getUnitsToScroll();
-			}
-			
-		});
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
+				repaint();
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseClick.setLocation(e.getPoint());
 				oldOrigin.setLocation(origin);
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		addMouseMotionListener(new MouseMotionListener() {
-			
-			@Override
-			public void mouseMoved(MouseEvent e) {
+				repaint();
 			}
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				origin = new Point2D.Double(oldOrigin.getX()+e.getX()-mouseClick.getX(), oldOrigin.getY()+e.getY()-mouseClick.getY());
+				repaint();
 			}
-		});
+			
+		};
 		
+		addMouseWheelListener(adapter);
+		addMouseListener(adapter);
+		addMouseMotionListener(adapter);
 		
 	}
 
@@ -174,8 +152,8 @@ public class AnimatedGraphView extends JComponent {
 				setFrame((long) (getFrame() + (end - start) * getSpeed()));
 				start = System.currentTimeMillis();
 				paintImmediately(0, 0, getWidth(), getHeight());
-				if (getFrame() < 0 || getFrame() > animation.lengthInMills) {
-					this.end.handle(this::setSpeed,this::setFrame, animation.lengthInMills, getFrame(), getSpeed());
+				if (getFrame() < 0 || getFrame() > animation.getLength()) {
+					this.end.handle(this::setSpeed,this::setFrame, animation.getLength(), getFrame(), getSpeed());
 					handlerList.parallelStream().forEach(h->EventQueue.invokeLater(()->h.animationEvent(new  AnimationEvent())));
 				}
 				end = System.currentTimeMillis();

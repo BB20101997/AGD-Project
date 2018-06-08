@@ -11,13 +11,13 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.GraphMapping.Pair;
 
-public class Animation {
+public class Animation implements IAnimation{
 
-	long lengthInMills;
-	double speed;
+	private final long lengthInMills;
 
 	GraphMapping mapping;
 	ElkNode root;
@@ -32,7 +32,6 @@ public class Animation {
 		lengthInMills = length;
 	}
 
-	@SuppressWarnings("exports")
 	public void generateFrame(long frame, Graphics2D graphic) {
 
 		double width = graphic.getClipBounds().getWidth();
@@ -102,7 +101,9 @@ public class Animation {
 		return Math.max(mapping.getMapping(root).start.getHeight(), mapping.getMapping(root).end.getHeight());
 	}
 
-	public void setLength(int length) {
-		lengthInMills = length;
+	@Override
+	public long getLength() {
+		return lengthInMills;
 	}
+
 }

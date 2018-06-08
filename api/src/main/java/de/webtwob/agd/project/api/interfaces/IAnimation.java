@@ -1,7 +1,6 @@
 package de.webtwob.agd.project.api.interfaces;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Dimension2D;
 
 public interface IAnimation {
 	
@@ -15,6 +14,9 @@ public interface IAnimation {
 	 * @return the length of the animation in frames
 	 * */
 	long getLength();
-
+	
+	double getWidth();
+	
+	double getHeight();
 
 }

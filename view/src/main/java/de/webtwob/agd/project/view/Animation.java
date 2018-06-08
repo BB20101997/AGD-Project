@@ -18,9 +18,8 @@ import de.webtwob.agd.project.api.util.GraphMapping.Pair;
 public class Animation implements IAnimation{
 
 	private final long lengthInMills;
-
-	GraphMapping mapping;
-	ElkNode root;
+	private final GraphMapping mapping;
+	private final ElkNode root;
 
 	/**
 	 * length in Frames

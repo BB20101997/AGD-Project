@@ -10,7 +10,8 @@ import org.eclipse.elk.graph.ElkNode;
 public class Model {
 	
 	
-	//TODO Thread
+	//TODO Thread 
+	//TODO Find a good way to store the changes
 	/**Greedy cycle break from before
 	 * 
 	 * @param graph
@@ -43,6 +44,8 @@ public class Model {
                         sourceList.addLast(node);
                         iter.remove(); // avoid ConcurrentModificationException
                         found = true;
+                      //TODO Store "currently active" Property
+                        //TODO Store sink Property and return step to Controler
                     }
 
                 }
@@ -61,18 +64,24 @@ public class Model {
                         sinkList.addFirst(node);
                         iter.remove(); // avoid ConcurrentModificationException
                         found = true;
+                      //TODO Store "currently active" Property
+                      //TODO Store source Property and return step to Controler
                     }
 
                 }
 
             } while (found);// stop when an iteration didn't found sinks
-
+            
+            
+            //TODO Store "currently active" Property
             // find edge with max in-degree to out-degree difference
             ElkNode maxNode = null;
             int maxDiff = Integer.MIN_VALUE;
             for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
                 
                 ElkNode curNode = iter.next();
+              //TODO Store "currently active" Property
+              //TODO Store "currently active edges" Property
                 int curVal = curNode.getOutgoingEdges().size() - curNode.getIncomingEdges().size();
                 if (curVal > maxDiff) {
                     maxDiff = curVal;

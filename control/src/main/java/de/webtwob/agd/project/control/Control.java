@@ -46,7 +46,7 @@ public class Control {
 	public void autoplay() {
 		// TODO Add listener for Button event and replace it with this
 		// TODO wait for Toggle removed
-		while ((goForwardAutoplay && currentStep != steps.size() - 1)
+		while ((goForwardAutoplay && currentStep <= steps.size() - 1|| !goForwardAutoplay && currentStep > 0)
 				|| (!goForwardAutoplay && goForwardAutoplay && currentStep != 0)) {
             if (goForwardAutoplay) {
             	buttonForward();

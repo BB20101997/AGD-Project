@@ -1,20 +1,13 @@
 package de.webtwob.agd.project.model;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.eclipse.elk.core.math.KVectorChain;
-import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.graph.ElkConnectableShape;
 import org.eclipse.elk.graph.ElkEdge;
-import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 //import de.webtwob.agd.s4.layouts.options.LayerBasedMetaDataProvider;
 
+@SuppressWarnings("exports")
 public class Util {
     
 //    public static final int UNASSIGNED = -1;
@@ -61,7 +54,7 @@ public class Util {
     /**
      * A version of ElkGraphUtil.getSourceNode which doesn't throw if more than one Target is present
      */
-    public static ElkNode getSource(ElkEdge edge) {
+	public static ElkNode getSource(ElkEdge edge) {
         if (edge.getSources().size() < 1) {
             throw new IllegalArgumentException("Passed Egde does not have any Sources!");
         }

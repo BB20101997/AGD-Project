@@ -57,20 +57,8 @@ public class CompoundAnimation implements IAnimation {
 					});
 		}
 		
-
-		double width = graphic.getClipBounds().getWidth();
-		double height = graphic.getClipBounds().getHeight();
-
-		double scale = Math.min(width / getWidth(), height / getHeight());
-
-		graphic.scale(scale, scale);
-		
-		Graphics2D subGraphic = (Graphics2D) graphic.create(0, 0,(int) currentAnimation.getWidth(), (int)currentAnimation.getHeight());
-		
-		currentAnimation.generateFrame(frame - from,subGraphic);
-		
-		subGraphic.dispose();
-
+		currentAnimation.generateFrame(frame - from,graphic);
+	
 	}
 
 	@Override

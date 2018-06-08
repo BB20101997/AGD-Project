@@ -5,7 +5,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.graph.json
     implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
 
-    implementation project(":api")
+    api project(":api")
     implementation project(":file")
     implementation project(":view")   
 }

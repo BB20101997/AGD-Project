@@ -8,14 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import de.webtwob.agd.project.file.GraphImport;
-import de.webtwob.agd.project.view.AnimatedGraphView;
+import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAStaticGraph {
 
 	public static void main(String[] args) {
 
 
-		AnimatedGraphView sgv = new AnimatedGraphView();
+		AnimatedView sgv = new AnimatedView();
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		GraphImport.importGraphFromFile(new File("src/test/resources/staticTest.json")).ifPresent(sgv::setGraph);

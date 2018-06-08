@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.elk.graph.ElkNode;
 
+@SuppressWarnings("exports")
 public class Model {
 	
 	

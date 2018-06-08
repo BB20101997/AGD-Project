@@ -1,6 +1,6 @@
 package de.webtwob.agd.project.view;
 
-import static de.webtwob.agd.project.service.util.ViewUtil.getCurrent;
+import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
@@ -11,16 +11,15 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.service.util.GraphMapping;
-import de.webtwob.agd.project.service.util.GraphMapping.Pair;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphMapping.Pair;
 
-public class Animation {
+public class Animation implements IAnimation{
 
-	long lengthInMills;
-	double speed;
-
-	GraphMapping mapping;
-	ElkNode root;
+	private final long lengthInMills;
+	private final GraphMapping mapping;
+	private final ElkNode root;
 
 	/**
 	 * length in Frames
@@ -32,15 +31,7 @@ public class Animation {
 		lengthInMills = length;
 	}
 
-	@SuppressWarnings("exports")
 	public void generateFrame(long frame, Graphics2D graphic) {
-
-		double width = graphic.getClipBounds().getWidth();
-		double height = graphic.getClipBounds().getHeight();
-
-		double scale = Math.min(width / getWidth(), height / getHeight());
-
-		graphic.scale(scale, scale);
 
 		for (ElkNode child : root.getChildren()) {
 			drawNode(child, graphic, frame);
@@ -102,7 +93,9 @@ public class Animation {
 		return Math.max(mapping.getMapping(root).start.getHeight(), mapping.getMapping(root).end.getHeight());
 	}
 
-	public void setLength(int length) {
-		lengthInMills = length;
+	@Override
+	public long getLength() {
+		return lengthInMills;
 	}
+
 }

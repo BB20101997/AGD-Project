@@ -6,9 +6,8 @@ import java.util.Optional;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.events.GraphUpdateEvent;
 import de.webtwob.agd.project.file.GraphImport;
-import de.webtwob.agd.project.service.api.GraphUpdateEvent;
-import de.webtwob.agd.project.view.*;
 
 public class Control {
 

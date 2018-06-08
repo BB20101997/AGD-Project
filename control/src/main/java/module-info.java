@@ -4,7 +4,7 @@
 module de.webtwob.agd.project.control {
     requires org.eclipse.elk.graph;
     requires de.webtwob.agd.project.file;
-    requires de.webtwob.agd.project.service;
+    requires de.webtwob.agd.project.api;
     requires de.webtwob.agd.project.view;
     
     

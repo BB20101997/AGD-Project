@@ -1,4 +1,6 @@
-package de.webtwob.agd.project.service.api;
+package de.webtwob.agd.project.api;
+
+import de.webtwob.agd.project.api.events.AnimationEvent;
 
 public class AnimationEventHandler {
 	

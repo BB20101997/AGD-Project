@@ -9,16 +9,16 @@ import javax.swing.WindowConstants;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.file.GraphImport;
-import de.webtwob.agd.project.service.util.ViewUtil;
-import de.webtwob.agd.project.view.AnimatedGraphView;
-import de.webtwob.agd.project.view.LoopEnum;
+import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAnAnimatedGraph {
 
 	public static void main(String[] args) {
 		
-		AnimatedGraphView sgv = new AnimatedGraphView();
+		AnimatedView sgv = new AnimatedView();
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		

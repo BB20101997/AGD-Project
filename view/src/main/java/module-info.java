@@ -11,9 +11,10 @@ module de.webtwob.agd.project.view{
 	//internal requires
 	
 	//internal requires transitive
-	requires transitive de.webtwob.agd.project.service;
+	requires transitive de.webtwob.agd.project.api;
 	
 	//exports
 	exports de.webtwob.agd.project.view;
+	exports de.webtwob.agd.project.view.panel;
 	
 }

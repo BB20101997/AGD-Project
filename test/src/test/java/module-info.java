@@ -7,6 +7,6 @@ module de.webtwob.agd.project.test{
     requires junit;
 	requires java.desktop;
 	requires java.base;
-	requires de.webtwob.agd.project.service;
+	requires de.webtwob.agd.project.api;
 	
     }

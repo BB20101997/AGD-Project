@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.service.api;
+package de.webtwob.agd.project.api.events;
 
 public class AnimationUpdateEvent extends AnimationEvent{
 	

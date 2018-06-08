@@ -7,11 +7,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,93 +17,76 @@ import java.util.List;
 import javax.swing.JComponent;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.service.api.AnimationEvent;
-import de.webtwob.agd.project.service.api.AnimationEventHandler;
-import de.webtwob.agd.project.service.util.GraphMapping;
-import de.webtwob.agd.project.service.util.ViewUtil;
+import de.webtwob.agd.project.api.AnimationEventHandler;
+import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.events.AnimationEvent;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.ViewUtil;
 
-public class AnimatedGraphView extends JComponent {
+public class AnimatedView extends JComponent {
 
 	/**
 	 * generated serialVarsionUID
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
-	private volatile long frame;
+	//variables determining the position and size of animation
 	private volatile double scale = 1;
+	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 	
-	Point mouseClick = new Point();
-
-	Point2D.Double origin = new Point2D.Double(0, 0);
-	Point2D.Double oldOrigin = new Point2D.Double();
-
-	volatile Animation animation;
-
-	private double speed = 1; // milliseconds skipped per millisecond
+	private volatile IAnimation animation;
+	private volatile long frame;
+	private double speed = 1; // milliseconds skipped per millisecond time passed
+	LoopEnum end = LoopEnum.STOP;
+	
 	Thread animationThread = new Thread(this::animate);
-	
 	List<AnimationEventHandler> handlerList = new LinkedList<>();
 
-	LoopEnum end = LoopEnum.STOP;
-
-	public AnimatedGraphView() {
+	public AnimatedView() {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
 		animationThread.setDaemon(true);
 		animationThread.setName("AnimationGraphViewThread");
 		animationThread.start();
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
-		//setFocusable(true);
-		addMouseWheelListener(new MouseWheelListener() {
+		
+		MouseAdapter adapter = new MouseAdapter() {
+
+			Point mouseClick = new Point();
+			Point2D.Double oldOrigin = new Point2D.Double();
 			
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				//TODO this is somehow jumpy, also keep the point the mouse is at where it is
-				scale += e.getUnitsToScroll();
-			}
-			
-		});
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
+				/*
+				 * TODO this should not scale linearly
+				 * for smaller scale it should increase/decrease by smaller amounts
+				 * */
+				scale = scale + scale*e.getUnitsToScroll()/32;
+				if(scale<1) {
+					scale = 1;
+				}
+				repaint();
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseClick.setLocation(e.getPoint());
 				oldOrigin.setLocation(origin);
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		addMouseMotionListener(new MouseMotionListener() {
-			
-			@Override
-			public void mouseMoved(MouseEvent e) {
+				repaint();
 			}
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				origin = new Point2D.Double(oldOrigin.getX()+e.getX()-mouseClick.getX(), oldOrigin.getY()+e.getY()-mouseClick.getY());
+				repaint();
 			}
-		});
+			
+		};
 		
+		addMouseWheelListener(adapter);
+		addMouseListener(adapter);
+		addMouseMotionListener(adapter);
 		
 	}
 
@@ -113,7 +94,7 @@ public class AnimatedGraphView extends JComponent {
 	public void setGraph(ElkNode eg) {
 		setSpeed(0);
 		setFrame(0);
-		animation = new Animation(eg,ViewUtil.createMapping(eg, eg), 2);
+		setAnimation(new Animation(eg,ViewUtil.createMapping(eg, eg), 2));
 		repaint();
 	}
 
@@ -126,8 +107,13 @@ public class AnimatedGraphView extends JComponent {
 	 */
 	@SuppressWarnings("exports") // don't export automatic modules
 	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
-		animation = new Animation(graph, mapping, length);
+		setAnimation(new Animation(graph, mapping, length));
 		setSpeed(1);
+		setFrame(0);
+	}
+	
+	public void setAnimation(IAnimation animation) {
+		this.animation = animation;
 	}
 
 	@Override
@@ -143,6 +129,8 @@ public class AnimatedGraphView extends JComponent {
 		graphic.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		graphic.translate(origin.getX(), origin.getY());
+		var subScale = Math.min(getWidth()/animation.getWidth(),getHeight()/animation.getHeight());
+		graphic.scale(subScale,subScale);
 		graphic.scale(scale, scale);
 
 		animation.generateFrame(getFrame(), graphic);
@@ -173,17 +161,13 @@ public class AnimatedGraphView extends JComponent {
 				setFrame((long) (getFrame() + (end - start) * getSpeed()));
 				start = System.currentTimeMillis();
 				paintImmediately(0, 0, getWidth(), getHeight());
-				if (getFrame() < 0 || getFrame() > animation.lengthInMills) {
-					this.end.handle(this::setSpeed,this::setFrame, animation.lengthInMills, getFrame(), getSpeed());
+				if (getFrame() < 0 || getFrame() > animation.getLength()) {
+					this.end.handle(this::setSpeed,this::setFrame, animation.getLength(), getFrame(), getSpeed());
 					handlerList.parallelStream().forEach(h->EventQueue.invokeLater(()->h.animationEvent(new  AnimationEvent())));
 				}
 				end = System.currentTimeMillis();
 			}
 		}
-	}
-
-	public Animation getAnimation() {
-		return animation;
 	}
 
 	public void setLoop(LoopEnum reverse) {

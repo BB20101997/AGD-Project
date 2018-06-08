@@ -33,13 +33,6 @@ public class Animation implements IAnimation{
 
 	public void generateFrame(long frame, Graphics2D graphic) {
 
-		double width = graphic.getClipBounds().getWidth();
-		double height = graphic.getClipBounds().getHeight();
-
-		double scale = Math.min(width / getWidth(), height / getHeight());
-
-		graphic.scale(scale, scale);
-
 		for (ElkNode child : root.getChildren()) {
 			drawNode(child, graphic, frame);
 		}

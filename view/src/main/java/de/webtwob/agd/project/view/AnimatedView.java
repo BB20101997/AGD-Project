@@ -31,22 +31,17 @@ public class AnimatedView extends JComponent {
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
-	private volatile long frame;
+	//variables determining the position and size of animation
 	private volatile double scale = 1;
+	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 	
-	Point mouseClick = new Point();
-
-	Point2D.Double origin = new Point2D.Double(0, 0);
-	Point2D.Double oldOrigin = new Point2D.Double();
-
 	private volatile IAnimation animation;
-
-	private double speed = 1; // milliseconds skipped per millisecond
-	Thread animationThread = new Thread(this::animate);
-	
-	List<AnimationEventHandler> handlerList = new LinkedList<>();
-
+	private volatile long frame;
+	private double speed = 1; // milliseconds skipped per millisecond time passed
 	LoopEnum end = LoopEnum.STOP;
+	
+	Thread animationThread = new Thread(this::animate);
+	List<AnimationEventHandler> handlerList = new LinkedList<>();
 
 	public AnimatedView() {
 		setDoubleBuffered(true);
@@ -55,13 +50,22 @@ public class AnimatedView extends JComponent {
 		animationThread.setName("AnimationGraphViewThread");
 		animationThread.start();
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
-		//setFocusable(true);
 		
 		MouseAdapter adapter = new MouseAdapter() {
+
+			Point mouseClick = new Point();
+			Point2D.Double oldOrigin = new Point2D.Double();
+			
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				//TODO this is somehow jumpy, also keep the point the mouse is at where it is
-				scale += e.getUnitsToScroll();
+				/*
+				 * TODO this should not scale linearly
+				 * for smaller scale it should increase/decrease by smaller amounts
+				 * */
+				scale = scale + scale*e.getUnitsToScroll()/32;
+				if(scale<1) {
+					scale = 1;
+				}
 				repaint();
 			}
 			
@@ -105,6 +109,7 @@ public class AnimatedView extends JComponent {
 	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
 		setAnimation(new Animation(graph, mapping, length));
 		setSpeed(1);
+		setFrame(0);
 	}
 	
 	public void setAnimation(IAnimation animation) {
@@ -124,6 +129,8 @@ public class AnimatedView extends JComponent {
 		graphic.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		graphic.translate(origin.getX(), origin.getY());
+		var subScale = Math.min(getWidth()/animation.getWidth(),getHeight()/animation.getHeight());
+		graphic.scale(subScale,subScale);
 		graphic.scale(scale, scale);
 
 		animation.generateFrame(getFrame(), graphic);

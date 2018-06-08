@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.view;
+package de.webtwob.agd.project.api;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.LongConsumer;

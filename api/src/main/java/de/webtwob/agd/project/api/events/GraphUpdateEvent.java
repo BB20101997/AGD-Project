@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.api;
+package de.webtwob.agd.project.api.events;
 
 import java.util.EventObject;
 

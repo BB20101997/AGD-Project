@@ -19,8 +19,9 @@ import java.util.List;
 import javax.swing.JComponent;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationEvent;
 import de.webtwob.agd.project.api.AnimationEventHandler;
+import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.events.AnimationEvent;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.ViewUtil;
 

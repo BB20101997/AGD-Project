@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.IController;
+import de.webtwob.agd.project.api.IGraphLoader;
 import de.webtwob.agd.project.api.events.GraphUpdateEvent;
-import de.webtwob.agd.project.file.JSONGraphLoader;
 
 public class Control implements IController {
 
@@ -122,7 +122,7 @@ public class Control implements IController {
 	 */
 	@Override
 	public boolean changeGraph(File file) {
-		Optional<ElkNode> graph = JSONGraphLoader.importGraphFromFile(file);
+		Optional<ElkNode> graph = IGraphLoader.loadGraph(file);
 		if (graph.isPresent()) {
 			// TODO steps = Model.getSteps(graph.get())
 			currentStep=0;

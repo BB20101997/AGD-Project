@@ -9,6 +9,5 @@ module de.webtwob.agd.project.main {
 	requires de.webtwob.agd.project.view;
     requires de.webtwob.agd.project.control;
 	
-	uses de.webtwob.agd.project.api.IGraphLoader;
 	
 }

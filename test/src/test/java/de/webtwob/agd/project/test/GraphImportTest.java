@@ -3,6 +3,7 @@ package de.webtwob.agd.project.test;
 import org.eclipse.elk.graph.ElkNode;
 import org.junit.Assert;
 import org.junit.Test;
+
 import de.webtwob.agd.project.file.JSONGraphLoader;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class GraphImportTest {
 
     @Test
     public void importGraphFromFile() {
+    	//TODO why does IGraphLoader.loadGraph not work here, try adding a testRuntime dependency on the file project
         Optional<ElkNode> optNode = JSONGraphLoader.importGraphFromFile(new File("src/test/resources/importTestGraph.json"));
         Assert.assertTrue("Importer returned no Graph",optNode.isPresent());
         ElkNode node = optNode.get();

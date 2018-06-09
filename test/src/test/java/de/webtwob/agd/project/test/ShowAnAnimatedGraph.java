@@ -9,9 +9,9 @@ import javax.swing.WindowConstants;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.IGraphLoader;
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.util.ViewUtil;
-import de.webtwob.agd.project.file.GraphImport;
 import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAnAnimatedGraph {
@@ -22,9 +22,8 @@ public class ShowAnAnimatedGraph {
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		
-		ElkNode start = GraphImport.importGraphFromFile(new File("src/test/resources/animationTestStart.json")).orElse(null);
-		ElkNode end   = GraphImport.importGraphFromFile(new File("src/test/resources/animationTestEnd.json")).orElse(null);
-		
+		ElkNode start = IGraphLoader.loadGraph(new File("src/test/resources/animationTestStart.json")).orElse(null);
+		ElkNode end   = IGraphLoader.loadGraph(new File("src/test/resources/animationTestEnd.json")).orElse(null);
 		
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());

@@ -8,7 +8,7 @@ public interface IAnimation {
 	 * @param frame the Frame to draw
 	 * @param graphic the Graphics2D object to draw to
 	 * */
-	void generateFrame(long frame, Graphics2D graphic);
+	void generateFrame(long frame, @SuppressWarnings("exports") Graphics2D graphic);
 	
 	/**
 	 * @return the length of the animation in frames

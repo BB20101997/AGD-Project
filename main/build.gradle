@@ -5,7 +5,9 @@ dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.core
     api group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
-
+    
+    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
+    
     // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.common.compaction
     api group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.common.compaction', version: '0.3.0'
 
@@ -26,6 +28,8 @@ dependencies {
 
 	implementation project(':view')
 	
-	runtimeOnly project(':file')
+    implementation project(":control")
+      
+	runtimeOnly project(':file') 
 	
 }

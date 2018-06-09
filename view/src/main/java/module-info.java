@@ -17,4 +17,7 @@ module de.webtwob.agd.project.view{
 	exports de.webtwob.agd.project.view;
 	exports de.webtwob.agd.project.view.panel;
 	
+	//TODO implement an IAlgorithm
+	uses de.webtwob.agd.project.api.IAlgorithm;
+	
 }

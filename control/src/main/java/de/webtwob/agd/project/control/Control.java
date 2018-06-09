@@ -6,10 +6,11 @@ import java.util.Optional;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.IController;
 import de.webtwob.agd.project.api.events.GraphUpdateEvent;
 import de.webtwob.agd.project.file.JSONGraphLoader;
 
-public class Control {
+public class Control implements IController {
 
 	private int currentStep; // Initalize with any new loaded graph
 	private int sizeOfSteps = 1;
@@ -23,26 +24,43 @@ public class Control {
 		// TODO ADD view
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#isGoForwardAutoplay()
+	 */
+	@Override
 	public boolean isGoForwardAutoplay() {
 		return goForwardAutoplay;
 	}
 
 	// TODO set to toggle Button
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#setGoForwardAutoplay(boolean)
+	 */
+	@Override
 	public void setGoForwardAutoplay(boolean goForwardAutoplay) {
 		this.goForwardAutoplay = goForwardAutoplay;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#getSizeOfSteps()
+	 */
+	@Override
 	public int getSizeOfSteps() {
 		return sizeOfSteps;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#setSizeOfSteps(int)
+	 */
+	@Override
 	public void setSizeOfSteps(int newStepSize) {
 		this.sizeOfSteps = newStepSize;
 	}
 
-	/**
-	 * 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#autoplay()
 	 */
+	@Override
 	public void autoplay() {
 		// TODO Add listener for Button event and replace it with this
 		// TODO wait for Toggle removed
@@ -62,6 +80,10 @@ public class Control {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#buttonForward()
+	 */
+	@Override
 	public void buttonForward() {
 
 		GraphUpdateEvent event = new GraphUpdateEvent(steps.get(addStep()));
@@ -77,6 +99,10 @@ public class Control {
 		return currentStep;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#buttonBackward()
+	 */
+	@Override
 	public void buttonBackward() {
 		GraphUpdateEvent event = new GraphUpdateEvent(steps.get(subStep()));
 		// TODO View.graphUpdate steps.get(event);
@@ -91,13 +117,10 @@ public class Control {
 		return currentStep;
 	}
 
-	/**
-	 * Changes the current graph returns true if successful (false to give
-	 * errormessage in view)
-	 * 
-	 * @param file
-	 * @return
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#changeGraph(java.io.File)
 	 */
+	@Override
 	public boolean changeGraph(File file) {
 		Optional<ElkNode> graph = JSONGraphLoader.importGraphFromFile(file);
 		if (graph.isPresent()) {
@@ -108,15 +131,18 @@ public class Control {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#getAutoplayTime()
+	 */
+	@Override
 	public int getAutoplayTime() {
 		return autoplayTime;
 	}
 
-	/**
-	 * Sets new Autoplay Time in seconds
-	 * 
-	 * @param autoplayTime
+	/* (non-Javadoc)
+	 * @see de.webtwob.agd.project.control.IController#setAutoplayTime(int)
 	 */
+	@Override
 	public void setAutoplayTime(int autoplayTime) {
 		this.autoplayTime = autoplayTime;
 	}

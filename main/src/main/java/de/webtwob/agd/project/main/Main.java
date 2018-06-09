@@ -9,19 +9,25 @@ import java.util.stream.Collectors;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+
+import org.eclipse.elk.graph.ElkNode;
+
+import de.webtwob.agd.project.api.IController;
 import de.webtwob.agd.project.api.IGraphLoader;
+import de.webtwob.agd.project.control.Control;
 import de.webtwob.agd.project.view.panel.MainPanel;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-		File file = null;
+		boolean fileSelected = false;
+		File tmpFile = null;
 
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
 				if (args[i].equals("-file") && i + 1 < args.length) {
-					file = new File(args[i + 1]);
+					tmpFile = new File(args[i + 1]);
 				}
 			}
 		}
@@ -29,7 +35,7 @@ public class Main {
 		List<IGraphLoader> loader = ServiceLoader.load(IGraphLoader.class).stream().map(Provider::get)
 				.collect(Collectors.toList());
 
-		if (file == null) {
+		if (!fileSelected) {
 			JFileChooser chooser = new JFileChooser(".");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setDialogTitle("Select Graph to be animated!");
@@ -41,20 +47,36 @@ public class Main {
 
 			switch (chooser.showOpenDialog(null)) {
 			case JFileChooser.APPROVE_OPTION: {
-				file = chooser.getSelectedFile();
+				tmpFile = chooser.getSelectedFile();
 				break;
 			}
-			default: {
-				// User Canceled the Dialog or an Error Occurred
+			case JFileChooser.CANCEL_OPTION: {
+				// User Canceled File selection will be treated as application closed with normal exit
 				System.exit(0);
+				break;
+			}
+			case JFileChooser.ERROR_OPTION:
+			default: {//the three cases above should cover every case but just to be sure
+				//Error Occurred
+				System.exit(1);
 			}
 			}
 
 		}
+		
+		final File finFile = tmpFile;
+		
+		ElkNode graph = loader.stream().filter(load->load.getFileFilter().accept(finFile)).flatMap(load->load.loadGraphFromFile(finFile).stream()).findFirst().orElse(null);
 
+		if(graph==null) {
+			System.exit(2);
+		}
+		
 		JFrame frame = new JFrame("Cycle Break Animation");
+		
+		IController controller = new Control();
 
-		MainPanel mainPanel = new MainPanel();
+		MainPanel mainPanel = new MainPanel(graph,controller);
 
 		frame.setLayout(new BorderLayout());
 

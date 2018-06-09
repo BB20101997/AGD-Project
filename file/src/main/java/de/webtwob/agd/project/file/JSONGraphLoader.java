@@ -1,6 +1,9 @@
 package de.webtwob.agd.project.file;
 
 import com.google.gson.JsonParseException;
+
+import de.webtwob.agd.project.api.IGraphLoader;
+
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.json.ElkGraphJson;
 import org.eclipse.elk.graph.json.JsonImportException;
@@ -10,12 +13,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  * Created by BB20101997 on 31. Mai. 2018.
  */
-public class GraphImport {
+public class JSONGraphLoader implements IGraphLoader{
 
-    private GraphImport(){}
+    public JSONGraphLoader(){}
 
     /**
      * Uses ElkGraphJson to import an ElkGraph from a Json file
@@ -38,4 +44,15 @@ public class GraphImport {
 
         return Optional.empty();
     }
+
+	@SuppressWarnings("exports")
+	@Override
+	public Optional<ElkNode> loadGraphFromFile(File file) {
+		return importGraphFromFile(file);
+	}
+
+	@Override
+	public FileFilter getFileFilter() {
+		return new FileNameExtensionFilter("JSON-Files", "json");
+	}
 }

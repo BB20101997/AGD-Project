@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.events.GraphUpdateEvent;
-import de.webtwob.agd.project.file.GraphImport;
+import de.webtwob.agd.project.file.JSONGraphLoader;
 
 public class Control {
 
@@ -99,7 +99,7 @@ public class Control {
 	 * @return
 	 */
 	public boolean changeGraph(File file) {
-		Optional<ElkNode> graph = GraphImport.importGraphFromFile(file);
+		Optional<ElkNode> graph = JSONGraphLoader.importGraphFromFile(file);
 		if (graph.isPresent()) {
 			// TODO steps = Model.getSteps(graph.get())
 			currentStep=0;

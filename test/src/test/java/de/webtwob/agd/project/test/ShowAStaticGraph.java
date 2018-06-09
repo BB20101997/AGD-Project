@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.webtwob.agd.project.file.GraphImport;
+import de.webtwob.agd.project.file.JSONGraphLoader;
 import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAStaticGraph {
@@ -18,7 +18,7 @@ public class ShowAStaticGraph {
 		AnimatedView sgv = new AnimatedView();
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
-		GraphImport.importGraphFromFile(new File("src/test/resources/staticTest.json")).ifPresent(sgv::setGraph);
+		JSONGraphLoader.importGraphFromFile(new File("src/test/resources/staticTest.json")).ifPresent(sgv::setGraph);
 		
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());

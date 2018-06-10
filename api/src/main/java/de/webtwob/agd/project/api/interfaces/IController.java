@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.api;
+package de.webtwob.agd.project.api.interfaces;
 
 import java.io.File;
 

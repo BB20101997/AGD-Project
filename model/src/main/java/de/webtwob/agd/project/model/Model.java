@@ -11,7 +11,7 @@ public class Model {
 	
 	
 	//TODO Thread 
-	//TODO Find a good way to store the changes
+	//TODO Find a good way to store the changes -> use de.webtwob.agd.project.api.util.GraphMapping 
 	/**Greedy cycle break from before
 	 * 
 	 * @param graph

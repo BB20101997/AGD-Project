@@ -1,8 +1,8 @@
 package de.webtwob.agd.project.api.util;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
@@ -20,7 +20,7 @@ public class ViewUtil {
 	/**
 	 * timeLength >= 2
 	 */
-	public static Point2D.Double getCurrent(Point2D.Double oldPos, Point2D.Double newPos, double timePos,
+	public static Point2D getCurrent(Point2D oldPos, Point2D newPos, double timePos,
 			double timeLength) {
 		return new Point2D.Double(getCurrent(oldPos.getX(), newPos.getX(), timePos, timeLength),
 				getCurrent(oldPos.getY(), newPos.getY(), timePos, timeLength));
@@ -75,10 +75,8 @@ public class ViewUtil {
 	private static void insertSectionMapping(ElkEdgeSection start, ElkEdgeSection end, GraphMapping mapping) {
 
 		var sectMapping = mapping.getMapping(start);
-		sectMapping.start.start = new Point2D.Double(start.getStartX(), start.getStartY());
-		sectMapping.start.end = new Point2D.Double(start.getEndX(), start.getEndY());
-		sectMapping.end.start = new Point2D.Double(end.getStartX(), end.getStartY());
-		sectMapping.end.end = new Point2D.Double(end.getEndX(), end.getEndY());
+		sectMapping.start = new Line2D.Double(start.getStartX(),start.getStartY(),start.getEndX(),start.getEndY());
+		sectMapping.end = new Line2D.Double(end.getStartX(),end.getStartY(),end.getEndX(),end.getEndY());
 
 		int count = Math.min(start.getBendPoints().size(), end.getBendPoints().size());
 		for (int i = 0; i < count; i++) {
@@ -93,6 +91,91 @@ public class ViewUtil {
 		bendMapping.start = new Point2D.Double(start.getX(), start.getY());
 		bendMapping.end = new Point2D.Double(end.getX(), end.getY());
 
+	}
+
+	
+	/**
+	 * Save the current state of the Graph in the start part of the mapping
+	 * */
+	public static void saveStartMapping(@SuppressWarnings("exports") ElkNode graph, GraphMapping mapping) {
+		var nodeMapping = mapping.getMapping(graph);
+		
+		nodeMapping.start = new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight());
+		
+		for(var child:graph.getChildren()) {
+			saveStartMapping(child,mapping);
+		}
+		
+		for(var edge : graph.getContainedEdges()) {
+			saveStartMapping(edge,mapping);
+		}
+	}
+	
+	/**
+	 * Save the current state of the Graph in the end part of the mapping
+	 * */
+	public static void saveEndMapping(@SuppressWarnings("exports") ElkNode graph, GraphMapping mapping) {
+		var nodeMapping = mapping.getMapping(graph);
+		
+		nodeMapping.end = new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight());
+		
+		for(var child:graph.getChildren()) {
+			saveEndMapping(child,mapping);
+		}
+		
+		for(var edge : graph.getContainedEdges()) {
+			saveEndMapping(edge,mapping);
+		}
+	}
+	
+	private static void saveStartMapping(ElkEdge edge,GraphMapping mapping) {
+		
+		for(var sect : edge.getSections()) {
+			saveStartMapping(sect,mapping);
+		}
+		
+	}
+
+	private static void saveStartMapping(ElkEdgeSection sect,GraphMapping mapping) {
+		var sectMapping = mapping.getMapping(sect);
+		
+		sectMapping.start = new Line2D.Double(sect.getStartX(), sect.getStartY(), sect.getEndX(), sect.getEndY());
+		
+		for(var bend: sect.getBendPoints()) {
+			saveStartMapping(bend,mapping);
+		}
+		
+	}
+
+	private static void saveStartMapping(ElkBendPoint bend,GraphMapping mapping) {
+		var bendMapping = mapping.getMapping(bend);
+		
+		bendMapping.start = new Point2D.Double(bend.getX(), bend.getY());
+	}
+	
+	private static void saveEndMapping(ElkEdge edge,GraphMapping mapping) {
+		
+		for(var sect : edge.getSections()) {
+			saveEndMapping(sect,mapping);
+		}
+		
+	}
+
+	private static void saveEndMapping(ElkEdgeSection sect,GraphMapping mapping) {
+		var sectMapping = mapping.getMapping(sect);
+		
+		sectMapping.end = new Line2D.Double(sect.getStartX(), sect.getStartY(), sect.getEndX(), sect.getEndY());
+		
+		for(var bend: sect.getBendPoints()) {
+			saveEndMapping(bend,mapping);
+		}
+		
+	}
+
+	private static void saveEndMapping(ElkBendPoint bend,GraphMapping mapping) {
+		var bendMapping = mapping.getMapping(bend);
+		
+		bendMapping.end = new Point2D.Double(bend.getX(), bend.getY());
 	}
 
 }

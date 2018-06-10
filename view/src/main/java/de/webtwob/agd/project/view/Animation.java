@@ -13,7 +13,7 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphMapping;
-import de.webtwob.agd.project.api.util.GraphMapping.Pair;
+import de.webtwob.agd.project.api.util.Pair;
 
 public class Animation implements IAnimation{
 
@@ -63,9 +63,9 @@ public class Animation implements IAnimation{
 	private void drawEdgeSection(ElkEdgeSection s, Graphics2D g, long frame) {
 		// TODO optionally draw arrows at the end of an edge
 		// mapping.pointInTime.EndOfSection.pos
-		Path2D.Double path = new Path2D.Double();
+		Path2D path = new Path2D.Double();
 
-		Point2D.Double point = getCurrent(mapping.getMapping(s).start.start, mapping.getMapping(s).end.start, frame,
+		Point2D point = getCurrent(mapping.getMapping(s).start.getP1(), mapping.getMapping(s).end.getP1(), frame,
 				lengthInMills);
 		path.moveTo(point.getX(), point.getY());
 
@@ -74,13 +74,13 @@ public class Animation implements IAnimation{
 			path.lineTo(point.getX(), point.getY());
 		}
 
-		point = getCurrent(mapping.getMapping(s).start.end, mapping.getMapping(s).end.end, frame, lengthInMills);
+		point = getCurrent(mapping.getMapping(s).start.getP2(), mapping.getMapping(s).end.getP2(), frame, lengthInMills);
 		path.lineTo(point.getX(), point.getY());
 
 		g.draw(path);
 	}
 
-	private Point2D.Double getBendPoint(ElkBendPoint p, long frame) {
+	private Point2D getBendPoint(ElkBendPoint p, long frame) {
 		Pair<Point2D.Double> bendMapping = mapping.getMapping(p);
 		return getCurrent(bendMapping.start, bendMapping.end, frame, lengthInMills);
 	}

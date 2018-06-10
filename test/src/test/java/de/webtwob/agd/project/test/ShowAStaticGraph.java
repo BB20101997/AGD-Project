@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.webtwob.agd.project.api.IGraphLoader;
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAStaticGraph {

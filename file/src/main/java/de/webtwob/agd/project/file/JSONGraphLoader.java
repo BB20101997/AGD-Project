@@ -2,7 +2,7 @@ package de.webtwob.agd.project.file;
 
 import com.google.gson.JsonParseException;
 
-import de.webtwob.agd.project.api.IGraphLoader;
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.json.ElkGraphJson;

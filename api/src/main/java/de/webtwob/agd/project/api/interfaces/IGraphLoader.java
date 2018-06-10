@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.api;
+package de.webtwob.agd.project.api.interfaces;
 
 import java.io.File;
 import java.util.List;
@@ -32,6 +32,8 @@ public interface IGraphLoader {
 		for (IGraphLoader load : loader) {
 			chooser.addChoosableFileFilter(load.getFileFilter());
 		}
+		
+		chooser.showOpenDialog(null);
 		
 		return loadGraph(chooser.getSelectedFile());
 	} 

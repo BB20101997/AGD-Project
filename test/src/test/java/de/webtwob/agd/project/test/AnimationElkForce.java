@@ -11,11 +11,15 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedView;
+import de.webtwob.agd.project.view.Animation;
 import de.webtwob.agd.project.view.AnimationSyncThread;
+import de.webtwob.agd.project.view.CompoundAnimation;
 
-public class ShowAnAnimatedGraph {
+public class AnimationElkForce {
 
 	public static void main(String[] args) {
 		
@@ -27,8 +31,22 @@ public class ShowAnAnimatedGraph {
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		
-		ElkNode start = IGraphLoader.loadGraph(new File("src/test/resources/animationTestStart.json")).orElse(null);
-		ElkNode end   = IGraphLoader.loadGraph(new File("src/test/resources/animationTestEnd.json")).orElse(null);
+		ElkNode start = IGraphLoader.loadGraph(new File("src/test/resources/forceLayoutTest.json")).orElse(null);
+		
+		InitialLayoutUtil.setForceLayoutAlgorithm(start);
+		
+		GraphMapping mapping = new GraphMapping();
+		
+		ViewUtil.saveStartMapping(start, mapping);
+		
+		InitialLayoutUtil.layout(start);
+		
+		ViewUtil.saveEndMapping(start, mapping);
+		
+		var endPause = new GraphMapping();
+		
+		ViewUtil.saveStartMapping(start, endPause);
+		ViewUtil.saveEndMapping(start, endPause);
 		
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
@@ -37,10 +55,15 @@ public class ShowAnAnimatedGraph {
 		frame.setVisible(true);
 		frame.pack();
 
-		syncThread.setLoopAction(LoopEnum.REVERSE);
+		CompoundAnimation comAnim = new CompoundAnimation();
+		
+		comAnim.addAnimation(new Animation(start,mapping,2000));
+		comAnim.addAnimation(new Animation(start,endPause,500));
+		
+		syncThread.setLoopAction(LoopEnum.LOOP);
 		syncThread.start();
 		
-		sgv.animateGraph(start, ViewUtil.createMapping(start,end),20000);
+		sgv.setAnimation(comAnim);
 		
 		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

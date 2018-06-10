@@ -1,0 +1,26 @@
+{
+	"id": "root",
+	"children": [
+		{
+			"id": "n1",
+            "width": 20,
+            "height": 20
+		},
+		{
+			"id": "n2",
+            "width": 20,
+            "height": 20
+		}
+	],
+	"edges": [
+		{
+			"id": "e1",
+			"sources": [
+				"n1"
+			],
+			"targets": [
+				"n2"
+			]
+		}
+	]
+}

@@ -10,8 +10,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import de.webtwob.agd.project.api.IAlgorithm;
-import de.webtwob.agd.project.api.IController;
+import de.webtwob.agd.project.api.interfaces.IAlgorithm;
+import de.webtwob.agd.project.api.interfaces.IController;
 
 public class ControllPanel extends JPanel {
 
@@ -43,7 +43,7 @@ public class ControllPanel extends JPanel {
 
 		algorithmChoises.addItemListener(this::algorithmChangeEvent);
 
-		if(algorithms.size()>=0) {
+		if(!algorithms.isEmpty()) {
 			//if an implementation is found default to the first one
 			algorithmChoises.setSelectedIndex(0);
 		}

@@ -1,5 +1,6 @@
 package de.webtwob.agd.project.api.util;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -20,7 +21,7 @@ public class ViewUtil {
 	/**
 	 * timeLength >= 2
 	 */
-	public static Point2D.Double getCurrent(Point2D.Double oldPos, Point2D.Double newPos, double timePos,
+	public static Point2D getCurrent(Point2D oldPos, Point2D newPos, double timePos,
 			double timeLength) {
 		return new Point2D.Double(getCurrent(oldPos.getX(), newPos.getX(), timePos, timeLength),
 				getCurrent(oldPos.getY(), newPos.getY(), timePos, timeLength));
@@ -75,10 +76,8 @@ public class ViewUtil {
 	private static void insertSectionMapping(ElkEdgeSection start, ElkEdgeSection end, GraphMapping mapping) {
 
 		var sectMapping = mapping.getMapping(start);
-		sectMapping.start.start = new Point2D.Double(start.getStartX(), start.getStartY());
-		sectMapping.start.end = new Point2D.Double(start.getEndX(), start.getEndY());
-		sectMapping.end.start = new Point2D.Double(end.getStartX(), end.getStartY());
-		sectMapping.end.end = new Point2D.Double(end.getEndX(), end.getEndY());
+		sectMapping.start = new Line2D.Double(start.getStartX(),start.getStartY(),start.getEndX(),start.getEndY());
+		sectMapping.end = new Line2D.Double(end.getStartX(),end.getStartY(),end.getEndX(),end.getEndY());
 
 		int count = Math.min(start.getBendPoints().size(), end.getBendPoints().size());
 		for (int i = 0; i < count; i++) {

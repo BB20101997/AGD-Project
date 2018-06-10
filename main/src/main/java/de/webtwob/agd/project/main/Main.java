@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.IController;
-import de.webtwob.agd.project.api.IGraphLoader;
+import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 import de.webtwob.agd.project.control.Control;
 import de.webtwob.agd.project.view.panel.MainPanel;
 

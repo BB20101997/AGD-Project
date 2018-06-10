@@ -12,5 +12,5 @@ module de.webtwob.agd.project.file {
 
     exports de.webtwob.agd.project.file;
     
-    provides de.webtwob.agd.project.api.IGraphLoader with JSONGraphLoader;
+    provides de.webtwob.agd.project.api.interfaces.IGraphLoader with JSONGraphLoader;
 }

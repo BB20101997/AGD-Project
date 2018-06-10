@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.IAlgorithm;
-import de.webtwob.agd.project.api.IController;
+import de.webtwob.agd.project.api.interfaces.IAlgorithm;
+import de.webtwob.agd.project.api.interfaces.IController;
 
 public class MainPanel extends JPanel {
 

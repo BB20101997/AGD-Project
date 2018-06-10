@@ -8,5 +8,5 @@ module de.webtwob.agd.project.api{
 	exports de.webtwob.agd.project.api.events;
 	exports de.webtwob.agd.project.api.interfaces;
 	
-	uses de.webtwob.agd.project.api.IGraphLoader;
+	uses de.webtwob.agd.project.api.interfaces.IGraphLoader;
 }

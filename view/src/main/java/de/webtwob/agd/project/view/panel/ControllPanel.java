@@ -43,7 +43,7 @@ public class ControllPanel extends JPanel {
 
 		algorithmChoises.addItemListener(this::algorithmChangeEvent);
 
-		if(algorithms.size()>=0) {
+		if(!algorithms.isEmpty()) {
 			//if an implementation is found default to the first one
 			algorithmChoises.setSelectedIndex(0);
 		}

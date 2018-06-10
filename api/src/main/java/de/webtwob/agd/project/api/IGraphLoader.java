@@ -33,6 +33,8 @@ public interface IGraphLoader {
 			chooser.addChoosableFileFilter(load.getFileFilter());
 		}
 		
+		chooser.showOpenDialog(null);
+		
 		return loadGraph(chooser.getSelectedFile());
 	} 
 	

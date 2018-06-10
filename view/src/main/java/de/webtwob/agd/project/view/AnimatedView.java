@@ -41,7 +41,7 @@ public class AnimatedView extends JComponent {
 		
 		frameSync = syncThread;
 		
-		frameSync.addFrameChangeCallback(()->paintImmediately(0, 0, getWidth(), getHeight()));
+		frameSync.addFrameChangeCallback(this::repaint);
 		
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		
@@ -67,7 +67,6 @@ public class AnimatedView extends JComponent {
 			public void mousePressed(MouseEvent e) {
 				mouseClick.setLocation(e.getPoint());
 				oldOrigin.setLocation(origin);
-				repaint();
 			}
 			
 			@Override
@@ -109,12 +108,19 @@ public class AnimatedView extends JComponent {
 	}
 	
 	public void setAnimation(IAnimation animation) {
+		frameSync.removeAnimation(this.animation);
 		this.animation = animation;
+		frameSync.addAnimation(this.animation);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		g.setColor(getBackground());
+		g.fillRect(0, 0, getWidth(), getHeight());
+		g.setColor(getForeground());
+		
 		if (animation == null)
 			return;
 		Graphics2D graphic = (Graphics2D) g.create();
@@ -137,11 +143,9 @@ public class AnimatedView extends JComponent {
 	@SuppressWarnings("exports")
 	@Override
 	public void update(Graphics g) {
-		g.setColor(getBackground());
-		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(getForeground());
 		paint(g);
 	}
+	
 
 	
 

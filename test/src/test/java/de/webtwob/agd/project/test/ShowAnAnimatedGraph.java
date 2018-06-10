@@ -38,9 +38,6 @@ public class ShowAnAnimatedGraph {
 		frame.pack();
 
 		syncThread.setLoopAction(LoopEnum.REVERSE);
-		
-		syncThread.updateMaxEnd(20000);
-		syncThread.setAnimationEnd(20000);
 		syncThread.start();
 		
 		sgv.animateGraph(start, ViewUtil.createMapping(start,end),20000);

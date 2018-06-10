@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.eclipse.elk.graph.ElkNode;
+
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.GraphMapping;
 
 public class CompoundAnimation implements IAnimation {
 
@@ -28,11 +31,26 @@ public class CompoundAnimation implements IAnimation {
 	//but for now signed long should suffice
 	long totalLength = 0;
 
+	/**
+	 * Creates an empty Compound Animation
+	 * */
 	public CompoundAnimation() {
 
 	}
+	
+	/**
+	 * Creates a CompoundAnimation conatining equal long animation of the passed mappings,
+	 * each animation is length long
+	 * */
+	public CompoundAnimation(ElkNode root,List<GraphMapping> mappings,int length) {
+		IAnimation anim;
+		for(var map : mappings) {
+			anim = new Animation(root, map, length);
+			addAnimation(anim);
+		}
+	}
 
-	void addAnimation(IAnimation anim) {
+	public void addAnimation(IAnimation anim) {
 		animationList.add(anim);
 		//add new start and end
 		animationStarts.add(totalLength);
@@ -56,8 +74,9 @@ public class CompoundAnimation implements IAnimation {
 						to = animationEnds.get(i);
 					});
 		}
-		
-		currentAnimation.generateFrame(frame - from,graphic);
+		if(currentAnimation!=null) {
+			currentAnimation.generateFrame(frame - from,graphic);
+		}
 	
 	}
 

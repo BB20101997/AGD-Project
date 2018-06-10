@@ -140,7 +140,6 @@ public class AnimatedView extends JComponent {
 		graphic.dispose();
 	}
 
-	@SuppressWarnings("exports")
 	@Override
 	public void update(Graphics g) {
 		paint(g);

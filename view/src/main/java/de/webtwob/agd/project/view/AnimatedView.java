@@ -2,7 +2,6 @@ package de.webtwob.agd.project.view;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -11,15 +10,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.util.LinkedList;
-import java.util.List;
+import java.lang.Thread.State;
 
 import javax.swing.JComponent;
+
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationEventHandler;
-import de.webtwob.agd.project.api.LoopEnum;
-import de.webtwob.agd.project.api.events.AnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.ViewUtil;
@@ -36,19 +32,17 @@ public class AnimatedView extends JComponent {
 	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 	
 	private volatile IAnimation animation;
-	private volatile long frame;
-	private double speed = 1; // milliseconds skipped per millisecond time passed
-	LoopEnum end = LoopEnum.STOP;
 	
-	Thread animationThread = new Thread(this::animate);
-	List<AnimationEventHandler> handlerList = new LinkedList<>();
+	private AnimationSyncThread frameSync = new AnimationSyncThread();
 
-	public AnimatedView() {
+	public AnimatedView(AnimationSyncThread syncThread) {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
-		animationThread.setDaemon(true);
-		animationThread.setName("AnimationGraphViewThread");
-		animationThread.start();
+		
+		frameSync = syncThread;
+		
+		frameSync.addFrameChangeCallback(()->paintImmediately(0, 0, getWidth(), getHeight()));
+		
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		
 		MouseAdapter adapter = new MouseAdapter() {
@@ -87,13 +81,17 @@ public class AnimatedView extends JComponent {
 		addMouseWheelListener(adapter);
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
-		
+	}
+	
+	public AnimatedView() {
+		this(new AnimationSyncThread());
+		if(frameSync.getState() == State.NEW) {
+			frameSync.start();
+		}
 	}
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setGraph(ElkNode eg) {
-		setSpeed(0);
-		setFrame(0);
 		setAnimation(new Animation(eg,ViewUtil.createMapping(eg, eg), 2));
 		repaint();
 	}
@@ -108,8 +106,6 @@ public class AnimatedView extends JComponent {
 	@SuppressWarnings("exports") // don't export automatic modules
 	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
 		setAnimation(new Animation(graph, mapping, length));
-		setSpeed(1);
-		setFrame(0);
 	}
 	
 	public void setAnimation(IAnimation animation) {
@@ -133,7 +129,7 @@ public class AnimatedView extends JComponent {
 		graphic.scale(subScale,subScale);
 		graphic.scale(scale, scale);
 
-		animation.generateFrame(getFrame(), graphic);
+		animation.generateFrame(frameSync.getFrame(), graphic);
 
 		graphic.dispose();
 	}
@@ -147,49 +143,6 @@ public class AnimatedView extends JComponent {
 		paint(g);
 	}
 
-	public void substcribeToAnimationEvent(AnimationEventHandler aeh) {
-		handlerList.add(aeh);
-	}
 	
-	private void animate() {
-
-		long start = System.currentTimeMillis();
-		long end = System.currentTimeMillis();
-
-		while (true) {
-			if (animation != null && getSpeed() != 0) {
-				setFrame((long) (getFrame() + (end - start) * getSpeed()));
-				start = System.currentTimeMillis();
-				paintImmediately(0, 0, getWidth(), getHeight());
-				if (getFrame() < 0 || getFrame() > animation.getLength()) {
-					this.end.handle(this::setSpeed,this::setFrame, animation.getLength(), getFrame(), getSpeed());
-					handlerList.parallelStream().forEach(h->EventQueue.invokeLater(()->h.animationEvent(new  AnimationEvent())));
-				}
-				end = System.currentTimeMillis();
-			}
-		}
-	}
-
-	public void setLoop(LoopEnum reverse) {
-		end = reverse;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public double setSpeed(double speed) {
-		this.speed = speed;
-		return speed;
-	}
-
-	public long getFrame() {
-		return frame;
-	}
-
-	public long setFrame(long frame) {
-		this.frame = frame;
-		return frame;
-	}
 
 }

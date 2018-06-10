@@ -13,12 +13,17 @@ import de.webtwob.agd.project.api.IGraphLoader;
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedView;
+import de.webtwob.agd.project.view.AnimationSyncThread;
 
 public class ShowAnAnimatedGraph {
 
 	public static void main(String[] args) {
 		
-		AnimatedView sgv = new AnimatedView();
+
+		AnimationSyncThread syncThread = new AnimationSyncThread();
+		
+		AnimatedView sgv = new AnimatedView(syncThread);
+		
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		
@@ -32,7 +37,12 @@ public class ShowAnAnimatedGraph {
 		frame.setVisible(true);
 		frame.pack();
 
-		sgv.setLoop(LoopEnum.REVERSE);
+		syncThread.setLoopAction(LoopEnum.REVERSE);
+		
+		syncThread.updateMaxEnd(20000);
+		syncThread.setAnimationEnd(20000);
+		syncThread.start();
+		
 		sgv.animateGraph(start, ViewUtil.createMapping(start,end),20000);
 		
 		

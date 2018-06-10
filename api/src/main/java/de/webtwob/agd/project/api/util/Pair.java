@@ -13,4 +13,12 @@ public class Pair<A> {
 
 	public A start;
 	public A end;
+	
+	public void setStart(A start) {
+		this.start = start;
+	}
+	
+	public void setEnd(A end) {
+		this.end = end;
+	}
 }

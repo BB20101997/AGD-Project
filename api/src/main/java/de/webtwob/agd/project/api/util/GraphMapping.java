@@ -7,7 +7,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
@@ -33,6 +32,14 @@ public class GraphMapping {
 	@SuppressWarnings("exports")
 	public Pair<Point2D.Double> getMapping(ElkBendPoint bend) {
 		return elkBendPointMap.computeIfAbsent(bend, key->new Pair<>(Double::new));
+	}
+
+	public Color getHighlight(Object obj) {
+		return highlightMap.get(obj);
+	}
+	
+	public void setHighlight(Object obj,Color col) {
+		highlightMap.put(obj, col);
 	}
 	
 }

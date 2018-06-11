@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public class Control implements IController {
 
-	private int currentStep; // Initalize with any new loaded graph
+	private int currentStep; // Initialize with any new loaded graph
 	private int sizeOfSteps = 1;
 	private int autoplayTime = 1;
 	private boolean goForwardAutoplay;
 
-	private List<ElkNode> steps;// Initalize with any new loaded graph
+	private List<ElkNode> steps;// Initialize with any new loaded graph
 
 	public Control() {
 		// TODO Create model

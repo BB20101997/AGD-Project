@@ -30,7 +30,7 @@ public class Main {
 		ElkNode graph;
 
 		if (tmpFile != null) {
-			// try to load file passed via the comand line
+			// try to load file passed via the command line
 			graph = GraphLoaderHelper.loadGraph(tmpFile).orElse(null);
 		} else {
 			// ask the user for a file and load it

@@ -46,6 +46,16 @@ public class Animation implements IAnimation {
 
 		Rectangle2D.Double rect = getCurrent(mapping.getMapping(node).getStart(), mapping.getMapping(node).getEnd(),
 				frame, lengthInMills);
+		
+		var color = mapping.getHighlight(node);
+		
+		if(color!=null) {
+			var forground = graphic.getColor();
+			graphic.setColor(color);
+			graphic.fill(rect);
+			graphic.setColor(forground);
+		}
+		
 		graphic.draw(rect);
 
 		// draw the sub-graph
@@ -57,7 +67,13 @@ public class Animation implements IAnimation {
 	}
 
 	protected void drawEdge(ElkEdge e, Graphics2D g, long frame) {
+		var forground = g.getColor();
+		var color = mapping.getHighlight(e);
+		if(color!=null) {
+			g.setColor(color);
+		}
 		e.getSections().forEach(s -> drawEdgeSection(s, g, frame));
+		g.setColor(forground);
 	}
 
 	private void drawEdgeSection(ElkEdgeSection s, Graphics2D g, long frame) {
@@ -77,8 +93,16 @@ public class Animation implements IAnimation {
 		point = getCurrent(mapping.getMapping(s).getStart().getP2(), mapping.getMapping(s).getEnd().getP2(), frame,
 				lengthInMills);
 		path.lineTo(point.getX(), point.getY());
-
-		g.draw(path);
+		
+		var color = mapping.getHighlight(s);
+		if(color!=null) {
+			var forground = g.getColor();
+			g.setColor(color);
+			g.draw(path);
+			g.setColor(forground);
+		}else {
+			g.draw(path);
+		}
 	}
 
 	private Point2D getBendPoint(ElkBendPoint p, long frame) {

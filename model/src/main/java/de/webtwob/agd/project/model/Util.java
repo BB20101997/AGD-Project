@@ -5,9 +5,11 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
-
 @SuppressWarnings("exports")
 public class Util {
+
+	private Util() {
+	}
 
 	/**
 	 * @param edge
@@ -25,7 +27,7 @@ public class Util {
 	 * Target is present
 	 */
 	public static ElkNode getTarget(ElkEdge edge) {
-		if (edge.getTargets().size() < 1) {
+		if (edge.getTargets().isEmpty()) {
 			throw new IllegalArgumentException("Passed Egde does not have any Targets!");
 		}
 
@@ -38,7 +40,7 @@ public class Util {
 	 * Target is present
 	 */
 	public static ElkNode getSource(ElkEdge edge) {
-		if (edge.getSources().size() < 1) {
+		if (edge.getSources().isEmpty()) {
 			throw new IllegalArgumentException("Passed Egde does not have any Sources!");
 		}
 

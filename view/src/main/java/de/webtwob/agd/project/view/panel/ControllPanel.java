@@ -28,31 +28,31 @@ public class ControllPanel extends JPanel {
 	}
 
 	private MainPanel mainPanel;
-	
+
 	private JComboBox<String> algorithmChoises = new JComboBox<>(algorithms.keySet().toArray(new String[0]));
 
 	public ControllPanel(MainPanel mainPanel, IController controller) {
-		
+
 		this.mainPanel = mainPanel;
-		
+
 		setBackground(Color.YELLOW);
-		
+
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		add(algorithmChoises);
 
 		algorithmChoises.addItemListener(this::algorithmChangeEvent);
 
-		if(!algorithms.isEmpty()) {
-			//if an implementation is found default to the first one
+		if (!algorithms.isEmpty()) {
+			// if an implementation is found default to the first one
 			algorithmChoises.setSelectedIndex(0);
 		}
-		
+
 	}
-	
+
 	private void algorithmChangeEvent(ItemEvent event) {
 		mainPanel.setAlgorithm(algorithms.get(event.getItem()));
-		//TODO update other stuff
+		// TODO update other stuff
 	}
 
 }

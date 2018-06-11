@@ -16,14 +16,17 @@ import java.util.stream.Collectors;
  */
 public class GraphImportTest {
 
-    @Test
-    public void importGraphFromFile() {
-    	//TODO why does IGraphLoader.loadGraph not work here, try adding a testRuntime dependency on the file project
-        Optional<ElkNode> optNode = JSONGraphLoader.importGraphFromFile(new File("src/test/resources/importTestGraph.json"));
-        Assert.assertTrue("Importer returned no Graph",optNode.isPresent());
-        ElkNode node = optNode.get();
-        Assert.assertEquals("root", node.getIdentifier());
-        Assert.assertEquals(2, node.getChildren().size());
-        Assert.assertEquals(Set.of("n1","n2"),node.getChildren().stream().map(ElkNode::getIdentifier).collect(Collectors.toSet()));
-    }
+	@Test
+	public void importGraphFromFile() {
+		// TODO why does IGraphLoader.loadGraph not work here, try adding a testRuntime
+		// dependency on the file project
+		Optional<ElkNode> optNode = JSONGraphLoader
+				.importGraphFromFile(new File("src/test/resources/importTestGraph.json"));
+		Assert.assertTrue("Importer returned no Graph", optNode.isPresent());
+		ElkNode node = optNode.get();
+		Assert.assertEquals("root", node.getIdentifier());
+		Assert.assertEquals(2, node.getChildren().size());
+		Assert.assertEquals(Set.of("n1", "n2"),
+				node.getChildren().stream().map(ElkNode::getIdentifier).collect(Collectors.toSet()));
+	}
 }

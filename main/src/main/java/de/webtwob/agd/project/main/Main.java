@@ -5,19 +5,20 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IController;
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 import de.webtwob.agd.project.control.Control;
 import de.webtwob.agd.project.view.panel.MainPanel;
 
 public class Main {
 
+	@SuppressWarnings("squid:S1066") // not collapsing if statement in case we want to add more commandline parameter
 	public static void main(String[] args) {
 
 		File tmpFile = null;
-		
+
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
 				if (args[i].equals("-file") && i + 1 < args.length) {
@@ -25,26 +26,26 @@ public class Main {
 				}
 			}
 		}
-		
+
 		ElkNode graph;
-		
-		if(tmpFile != null) {
-			//try to load file passed via the comand line
-			graph = IGraphLoader.loadGraph(tmpFile).orElse(null);
+
+		if (tmpFile != null) {
+			// try to load file passed via the command line
+			graph = GraphLoaderHelper.loadGraph(tmpFile).orElse(null);
 		} else {
-			//ask the user for a file and load it
-			graph = IGraphLoader.loadGraph().orElse(null);
+			// ask the user for a file and load it
+			graph = GraphLoaderHelper.loadGraph().orElse(null);
 		}
-		
-		if(graph==null) {
+
+		if (graph == null) {
 			System.exit(2);
 		}
-		
+
 		JFrame frame = new JFrame("Cycle Break Animation");
-		
+
 		IController controller = new Control();
 
-		MainPanel mainPanel = new MainPanel(graph,controller);
+		MainPanel mainPanel = new MainPanel(graph, controller);
 
 		frame.setLayout(new BorderLayout());
 

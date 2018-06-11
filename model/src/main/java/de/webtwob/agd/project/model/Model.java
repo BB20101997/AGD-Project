@@ -8,12 +8,13 @@ import java.util.Map;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
+@SuppressWarnings("exports")
 public class Model {
-
-	// TODO Thread
-	// TODO Find a good way to store the changes
-	/**
-	 * Greedy cycle break from before
+	
+	
+	//TODO Thread 
+	//TODO Find a good way to store the changes -> use de.webtwob.agd.project.api.util.GraphMapping 
+	/**Greedy cycle break from before
 	 * 
 	 * @param graph
 	 * @return

@@ -13,6 +13,8 @@ dependencies {
 
     testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph.json', version: '0.3.0'
     
+    testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.force', version: '0.3.0'
+    
     testImplementation  group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
 
     testImplementation project(":file")
@@ -21,7 +23,7 @@ dependencies {
     
     testImplementation project(":view")
     
-    testImplementation project(":service")
+    testImplementation project(":api")
 
 
 }

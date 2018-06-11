@@ -1,14 +1,13 @@
 package de.webtwob.agd.project.control;
 
+import de.webtwob.agd.project.api.events.GraphUpdateEvent;
+import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
+import org.eclipse.elk.graph.ElkNode;
+
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
-
-import org.eclipse.elk.graph.ElkNode;
-
-import de.webtwob.agd.project.api.events.GraphUpdateEvent;
-import de.webtwob.agd.project.api.interfaces.IController;
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 public class Control implements IController {
 
@@ -24,7 +23,9 @@ public class Control implements IController {
 		// TODO ADD view
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#isGoForwardAutoplay()
 	 */
 	@Override
@@ -33,7 +34,9 @@ public class Control implements IController {
 	}
 
 	// TODO set to toggle Button
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#setGoForwardAutoplay(boolean)
 	 */
 	@Override
@@ -41,7 +44,9 @@ public class Control implements IController {
 		this.goForwardAutoplay = goForwardAutoplay;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#getSizeOfSteps()
 	 */
 	@Override
@@ -49,7 +54,9 @@ public class Control implements IController {
 		return sizeOfSteps;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#setSizeOfSteps(int)
 	 */
 	@Override
@@ -57,30 +64,34 @@ public class Control implements IController {
 		this.sizeOfSteps = newStepSize;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#autoplay()
 	 */
 	@Override
 	public void autoplay() {
 		// TODO Add listener for Button event and replace it with this
 		// TODO wait for Toggle removed
-		while ((goForwardAutoplay && currentStep <= steps.size() - 1|| !goForwardAutoplay && currentStep > 0)
+		while ((goForwardAutoplay && currentStep <= steps.size() - 1 || !goForwardAutoplay && currentStep > 0)
 				|| (!goForwardAutoplay && goForwardAutoplay && currentStep != 0)) {
-            if (goForwardAutoplay) {
-            	buttonForward();
-            } else {
-            	buttonBackward();
-            }
-            try {
-				Thread.sleep(autoplayTime*1000);
+			if (goForwardAutoplay) {
+				buttonForward();
+			} else {
+				buttonBackward();
+			}
+			try {
+				Thread.sleep(autoplayTime * 1000L);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#buttonForward()
 	 */
 	@Override
@@ -99,7 +110,9 @@ public class Control implements IController {
 		return currentStep;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#buttonBackward()
 	 */
 	@Override
@@ -117,21 +130,25 @@ public class Control implements IController {
 		return currentStep;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#changeGraph(java.io.File)
 	 */
 	@Override
 	public boolean changeGraph(File file) {
-		Optional<ElkNode> graph = IGraphLoader.loadGraph(file);
+		Optional<ElkNode> graph = GraphLoaderHelper.loadGraph(file);
 		if (graph.isPresent()) {
 			// TODO steps = Model.getSteps(graph.get())
-			currentStep=0;
+			currentStep = 0;
 			return true; //
 		}
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#getAutoplayTime()
 	 */
 	@Override
@@ -139,7 +156,9 @@ public class Control implements IController {
 		return autoplayTime;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.webtwob.agd.project.control.IController#setAutoplayTime(int)
 	 */
 	@Override

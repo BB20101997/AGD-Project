@@ -1,21 +1,21 @@
 package de.webtwob.agd.project.view;
 
-import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
-
-import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.Pair;
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphMapping;
-import de.webtwob.agd.project.api.util.Pair;
+import java.awt.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
-public class Animation implements IAnimation{
+import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
+
+public class Animation implements IAnimation {
 
 	private final long lengthInMills;
 	private final GraphMapping mapping;
@@ -44,8 +44,8 @@ public class Animation implements IAnimation{
 
 	private void drawNode(ElkNode node, Graphics2D graphic, long frame) {
 
-		Rectangle2D.Double rect = getCurrent(mapping.getMapping(node).start, mapping.getMapping(node).end, frame,
-				lengthInMills);
+		Rectangle2D.Double rect = getCurrent(mapping.getMapping(node).getStart(), mapping.getMapping(node).getEnd(),
+				frame, lengthInMills);
 		graphic.draw(rect);
 
 		// draw the sub-graph
@@ -65,8 +65,8 @@ public class Animation implements IAnimation{
 		// mapping.pointInTime.EndOfSection.pos
 		Path2D path = new Path2D.Double();
 
-		Point2D point = getCurrent(mapping.getMapping(s).start.getP1(), mapping.getMapping(s).end.getP1(), frame,
-				lengthInMills);
+		Point2D point = getCurrent(mapping.getMapping(s).getStart().getP1(), mapping.getMapping(s).getEnd().getP1(),
+				frame, lengthInMills);
 		path.moveTo(point.getX(), point.getY());
 
 		for (int i = 0; i < s.getBendPoints().size(); i++) {
@@ -74,7 +74,8 @@ public class Animation implements IAnimation{
 			path.lineTo(point.getX(), point.getY());
 		}
 
-		point = getCurrent(mapping.getMapping(s).start.getP2(), mapping.getMapping(s).end.getP2(), frame, lengthInMills);
+		point = getCurrent(mapping.getMapping(s).getStart().getP2(), mapping.getMapping(s).getEnd().getP2(), frame,
+				lengthInMills);
 		path.lineTo(point.getX(), point.getY());
 
 		g.draw(path);
@@ -82,15 +83,15 @@ public class Animation implements IAnimation{
 
 	private Point2D getBendPoint(ElkBendPoint p, long frame) {
 		Pair<Point2D.Double> bendMapping = mapping.getMapping(p);
-		return getCurrent(bendMapping.start, bendMapping.end, frame, lengthInMills);
+		return getCurrent(bendMapping.getStart(), bendMapping.getEnd(), frame, lengthInMills);
 	}
 
 	public double getWidth() {
-		return Math.max(mapping.getMapping(root).start.getWidth(), mapping.getMapping(root).end.getWidth());
+		return Math.max(mapping.getMapping(root).getStart().getWidth(), mapping.getMapping(root).getEnd().getWidth());
 	}
 
 	public double getHeight() {
-		return Math.max(mapping.getMapping(root).start.getHeight(), mapping.getMapping(root).end.getHeight());
+		return Math.max(mapping.getMapping(root).getStart().getHeight(), mapping.getMapping(root).getEnd().getHeight());
 	}
 
 	@Override

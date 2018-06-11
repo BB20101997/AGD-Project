@@ -20,7 +20,7 @@ public class MainPanel extends JPanel {
 	JPanel algorithmPanel = new JPanel();
 	ControllPanel controllPanel;
 	IAlgorithm algorithm = null;
-	ElkNode graph;
+	transient ElkNode graph;
 
 	/*
 	 * In Java > Code Style > Formatter
@@ -42,11 +42,11 @@ public class MainPanel extends JPanel {
 	 * 
 	 * @formatter:on
 	 * 
-	 * */
+	 */
 
 	public MainPanel(@SuppressWarnings("exports") ElkNode graph, IController controller) {
 
-		this.graph  = graph;
+		this.graph = graph;
 		setLayout(new GridBagLayout());
 
 		controllPanel = new ControllPanel(this, controller);

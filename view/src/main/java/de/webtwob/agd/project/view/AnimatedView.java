@@ -27,71 +27,72 @@ public class AnimatedView extends JComponent {
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
-	//variables determining the position and size of animation
+	// variables determining the position and size of animation
 	private volatile double scale = 1;
 	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
-	
+
 	private volatile IAnimation animation;
-	
+
 	private AnimationSyncThread frameSync = new AnimationSyncThread();
 
 	public AnimatedView(AnimationSyncThread syncThread) {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
-		
+
 		frameSync = syncThread;
-		
+
 		frameSync.addFrameChangeCallback(this::repaint);
-		
-		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_WHEEL_EVENT_MASK);
-		
+
+		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
+
 		MouseAdapter adapter = new MouseAdapter() {
 
 			Point mouseClick = new Point();
 			Point2D.Double oldOrigin = new Point2D.Double();
-			
+
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				/*
-				 * TODO this should not scale linearly
-				 * for smaller scale it should increase/decrease by smaller amounts
-				 * */
-				scale = scale + scale*e.getUnitsToScroll()/32;
-				if(scale<1) {
+				 * TODO this should not scale linearly for smaller scale it should
+				 * increase/decrease by smaller amounts
+				 */
+				scale = scale + scale * e.getUnitsToScroll() / 32;
+				if (scale < 1) {
 					scale = 1;
 				}
 				repaint();
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseClick.setLocation(e.getPoint());
 				oldOrigin.setLocation(origin);
 			}
-			
+
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				origin = new Point2D.Double(oldOrigin.getX()+e.getX()-mouseClick.getX(), oldOrigin.getY()+e.getY()-mouseClick.getY());
+				origin = new Point2D.Double(oldOrigin.getX() + e.getX() - mouseClick.getX(),
+						oldOrigin.getY() + e.getY() - mouseClick.getY());
 				repaint();
 			}
-			
+
 		};
-		
+
 		addMouseWheelListener(adapter);
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
 	}
-	
+
 	public AnimatedView() {
 		this(new AnimationSyncThread());
-		if(frameSync.getState() == State.NEW) {
+		if (frameSync.getState() == State.NEW) {
 			frameSync.start();
 		}
 	}
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setGraph(ElkNode eg) {
-		setAnimation(new Animation(eg,ViewUtil.createMapping(eg, eg), 2));
+		setAnimation(new Animation(eg, ViewUtil.createMapping(eg, eg), 2));
 		repaint();
 	}
 
@@ -106,7 +107,7 @@ public class AnimatedView extends JComponent {
 	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
 		setAnimation(new Animation(graph, mapping, length));
 	}
-	
+
 	public void setAnimation(IAnimation animation) {
 		frameSync.removeAnimation(this.animation);
 		this.animation = animation;
@@ -116,11 +117,11 @@ public class AnimatedView extends JComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		g.setColor(getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(getForeground());
-		
+
 		if (animation == null)
 			return;
 		Graphics2D graphic = (Graphics2D) g.create();
@@ -131,8 +132,8 @@ public class AnimatedView extends JComponent {
 		graphic.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		graphic.translate(origin.getX(), origin.getY());
-		var subScale = Math.min(getWidth()/animation.getWidth(),getHeight()/animation.getHeight());
-		graphic.scale(subScale,subScale);
+		var subScale = Math.min(getWidth() / animation.getWidth(), getHeight() / animation.getHeight());
+		graphic.scale(subScale, subScale);
 		graphic.scale(scale, scale);
 
 		animation.generateFrame(frameSync.getFrame(), graphic);
@@ -144,8 +145,5 @@ public class AnimatedView extends JComponent {
 	public void update(Graphics g) {
 		paint(g);
 	}
-	
-
-	
 
 }

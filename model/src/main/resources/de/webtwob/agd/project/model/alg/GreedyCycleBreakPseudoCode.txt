@@ -1,0 +1,52 @@
+children = graph.getChildren()
+sources = new List
+sinks = new List
+    
+while(!children.isEmpty){
+    found = false
+    do{
+        found = false
+        for(child : children){
+            if(child.isSource()){
+                sources.addLast(child)
+                children.remove(child)
+                found = true
+            }
+        }
+    }while(found)
+    
+    do{
+        found = false
+        for(child : children){
+            if(child.isSink()){
+                sinks.addFirst(child)
+                children.remove(child)
+                found = true
+            }
+        }
+    }while(found)
+    
+    maxNode = null
+    maxDiff = Integer.MIN_VAL
+
+    for(child : children){
+        diff = child.outDegree - child.inDegree
+        if(maxDiff<diff){
+            maxNode = child;
+            maxDiff = diff;
+        }
+    }
+    
+    if(maxNode!=null){
+        sources.addFirst(maxNode)
+        children.remove(maxNode)
+    }
+}
+
+combined = sources + sinks
+
+for(edge : graph.getEdges()){
+    if(combined.indexOf(edge.source) > combined.indexOf(edge.target)){
+        edge.reverse()
+    }
+}

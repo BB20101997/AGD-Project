@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.io.File;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.control.Control;
@@ -39,10 +40,13 @@ public class Main {
 		}
 
 		if (graph == null) {
+			System.err.println("No Graph Loaded!");
 			System.exit(2);
 		}
 
 		JFrame frame = new JFrame("Cycle Break Animation");
+		
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		IController controller = new Control();
 

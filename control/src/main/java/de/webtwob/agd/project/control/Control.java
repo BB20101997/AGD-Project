@@ -1,20 +1,13 @@
 package de.webtwob.agd.project.control;
 
-import de.webtwob.agd.project.api.events.GraphUpdateEvent;
-import de.webtwob.agd.project.api.interfaces.IController;
-import de.webtwob.agd.project.api.util.GraphLoaderHelper;
-import org.eclipse.elk.graph.ElkNode;
-
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IController;
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 
 public class Control implements IController {
 
@@ -112,6 +105,7 @@ public class Control implements IController {
 		// TODO View.graphUpdate steps.get(event);
 	}
 
+	@SuppressWarnings("unused")
 	private int addStep() {
 		if (sizeOfSteps + currentStep >= steps.size()) {
 			currentStep = steps.size() - 1;
@@ -131,6 +125,7 @@ public class Control implements IController {
 		// TODO View.graphUpdate steps.get(event);
 	}
 
+	@SuppressWarnings("unused")
 	private int subStep() {
 		if (currentStep - sizeOfSteps < 0) {
 			currentStep = 0;

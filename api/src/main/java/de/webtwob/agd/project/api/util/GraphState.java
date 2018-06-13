@@ -3,6 +3,7 @@ package de.webtwob.agd.project.api.util;
 import java.awt.Color;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +23,13 @@ public class GraphState {
 	 * Copy Constructor
 	 * */
 	public GraphState(GraphState copy) {
-		elkBendPointMap.putAll(copy.elkBendPointMap);
-		elkSectionMap.putAll(copy.elkSectionMap);
-		elkNodeMap.putAll(copy.elkNodeMap);
+		copy.elkBendPointMap.forEach((key,value)->elkBendPointMap.put(key, (Double) value.clone()));
+		copy.elkSectionMap.forEach((key,value)->elkSectionMap.put(key, (Line2D.Double) value.clone()));
+		copy.elkNodeMap.forEach((key,value)->elkNodeMap.put(key, (Rectangle2D.Double)value.clone()));
 		
 		highlightMap.putAll(copy.highlightMap);
 		verbosity = copy.verbosity;
+		pseudoCodeLine = copy.pseudoCodeLine;
 	}
 	
 	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
@@ -35,6 +37,8 @@ public class GraphState {
 	private Map<ElkBendPoint, Point2D.Double> elkBendPointMap = new HashMap<>();
 
 	private Map<Object, Color> highlightMap = new HashMap<>();
+	
+	private int pseudoCodeLine = 0;
 	
 	private IVerbosity verbosity = VerbosityEnum.ONE;
 
@@ -71,6 +75,14 @@ public class GraphState {
 
 	public void setVerbosity(IVerbosity verbosity) {
 		this.verbosity = verbosity;
+	}
+
+	public int getPseudoCodeLine() {
+		return pseudoCodeLine;
+	}
+
+	public void setPseudoCodeLine(int pseudoCodeLine) {
+		this.pseudoCodeLine = pseudoCodeLine;
 	}
 
 

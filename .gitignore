@@ -273,3 +273,7 @@ TSWLatexianTemp*
 *.project
 *.classpath
 /.settings/
+/control/.settings/
+/control/bin/
+/model/.settings/
+/model/bin/

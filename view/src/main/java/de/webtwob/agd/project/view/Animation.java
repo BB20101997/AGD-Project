@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Vector;
 
 import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
 
@@ -93,25 +94,47 @@ public class Animation implements IAnimation {
 
 		Point2D point = getCurrent(mapping.getStart().getMapping(s).getP1(), mapping.getEnd().getMapping(s).getP1(),
 				frame, lengthInMills);
+		
 		path.moveTo(point.getX(), point.getY());
 
+		var secondToLast = point;
+		
 		for (int i = 0; i < s.getBendPoints().size(); i++) {
 			point = getBendPoint(s.getBendPoints().get(i), frame);
 			path.lineTo(point.getX(), point.getY());
+			secondToLast = point;
 		}
 
 		point = getCurrent(mapping.getStart().getMapping(s).getP2(), mapping.getEnd().getMapping(s).getP2(), frame,
 				lengthInMills);
 		path.lineTo(point.getX(), point.getY());
 
-		var color = getCurrent(mapping.getStart().getHighlight(s),mapping.getEnd().getHighlight(s),g.getColor(), frame, lengthInMills);             
+		var diff = new Point2D.Double(point.getX()-secondToLast.getX(),point.getY()-secondToLast.getY());
+		
+				
+		var head = new Path2D.Double();
+		head.moveTo(0,0);
+		head.lineTo(-5,10);
+		head.lineTo(5,10);
+		head.closePath();
+		
+		var color = getCurrent(mapping.getStart().getHighlight(s),mapping.getEnd().getHighlight(s),g.getColor(), frame, lengthInMills);      
+		
 		if(color!=null) {                                  
 			var forground = g.getColor();                  
 			g.setColor(color);                             
-			g.draw(path);                                  
+			g.draw(path);
+			var g2 =(Graphics2D) g.create();
+			g2.translate(point.getX(), point.getY());
+			g2.rotate(Math.atan2(diff.getY(), diff.getX()));
+			g2.fill(head);
 			g.setColor(forground);                         
 		}else {
-			g.draw(path);
+			g.draw(path);  
+			var g2 =(Graphics2D) g.create();
+			g2.translate(point.getX(), point.getY());
+			g2.rotate(Math.atan2(diff.getX(), -diff.getY()));
+			g2.fill(head);
 		}
 	}
 
@@ -130,6 +153,16 @@ public class Animation implements IAnimation {
 	@Override
 	public long getLength() {
 		return lengthInMills;
+	}
+
+	
+	@Override
+	public GraphState getGraphStateForFrame(long frame) {
+		if(frame<lengthInMills/2) {
+			return mapping.getStart();
+		}else {
+			return mapping.getEnd();
+		}
 	}
 
 }

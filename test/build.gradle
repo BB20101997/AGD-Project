@@ -23,6 +23,8 @@ dependencies {
 
     testImplementation project(":main")
     
+     testImplementation project(":control")
+    
     testImplementation project(":view")
     
     testImplementation project(":api")

@@ -48,16 +48,23 @@ public class Animation implements IAnimation {
 				frame, lengthInMills);
 		
 		
-		var color = getCurrent(mapping.getStart().getHighlight(node),mapping.getEnd().getHighlight(node), frame, lengthInMills);
+		var color = getCurrent(mapping.getStart().getHighlight(node),mapping.getEnd().getHighlight(node),graphic.getBackground(),frame, lengthInMills);
 		
 		if(color!=null) {
 			var forground = graphic.getColor();
+			var background = graphic.getBackground();
 			graphic.setColor(color);
 			graphic.fill(rect);
 			graphic.setColor(forground);
+			graphic.setBackground(background);
 		}
 		
 		graphic.draw(rect);
+		
+		//draw label centered on node
+		var glyphV = graphic.getFont().createGlyphVector(graphic.getFontRenderContext(), node.getIdentifier());
+		var bounds = glyphV.getVisualBounds();
+		graphic.drawGlyphVector(glyphV, (float)(rect.getCenterX()-bounds.getCenterX()), (float) (rect.getCenterY()-bounds.getCenterY()));
 
 		// draw the sub-graph
 		Graphics2D subGraphic = (Graphics2D) graphic.create((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(),
@@ -69,16 +76,18 @@ public class Animation implements IAnimation {
 
 	protected void drawEdge(ElkEdge e, Graphics2D g, long frame) {
 		var forground = g.getColor();
-		var color = getCurrent(mapping.getStart().getHighlight(e),mapping.getEnd().getHighlight(e), frame, lengthInMills);
+		
+		var color = getCurrent(mapping.getStart().getHighlight(e),mapping.getEnd().getHighlight(e),forground, frame, lengthInMills);
 		if(color!=null) {
 			g.setColor(color);
 		}
+		
 		e.getSections().forEach(s -> drawEdgeSection(s, g, frame));
 		g.setColor(forground);
 	}
 
 	private void drawEdgeSection(ElkEdgeSection s, Graphics2D g, long frame) {
-		// TODO optionally draw arrows at the end of an edge
+		// TODO  draw arrows at the end of an edge
 		// mapping.pointInTime.EndOfSection.pos
 		Path2D path = new Path2D.Double();
 
@@ -95,7 +104,7 @@ public class Animation implements IAnimation {
 				lengthInMills);
 		path.lineTo(point.getX(), point.getY());
 
-		var color = getCurrent(mapping.getStart().getHighlight(s),mapping.getEnd().getHighlight(s), frame, lengthInMills);             
+		var color = getCurrent(mapping.getStart().getHighlight(s),mapping.getEnd().getHighlight(s),g.getColor(), frame, lengthInMills);             
 		if(color!=null) {                                  
 			var forground = g.getColor();                  
 			g.setColor(color);                             

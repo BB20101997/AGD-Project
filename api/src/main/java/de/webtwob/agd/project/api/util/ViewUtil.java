@@ -41,29 +41,34 @@ public class ViewUtil {
 				getCurrent(oldPos.getHeight(), newPos.getHeight(), timePos, timeLength));
 	}
 
-	public static Color getCurrent(Color start, Color end, double timePos, double totalTime) {
+	public static Color getCurrent(Color start, Color end,Color fallback, double timePos, double totalTime) {
 		
+		if(start==end) {
+			return start;
+		}
+		
+		//assumes WHITE Background Color
 		if(start == null) {
-			return end;
+			start = fallback;
 		}
 		if(end == null) {
-			return start;
+			end = fallback;
 		}
 
 		var startAlpha = start.getAlpha() * start.getAlpha();
-		var startBlue = start.getBlue() * start.getBlue();
+		var startBlue  = start.getBlue()  * start.getBlue();
 		var startGreen = start.getGreen() * start.getGreen();
-		var startRed = start.getRed() * start.getRed();
+		var startRed   = start.getRed()   * start.getRed();
 
 		var endAlpha = end.getAlpha() * end.getAlpha();
 		var endBlue  = end.getBlue()  * end.getBlue();
 		var endGreen = end.getGreen() * end.getGreen();
 		var endRed   = end.getRed()   * end.getRed();
 		
-		var resAlpha = (int)Math.sqrt(getCurrent(startAlpha,endAlpha,timePos,totalTime));
-		var resBlue  = (int)Math.sqrt(getCurrent(startBlue,endBlue  ,timePos,totalTime));
-		var resGreen = (int)Math.sqrt(getCurrent(startGreen,endGreen,timePos,totalTime));
-		var resRed   = (int)Math.sqrt(getCurrent(startRed,endRed    ,timePos,totalTime));	
+		var resAlpha = (int)Math.sqrt(getCurrent(startAlpha,endAlpha ,timePos,totalTime));
+		var resBlue  = (int)Math.sqrt(getCurrent(startBlue ,endBlue  ,timePos,totalTime));
+		var resGreen = (int)Math.sqrt(getCurrent(startGreen,endGreen ,timePos,totalTime));
+		var resRed   = (int)Math.sqrt(getCurrent(startRed  ,endRed   ,timePos,totalTime));	
 		
 		return new Color(resRed,resGreen,resBlue,resAlpha);
 	}
@@ -146,7 +151,7 @@ public class ViewUtil {
 		}
 	}
 
-	private static void saveState(ElkEdge edge, GraphState state) {
+	public static void saveState(ElkEdge edge, GraphState state) {
 
 		for (var sect : edge.getSections()) {
 			saveState(sect, state);

@@ -11,13 +11,32 @@ import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.VerbosityEnum;
+import de.webtwob.agd.project.api.interfaces.IVerbosity;
+
 public class GraphState {
 	
-	Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
-	Map<ElkEdgeSection, Line2D.Double> elkSectionMap = new HashMap<>();
-	Map<ElkBendPoint, Point2D.Double> elkBendPointMap = new HashMap<>();
+	public GraphState() {}
+	
+	/**
+	 * Copy Constructor
+	 * */
+	public GraphState(GraphState copy) {
+		elkBendPointMap.putAll(copy.elkBendPointMap);
+		elkSectionMap.putAll(copy.elkSectionMap);
+		elkNodeMap.putAll(copy.elkNodeMap);
+		
+		highlightMap.putAll(copy.highlightMap);
+		verbosity = copy.verbosity;
+	}
+	
+	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
+	private Map<ElkEdgeSection, Line2D.Double> elkSectionMap = new HashMap<>();
+	private Map<ElkBendPoint, Point2D.Double> elkBendPointMap = new HashMap<>();
 
-	Map<Object, Color> highlightMap = new HashMap<>();
+	private Map<Object, Color> highlightMap = new HashMap<>();
+	
+	private IVerbosity verbosity = VerbosityEnum.ONE;
 
 	@SuppressWarnings("exports")
 	public Rectangle2D.Double getMapping(ElkNode node) {
@@ -39,7 +58,19 @@ public class GraphState {
 	}
 
 	public void setHighlight(Object obj, Color col) {
+		if(obj==null) return;
+		if(col==null) {
+			highlightMap.remove(obj);
+		}
 		highlightMap.put(obj, col);
+	}
+
+	public IVerbosity getVerbosity() {
+		return verbosity;
+	}
+
+	public void setVerbosity(IVerbosity verbosity) {
+		this.verbosity = verbosity;
 	}
 
 

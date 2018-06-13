@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IController;
 
@@ -21,7 +22,7 @@ public class MainPanel extends JPanel {
 	JPanel algorithmPanel = new JPanel();
 	ControllPanel controllPanel;
 	IAlgorithm algorithm = null;
-	AnimationSyncThread syncThread = new AnimationSyncThread();
+	AnimationSyncThread syncThread;
 	transient ElkNode graph;
 
 	/*
@@ -82,7 +83,13 @@ public class MainPanel extends JPanel {
 	public void setAlgorithm(IAlgorithm alg) {
 		algorithm = alg;
 		algorithmPanel.removeAll();
-		algorithm.getAnimationPanel(algorithmPanel,graph);
+		if(syncThread!=null) {
+			syncThread.interrupt();
+		}
+		syncThread = algorithm.getAnimationPanel(algorithmPanel,graph);
+		syncThread.setLoopAction(LoopEnum.LOOP);
+		syncThread.start();
+		
 	}
 
 }

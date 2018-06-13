@@ -6,13 +6,12 @@ import javax.swing.JPanel;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.interfaces.*;
-import de.webtwob.agd.project.api.util.GraphState;
+import de.webtwob.agd.project.api.interfaces.IAlgorithm;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
-import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.model.Model;
 import de.webtwob.agd.project.view.AnimatedView;
-import de.webtwob.agd.project.view.Animation;
+import de.webtwob.agd.project.view.CompoundAnimation;
 
 public class GreedyCycleBreakAlgorithm implements IAlgorithm{
 
@@ -23,12 +22,11 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm{
 		InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 		InitialLayoutUtil.layout(graph);
 		
-		Model mod = new Model();
-		mod.getSteps(graph);
+		var steps = Model.getSteps(graph);
 		
 		AnimationSyncThread syncThread = new AnimationSyncThread();
 		
-		IAnimation anim = new Animation(graph,new Pair<GraphState>(GraphState::new)/**TODO*/,20/**TODO*/);
+		IAnimation anim = new CompoundAnimation(graph,steps, 1000);
 		
 		var animView = new AnimatedView(syncThread);
 		animView.setAnimation(anim);

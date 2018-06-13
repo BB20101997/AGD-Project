@@ -13,12 +13,8 @@ import java.util.Optional;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.events.GraphUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IController;
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
-import de.webtwob.agd.project.api.util.ViewUtil;
-import de.webtwob.agd.project.api.util.GraphMapping;
-import de.webtwob.agd.project.api.enums.*;
 
 public class Control implements IController {
 
@@ -26,8 +22,6 @@ public class Control implements IController {
 	private int sizeOfSteps = 1;
 	private int autoplayTime = 1;
 	private boolean goForwardAutoplay;
-	private List<Map<ElkNode, NodeStates>> stepNodes;
-	private List<Map<ElkEdge, EdgeStates>> stepEdges;
 
 	private List<ElkNode> steps;// Initialize with any new loaded graph
 
@@ -37,9 +31,6 @@ public class Control implements IController {
 	}
 
 	public void setGraph(ElkNode graph) {
-		GraphMapping mapping = new GraphMapping();
-		stepNodes = new List<Map<ElkNode, NodeStates>>();
-		stepEdges = new List<Map<ElkEdge, EdgeStates>>();
 		
 	}
 	
@@ -115,7 +106,6 @@ public class Control implements IController {
 	 */
 	@Override
 	public void buttonForward() {
-		GraphMapping Step = new GraphMapping();
 		
 		//Edgesection colour for edge colour
 		
@@ -138,7 +128,6 @@ public class Control implements IController {
 	 */
 	@Override
 	public void buttonBackward() {
-		GraphUpdateEvent event = new GraphUpdateEvent(steps.get(subStep()));
 		// TODO View.graphUpdate steps.get(event);
 	}
 

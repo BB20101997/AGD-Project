@@ -6,6 +6,8 @@ module de.webtwob.agd.project.control {
 	requires de.webtwob.agd.project.file;
 	requires de.webtwob.agd.project.api;
 	requires de.webtwob.agd.project.view;
+	requires de.webtwob.agd.project.model;
+	
 
 	exports de.webtwob.agd.project.control;
 }

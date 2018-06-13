@@ -31,7 +31,7 @@ public class Model {
 		// Information for the Steps
 		List<ElkNode> allNodes = new LinkedList<>(graph.getChildren());
 		List<ElkEdge> edges = new LinkedList<>(graph.getContainedEdges());
-		List<ElkEdge> reversedEdges = new LinkedList<ElkEdge>();
+		List<ElkEdge> reversedEdges = new LinkedList<>();
 		List<ElkEdge> incomingEdges = null;
 		List<ElkEdge> outgoingEdges = null;
 		ElkNode currentlyActive = null;
@@ -195,7 +195,7 @@ public class Model {
 
 	private static Map<ElkEdge, EdgeStates> getNewStepEdges(List<ElkEdge> edgesList, List<ElkEdge> incomingEdges,
 			List<ElkEdge> outgoingEdges, List<ElkEdge> reversedEdges) {
-		Map<ElkEdge, EdgeStates> newStep = new HashMap<ElkEdge, EdgeStates>();
+		Map<ElkEdge, EdgeStates> newStep = new HashMap<>();
 		edgesList.forEach(l -> newStep.put(l, EdgeStates.NORMAL));
 		if (incomingEdges != null)
 			incomingEdges.forEach(l -> newStep.put(l, EdgeStates.INCOMING));
@@ -209,7 +209,7 @@ public class Model {
 	private static Map<ElkNode, NodeStates> getNewStepNodes(ElkNode active, LinkedList<ElkNode> sourceList,
 			LinkedList<ElkNode> sinkList, List<ElkNode> normal) {
 
-		Map<ElkNode, NodeStates> newStep = new HashMap<ElkNode, NodeStates>();
+		Map<ElkNode, NodeStates> newStep = new HashMap<>();
 		normal.forEach(e -> newStep.put(e, NodeStates.NORMAL));
 		sinkList.forEach(e -> newStep.put(e, NodeStates.SINK));
 		sourceList.forEach(e -> newStep.put(e, NodeStates.SOURCE));

@@ -5,9 +5,8 @@
 module de.webtwob.agd.project.main {
 	requires java.desktop;
 	requires org.eclipse.elk.graph;
-	
+
 	requires de.webtwob.agd.project.view;
-    requires de.webtwob.agd.project.control;
-	
-	
+	requires de.webtwob.agd.project.control;
+
 }

@@ -1,5 +1,10 @@
 package de.webtwob.agd.project.control;
 
+import de.webtwob.agd.project.api.events.GraphUpdateEvent;
+import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
+import org.eclipse.elk.graph.ElkNode;
+
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +22,14 @@ import de.webtwob.agd.project.api.enums.*;
 
 public class Control implements IController {
 
-	private int currentStep; // Initalize with any new loaded graph
+	private int currentStep; // Initialize with any new loaded graph
 	private int sizeOfSteps = 1;
 	private int autoplayTime = 1;
 	private boolean goForwardAutoplay;
 	private List<Map<ElkNode, NodeStates>> stepNodes;
 	private List<Map<ElkEdge, EdgeStates>> stepEdges;
 
-	private List<ElkNode> steps;// Initalize with any new loaded graph
+	private List<ElkNode> steps;// Initialize with any new loaded graph
 
 	public Control() {
 		// TODO Create model
@@ -153,7 +158,7 @@ public class Control implements IController {
 	 */
 	@Override
 	public boolean changeGraph(File file) {
-		Optional<ElkNode> graph = IGraphLoader.loadGraph(file);
+		Optional<ElkNode> graph = GraphLoaderHelper.loadGraph(file);
 		if (graph.isPresent()) {
 			// TODO steps = Model.getSteps(graph.get())
 			currentStep = 0;

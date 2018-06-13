@@ -16,30 +16,30 @@ public class GraphMapping {
 	Map<ElkNode, Pair<Rectangle2D.Double>> elkNodeMap = new HashMap<>();
 	Map<ElkEdgeSection, Pair<Line2D.Double>> elkSectionMap = new HashMap<>();
 	Map<ElkBendPoint, Pair<Point2D.Double>> elkBendPointMap = new HashMap<>();
-	
-	Map<Object,Color> highlightMap = new HashMap<>();
+
+	Map<Object, Color> highlightMap = new HashMap<>();
 
 	@SuppressWarnings("exports")
 	public Pair<Rectangle2D.Double> getMapping(ElkNode node) {
-		return elkNodeMap.computeIfAbsent(node, key->new Pair<>(Rectangle2D.Double::new));
+		return elkNodeMap.computeIfAbsent(node, key -> new Pair<>(Rectangle2D.Double::new));
 	}
 
 	@SuppressWarnings("exports")
 	public Pair<Line2D.Double> getMapping(ElkEdgeSection sect) {
-		return elkSectionMap.computeIfAbsent(sect,key -> new Pair<>(Line2D.Double::new));
+		return elkSectionMap.computeIfAbsent(sect, key -> new Pair<>(Line2D.Double::new));
 	}
 
 	@SuppressWarnings("exports")
 	public Pair<Point2D.Double> getMapping(ElkBendPoint bend) {
-		return elkBendPointMap.computeIfAbsent(bend, key->new Pair<>(Double::new));
+		return elkBendPointMap.computeIfAbsent(bend, key -> new Pair<>(Double::new));
 	}
 
 	public Color getHighlight(Object obj) {
 		return highlightMap.get(obj);
 	}
-	
-	public void setHighlight(Object obj,Color col) {
+
+	public void setHighlight(Object obj, Color col) {
 		highlightMap.put(obj, col);
 	}
-	
+
 }

@@ -1,9 +1,8 @@
-package de.webtwob.agd.project.view;
+package de.webtwob.agd.project.api;
 
-import de.webtwob.agd.project.api.IAnimationEventHandler;
-import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
 import java.awt.*;
 import java.util.LinkedList;

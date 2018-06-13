@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.ViewUtil;

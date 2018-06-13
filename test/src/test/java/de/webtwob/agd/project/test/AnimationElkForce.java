@@ -10,13 +10,13 @@ import javax.swing.WindowConstants;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.util.GraphMapping;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedView;
 import de.webtwob.agd.project.view.Animation;
-import de.webtwob.agd.project.view.AnimationSyncThread;
 import de.webtwob.agd.project.view.CompoundAnimation;
 
 public class AnimationElkForce {

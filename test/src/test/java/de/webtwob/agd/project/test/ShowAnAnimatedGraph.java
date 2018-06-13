@@ -10,10 +10,10 @@ import javax.swing.WindowConstants;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedView;
-import de.webtwob.agd.project.view.AnimationSyncThread;
 
 public class ShowAnAnimatedGraph {
 

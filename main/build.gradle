@@ -32,4 +32,6 @@ dependencies {
       
 	runtimeOnly project(':file') 
 	
+    runtimeOnly project(":model")
+	
 }

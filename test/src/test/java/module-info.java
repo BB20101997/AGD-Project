@@ -11,5 +11,7 @@ module de.webtwob.agd.project.test {
 	requires junit;
 	requires java.desktop;
 	requires java.base;
+	requires de.webtwob.agd.project.control;
+	requires de.webtwob.agd.project.model;
 
 }

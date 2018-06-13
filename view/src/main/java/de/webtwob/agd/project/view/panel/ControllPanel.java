@@ -46,6 +46,7 @@ public class ControllPanel extends JPanel {
 		if (!algorithms.isEmpty()) {
 			// if an implementation is found default to the first one
 			algorithmChoises.setSelectedIndex(0);
+			mainPanel.setAlgorithm(algorithms.get(algorithmChoises.getSelectedItem()));
 		}
 
 	}

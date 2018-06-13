@@ -10,13 +10,14 @@ import javax.swing.WindowConstants;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.LoopEnum;
-import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphState;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
+import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.api.util.ViewUtil;
 import de.webtwob.agd.project.view.AnimatedView;
 import de.webtwob.agd.project.view.Animation;
-import de.webtwob.agd.project.view.AnimationSyncThread;
 import de.webtwob.agd.project.view.CompoundAnimation;
 
 public class AnimationElkForce {
@@ -34,18 +35,17 @@ public class AnimationElkForce {
 
 		InitialLayoutUtil.setForceLayoutAlgorithm(start);
 
-		GraphMapping mapping = new GraphMapping();
+		var mapping = new Pair<GraphState>(GraphState::new);
 
-		ViewUtil.saveStartMapping(start, mapping);
+		ViewUtil.saveState(start, mapping.getStart());
 
 		InitialLayoutUtil.layout(start);
 
-		ViewUtil.saveEndMapping(start, mapping);
+		ViewUtil.saveState(start, mapping.getEnd());
 
-		var endPause = new GraphMapping();
+		var pause = new GraphState();
 
-		ViewUtil.saveStartMapping(start, endPause);
-		ViewUtil.saveEndMapping(start, endPause);
+		ViewUtil.saveState(start, pause);
 
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
@@ -57,7 +57,7 @@ public class AnimationElkForce {
 		CompoundAnimation comAnim = new CompoundAnimation();
 
 		comAnim.addAnimation(new Animation(start, mapping, 2000));
-		comAnim.addAnimation(new Animation(start, endPause, 500));
+		comAnim.addAnimation(new Animation(start, new Pair<>(pause,pause), 500));
 
 		syncThread.setLoopAction(LoopEnum.LOOP);
 		syncThread.start();

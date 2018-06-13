@@ -10,6 +10,10 @@ import org.eclipse.elk.graph.ElkNode;
 
 @SuppressWarnings("exports")
 public class Model {
+	
+	
+	private List<Map<ElkNode, NodeStates>> stepNodes = new LinkedList<Map<ElkNode, NodeStates>>();
+	private List<Map<ElkEdge, EdgeStates>> stepEdges = new LinkedList<Map<ElkEdge, EdgeStates>>();
 
 	// TODO Thread
 	// TODO Find a good way to store the changes -> use
@@ -20,9 +24,9 @@ public class Model {
 	 * @param graph
 	 * @return
 	 */
-	public static void getSteps(ElkNode graph, List<Map<ElkNode, NodeStates>> stepNodes,
-			List<Map<ElkEdge, EdgeStates>> stepEdges) {
-		stepNodes.clear();
+	public void getSteps(ElkNode graph) {
+		stepNodes = new LinkedList<Map<ElkNode, NodeStates>>();
+		stepEdges = new LinkedList<Map<ElkEdge, EdgeStates>>();
 		// order nodes
 
 		// copy child list so we can remove already sorted ones
@@ -189,6 +193,7 @@ public class Model {
 		// Step final
 		stepNodes.add(getNewStepNodes(null, sourceList, sinkList, allNodes));
 		stepEdges.add(getNewStepEdges(edges, null, null, reversedEdges));
+
 
 	}
 

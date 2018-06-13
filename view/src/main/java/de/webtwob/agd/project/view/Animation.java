@@ -1,7 +1,7 @@
 package de.webtwob.agd.project.view;
 
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphState;
 import de.webtwob.agd.project.api.util.Pair;
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
@@ -18,14 +18,14 @@ import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
 public class Animation implements IAnimation {
 
 	private final long lengthInMills;
-	private final GraphMapping mapping;
+	private final Pair<GraphState> mapping;
 	private final ElkNode root;
 
 	/**
 	 * length in Frames
 	 */
 	@SuppressWarnings("exports")
-	public Animation(ElkNode root, GraphMapping mapping, int length) {
+	public Animation(ElkNode root, Pair<GraphState> mapping, int length) {
 		this.root = root;
 		this.mapping = mapping;
 		lengthInMills = length;
@@ -44,10 +44,11 @@ public class Animation implements IAnimation {
 
 	private void drawNode(ElkNode node, Graphics2D graphic, long frame) {
 
-		Rectangle2D.Double rect = getCurrent(mapping.getMapping(node).getStart(), mapping.getMapping(node).getEnd(),
+		Rectangle2D.Double rect = getCurrent(mapping.getStart().getMapping(node), mapping.getEnd().getMapping(node),
 				frame, lengthInMills);
 		
-		var color = mapping.getHighlight(node);
+		
+		var color = getCurrent(mapping.getStart().getHighlight(node),mapping.getEnd().getHighlight(node), frame, lengthInMills);
 		
 		if(color!=null) {
 			var forground = graphic.getColor();
@@ -68,7 +69,7 @@ public class Animation implements IAnimation {
 
 	protected void drawEdge(ElkEdge e, Graphics2D g, long frame) {
 		var forground = g.getColor();
-		var color = mapping.getHighlight(e);
+		var color = getCurrent(mapping.getStart().getHighlight(e),mapping.getEnd().getHighlight(e), frame, lengthInMills);
 		if(color!=null) {
 			g.setColor(color);
 		}
@@ -81,7 +82,7 @@ public class Animation implements IAnimation {
 		// mapping.pointInTime.EndOfSection.pos
 		Path2D path = new Path2D.Double();
 
-		Point2D point = getCurrent(mapping.getMapping(s).getStart().getP1(), mapping.getMapping(s).getEnd().getP1(),
+		Point2D point = getCurrent(mapping.getStart().getMapping(s).getP1(), mapping.getEnd().getMapping(s).getP1(),
 				frame, lengthInMills);
 		path.moveTo(point.getX(), point.getY());
 
@@ -90,32 +91,31 @@ public class Animation implements IAnimation {
 			path.lineTo(point.getX(), point.getY());
 		}
 
-		point = getCurrent(mapping.getMapping(s).getStart().getP2(), mapping.getMapping(s).getEnd().getP2(), frame,
+		point = getCurrent(mapping.getStart().getMapping(s).getP2(), mapping.getEnd().getMapping(s).getP2(), frame,
 				lengthInMills);
 		path.lineTo(point.getX(), point.getY());
-		
-		var color = mapping.getHighlight(s);
-		if(color!=null) {
-			var forground = g.getColor();
-			g.setColor(color);
-			g.draw(path);
-			g.setColor(forground);
+
+		var color = getCurrent(mapping.getStart().getHighlight(s),mapping.getEnd().getHighlight(s), frame, lengthInMills);             
+		if(color!=null) {                                  
+			var forground = g.getColor();                  
+			g.setColor(color);                             
+			g.draw(path);                                  
+			g.setColor(forground);                         
 		}else {
 			g.draw(path);
 		}
 	}
 
 	private Point2D getBendPoint(ElkBendPoint p, long frame) {
-		Pair<Point2D.Double> bendMapping = mapping.getMapping(p);
-		return getCurrent(bendMapping.getStart(), bendMapping.getEnd(), frame, lengthInMills);
+		return getCurrent(mapping.getStart().getMapping(p), mapping.getEnd().getMapping(p), frame, lengthInMills);
 	}
 
 	public double getWidth() {
-		return Math.max(mapping.getMapping(root).getStart().getWidth(), mapping.getMapping(root).getEnd().getWidth());
-	}
-
-	public double getHeight() {
-		return Math.max(mapping.getMapping(root).getStart().getHeight(), mapping.getMapping(root).getEnd().getHeight());
+		return Math.max(mapping.getStart().getMapping(root).getWidth(),  mapping.getEnd().getMapping(root).getWidth());
+	}                                                                                    
+                                                                                         
+	public double getHeight() {                                                          
+		return Math.max(mapping.getStart().getMapping(root).getHeight(), mapping.getEnd().getMapping(root).getHeight());
 	}
 
 	@Override

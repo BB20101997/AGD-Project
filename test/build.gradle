@@ -18,6 +18,10 @@ dependencies {
     testImplementation  group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
 
     testImplementation project(":file")
+    
+    testImplementation project(":model")
+    
+    testImplementation project(":control")
 
     testImplementation project(":main")
     

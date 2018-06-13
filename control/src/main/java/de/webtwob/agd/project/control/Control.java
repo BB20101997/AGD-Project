@@ -7,7 +7,14 @@ import org.eclipse.elk.graph.ElkNode;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import org.eclipse.elk.graph.ElkEdge;
+import org.eclipse.elk.graph.ElkNode;
+
+import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 public class Control implements IController {
 
@@ -23,6 +30,10 @@ public class Control implements IController {
 		// TODO ADD view
 	}
 
+	public void setGraph(ElkNode graph) {
+		
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -73,15 +84,14 @@ public class Control implements IController {
 	public void autoplay() {
 		// TODO Add listener for Button event and replace it with this
 		// TODO wait for Toggle removed
-		while ((goForwardAutoplay && currentStep <= steps.size() - 1 || !goForwardAutoplay && currentStep > 0)
-				|| (!goForwardAutoplay && goForwardAutoplay && currentStep != 0)) {
+		while ((goForwardAutoplay && currentStep <= steps.size() - 1 || !goForwardAutoplay && currentStep > 0)) {
 			if (goForwardAutoplay) {
 				buttonForward();
 			} else {
 				buttonBackward();
 			}
 			try {
-				Thread.sleep(autoplayTime * 1000L);
+				Thread.sleep(autoplayTime * 1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				// e.printStackTrace();
@@ -96,8 +106,9 @@ public class Control implements IController {
 	 */
 	@Override
 	public void buttonForward() {
-
-		GraphUpdateEvent event = new GraphUpdateEvent(steps.get(addStep()));
+		
+		//Edgesection colour for edge colour
+		
 		// TODO View.graphUpdate steps.get(event);
 	}
 
@@ -117,7 +128,6 @@ public class Control implements IController {
 	 */
 	@Override
 	public void buttonBackward() {
-		GraphUpdateEvent event = new GraphUpdateEvent(steps.get(subStep()));
 		// TODO View.graphUpdate steps.get(event);
 	}
 

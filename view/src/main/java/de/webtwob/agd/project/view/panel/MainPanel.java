@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IController;
 
@@ -20,6 +21,7 @@ public class MainPanel extends JPanel {
 	JPanel algorithmPanel = new JPanel();
 	ControllPanel controllPanel;
 	IAlgorithm algorithm = null;
+	AnimationSyncThread syncThread = new AnimationSyncThread();
 	transient ElkNode graph;
 
 	/*
@@ -80,9 +82,7 @@ public class MainPanel extends JPanel {
 	public void setAlgorithm(IAlgorithm alg) {
 		algorithm = alg;
 		algorithmPanel.removeAll();
-		if (alg != null) {
-			algorithmPanel.add(algorithm.getAnimationPanel(graph));
-		}
+		algorithm.getAnimationPanel(algorithmPanel,graph);
 	}
 
 }

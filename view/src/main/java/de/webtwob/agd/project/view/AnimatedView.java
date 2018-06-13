@@ -16,8 +16,10 @@ import javax.swing.JComponent;
 
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphState;
+import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.api.util.ViewUtil;
 
 public class AnimatedView extends JComponent {
@@ -104,7 +106,7 @@ public class AnimatedView extends JComponent {
 	 *            used instead of length
 	 */
 	@SuppressWarnings("exports") // don't export automatic modules
-	public void animateGraph(ElkNode graph, GraphMapping mapping, int length) {
+	public void animateGraph(ElkNode graph, Pair<GraphState> mapping, int length) {
 		setAnimation(new Animation(graph, mapping, length));
 	}
 

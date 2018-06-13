@@ -20,6 +20,8 @@ dependencies {
     testImplementation project(":file")
     
     testImplementation project(":model")
+    
+    testImplementation project(":control")
 
     testImplementation project(":main")
     

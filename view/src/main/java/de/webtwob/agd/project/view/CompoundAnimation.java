@@ -1,7 +1,9 @@
 package de.webtwob.agd.project.view;
 
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphMapping;
+import de.webtwob.agd.project.api.util.GraphState;
+import de.webtwob.agd.project.api.util.Pair;
+
 import org.eclipse.elk.graph.ElkNode;
 
 import java.awt.*;
@@ -35,14 +37,18 @@ public class CompoundAnimation implements IAnimation {
 	}
 
 	/**
-	 * Creates a CompoundAnimation conatining equal long animation of the passed
+	 * Creates a CompoundAnimation containing equal long animation of the passed
 	 * mappings, each animation is length long
 	 */
-	public CompoundAnimation(ElkNode root, List<GraphMapping> mappings, int length) {
-		IAnimation anim;
-		for (var map : mappings) {
-			anim = new Animation(root, map, length);
-			addAnimation(anim);
+	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length) {
+		if(mappings.size()==1) {
+			//only one mapping
+			addAnimation(new Animation(root, new Pair<>(mappings.get(0),mappings.get(0)), length));
+		}else if(!mappings.isEmpty()){
+			//more than one mapping
+			for(int i = 1;i<mappings.size();i++) {
+				addAnimation(new Animation(root,new Pair<>(mappings.get(i-1),mappings.get(i)),length));
+			}
 		}
 	}
 

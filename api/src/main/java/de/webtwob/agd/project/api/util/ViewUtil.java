@@ -5,6 +5,7 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
+import java.awt.Color;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -40,19 +41,48 @@ public class ViewUtil {
 				getCurrent(oldPos.getHeight(), newPos.getHeight(), timePos, timeLength));
 	}
 
+	public static Color getCurrent(Color start, Color end, double timePos, double totalTime) {
+		
+		if(start == null) {
+			return end;
+		}
+		if(end == null) {
+			return start;
+		}
+
+		var startAlpha = start.getAlpha() * start.getAlpha();
+		var startBlue = start.getBlue() * start.getBlue();
+		var startGreen = start.getGreen() * start.getGreen();
+		var startRed = start.getRed() * start.getRed();
+
+		var endAlpha = end.getAlpha() * end.getAlpha();
+		var endBlue  = end.getBlue()  * end.getBlue();
+		var endGreen = end.getGreen() * end.getGreen();
+		var endRed   = end.getRed()   * end.getRed();
+		
+		var resAlpha = (int)Math.sqrt(getCurrent(startAlpha,endAlpha,timePos,totalTime));
+		var resBlue  = (int)Math.sqrt(getCurrent(startBlue,endBlue  ,timePos,totalTime));
+		var resGreen = (int)Math.sqrt(getCurrent(startGreen,endGreen,timePos,totalTime));
+		var resRed   = (int)Math.sqrt(getCurrent(startRed,endRed    ,timePos,totalTime));	
+		
+		return new Color(resRed,resGreen,resBlue,resAlpha);
+	}
+
 	@SuppressWarnings("exports")
-	public static GraphMapping createMapping(ElkNode start, ElkNode end) {
-		GraphMapping mapping = new GraphMapping();
+	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
+		var mapping = new Pair<>(GraphState::new);
 
 		insertNodeMapping(start, end, mapping);
 
 		return mapping;
 	}
 
-	private static void insertNodeMapping(ElkNode start, ElkNode end, GraphMapping mapping) {
-		var nodeMapping = mapping.getMapping(start);
-		nodeMapping.setStart(new Rectangle2D.Double(start.getX(), start.getY(), start.getWidth(), start.getHeight()));
-		nodeMapping.setEnd(new Rectangle2D.Double(end.getX(), end.getY(), end.getWidth(), end.getHeight()));
+	private static void insertNodeMapping(ElkNode start, ElkNode end, Pair<GraphState> mapping) {
+		var startMapping = mapping.getStart().getMapping(start);
+		var endMapping = mapping.getEnd().getMapping(start);
+
+		startMapping.setFrame(new Rectangle2D.Double(start.getX(), start.getY(), start.getWidth(), start.getHeight()));
+		endMapping.setFrame(new Rectangle2D.Double(end.getX(), end.getY(), end.getWidth(), end.getHeight()));
 
 		for (ElkNode startChild : start.getChildren()) {
 			end.getChildren().stream().filter(endChild -> endChild.getIdentifier().equals(startChild.getIdentifier()))
@@ -67,7 +97,7 @@ public class ViewUtil {
 
 	}
 
-	private static void insertEdgeMapping(ElkEdge start, ElkEdge end, GraphMapping mapping) {
+	private static void insertEdgeMapping(ElkEdge start, ElkEdge end, Pair<GraphState> mapping) {
 		int count = Math.min(start.getSections().size(), end.getSections().size());
 
 		for (int i = 0; i < count; i++) {
@@ -75,11 +105,13 @@ public class ViewUtil {
 		}
 	}
 
-	private static void insertSectionMapping(ElkEdgeSection start, ElkEdgeSection end, GraphMapping mapping) {
+	private static void insertSectionMapping(ElkEdgeSection start, ElkEdgeSection end, Pair<GraphState> mapping) {
 
-		var sectMapping = mapping.getMapping(start);
-		sectMapping.setStart(new Line2D.Double(start.getStartX(), start.getStartY(), start.getEndX(), start.getEndY()));
-		sectMapping.setEnd(new Line2D.Double(end.getStartX(), end.getStartY(), end.getEndX(), end.getEndY()));
+		var startMapping = mapping.getStart().getMapping(start);
+		var endMapping = mapping.getEnd().getMapping(start);
+
+		startMapping.setLine(new Line2D.Double(start.getStartX(), start.getStartY(), start.getEndX(), start.getEndY()));
+		endMapping.setLine(new Line2D.Double(end.getStartX(), end.getStartY(), end.getEndX(), end.getEndY()));
 
 		int count = Math.min(start.getBendPoints().size(), end.getBendPoints().size());
 		for (int i = 0; i < count; i++) {
@@ -88,96 +120,56 @@ public class ViewUtil {
 
 	}
 
-	private static void insertBendPointMapping(ElkBendPoint start, ElkBendPoint end, GraphMapping mapping) {
-		var bendMapping = mapping.getMapping(start);
+	private static void insertBendPointMapping(ElkBendPoint start, ElkBendPoint end, Pair<GraphState> mapping) {
+		var startMapping = mapping.getStart().getMapping(start);
+		var endMapping = mapping.getEnd().getMapping(start);
 
-		bendMapping.setStart(new Point2D.Double(start.getX(), start.getY()));
-		bendMapping.setEnd(new Point2D.Double(end.getX(), end.getY()));
+		startMapping.setLocation(new Point2D.Double(start.getX(), start.getY()));
+		endMapping.setLocation(new Point2D.Double(end.getX(), end.getY()));
 
 	}
 
 	/**
 	 * Save the current state of the Graph in the start part of the mapping
 	 */
-	public static void saveStartMapping(@SuppressWarnings("exports") ElkNode graph, GraphMapping mapping) {
-		var nodeMapping = mapping.getMapping(graph);
+	public static void saveState(@SuppressWarnings("exports") ElkNode graph, GraphState state) {
+		var nodeMapping = state.getMapping(graph);
 
-		nodeMapping.setStart(new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight()));
+		nodeMapping.setFrame(new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight()));
 
 		for (var child : graph.getChildren()) {
-			saveStartMapping(child, mapping);
+			saveState(child, state);
 		}
 
 		for (var edge : graph.getContainedEdges()) {
-			saveStartMapping(edge, mapping);
+			saveState(edge, state);
 		}
 	}
 
-	/**
-	 * Save the current state of the Graph in the end part of the mapping
-	 */
-	public static void saveEndMapping(@SuppressWarnings("exports") ElkNode graph, GraphMapping mapping) {
-		var nodeMapping = mapping.getMapping(graph);
-
-		nodeMapping.setEnd(new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight()));
-
-		for (var child : graph.getChildren()) {
-			saveEndMapping(child, mapping);
-		}
-
-		for (var edge : graph.getContainedEdges()) {
-			saveEndMapping(edge, mapping);
-		}
-	}
-
-	private static void saveStartMapping(ElkEdge edge, GraphMapping mapping) {
+	private static void saveState(ElkEdge edge, GraphState state) {
 
 		for (var sect : edge.getSections()) {
-			saveStartMapping(sect, mapping);
+			saveState(sect, state);
 		}
 
 	}
 
-	private static void saveStartMapping(ElkEdgeSection sect, GraphMapping mapping) {
-		var sectMapping = mapping.getMapping(sect);
+	private static void saveState(ElkEdgeSection sect, GraphState state) {
 
-		sectMapping.setStart(new Line2D.Double(sect.getStartX(), sect.getStartY(), sect.getEndX(), sect.getEndY()));
+		var mapping = state.getMapping(sect);
+		mapping.setLine(sect.getStartX(), sect.getStartY(), sect.getEndX(), sect.getEndY());
 
 		for (var bend : sect.getBendPoints()) {
-			saveStartMapping(bend, mapping);
+			saveState(bend, state);
 		}
 
 	}
 
-	private static void saveStartMapping(ElkBendPoint bend, GraphMapping mapping) {
-		var bendMapping = mapping.getMapping(bend);
+	private static void saveState(ElkBendPoint bend, GraphState state) {
+		var mapping = state.getMapping(bend);
 
-		bendMapping.setStart(new Point2D.Double(bend.getX(), bend.getY()));
-	}
+		mapping.setLocation(bend.getX(), bend.getY());
 
-	private static void saveEndMapping(ElkEdge edge, GraphMapping mapping) {
-
-		for (var sect : edge.getSections()) {
-			saveEndMapping(sect, mapping);
-		}
-
-	}
-
-	private static void saveEndMapping(ElkEdgeSection sect, GraphMapping mapping) {
-		var sectMapping = mapping.getMapping(sect);
-
-		sectMapping.setEnd(new Line2D.Double(sect.getStartX(), sect.getStartY(), sect.getEndX(), sect.getEndY()));
-
-		for (var bend : sect.getBendPoints()) {
-			saveEndMapping(bend, mapping);
-		}
-
-	}
-
-	private static void saveEndMapping(ElkBendPoint bend, GraphMapping mapping) {
-		var bendMapping = mapping.getMapping(bend);
-
-		bendMapping.setEnd(new Point2D.Double(bend.getX(), bend.getY()));
 	}
 
 }

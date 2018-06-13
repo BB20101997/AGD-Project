@@ -28,6 +28,7 @@ public class GraphState {
 		
 		highlightMap.putAll(copy.highlightMap);
 		verbosity = copy.verbosity;
+		pseudoCodeLine = copy.pseudoCodeLine;
 	}
 	
 	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
@@ -35,6 +36,8 @@ public class GraphState {
 	private Map<ElkBendPoint, Point2D.Double> elkBendPointMap = new HashMap<>();
 
 	private Map<Object, Color> highlightMap = new HashMap<>();
+	
+	private int pseudoCodeLine = 0;
 	
 	private IVerbosity verbosity = VerbosityEnum.ONE;
 
@@ -71,6 +74,14 @@ public class GraphState {
 
 	public void setVerbosity(IVerbosity verbosity) {
 		this.verbosity = verbosity;
+	}
+
+	public int getPseudoCodeLine() {
+		return pseudoCodeLine;
+	}
+
+	public void setPseudoCodeLine(int pseudoCodeLine) {
+		this.pseudoCodeLine = pseudoCodeLine;
 	}
 
 

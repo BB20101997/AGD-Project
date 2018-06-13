@@ -98,4 +98,25 @@ public class CompoundAnimation implements IAnimation {
 		return height;
 	}
 
+	@Override
+	public GraphState getGraphStateForFrame(long frame) {
+		var from = this.from;
+		var to = this.to;
+		var currentAnimation = this.currentAnimation;
+		if (frame < from || frame > to) {
+			var opt = IntStream.range(0, animationList.size())
+					.filter(i -> animationStarts.get(i) <= frame && animationEnds.get(i) >= frame).findFirst();
+			if(opt.isPresent()) {
+				var i = opt.getAsInt();
+				currentAnimation = animationList.get(i);
+						from = animationStarts.get(i);
+						to = animationEnds.get(i);
+			}
+		}
+		if (currentAnimation != null) {
+			return currentAnimation.getGraphStateForFrame(frame-from);
+		}
+		return null;
+	}
+
 }

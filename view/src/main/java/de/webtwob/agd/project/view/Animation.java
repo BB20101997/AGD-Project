@@ -132,4 +132,14 @@ public class Animation implements IAnimation {
 		return lengthInMills;
 	}
 
+	
+	@Override
+	public GraphState getGraphStateForFrame(long frame) {
+		if(frame<lengthInMills/2) {
+			return mapping.getStart();
+		}else {
+			return mapping.getEnd();
+		}
+	}
+
 }

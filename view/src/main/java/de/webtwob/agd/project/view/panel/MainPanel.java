@@ -1,8 +1,8 @@
 package de.webtwob.agd.project.view.panel;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
@@ -65,7 +65,7 @@ public class MainPanel extends JPanel {
 
 		add(algorithmPanel, constraints);
 
-		algorithmPanel.setBackground(Color.BLUE);
+		//algorithmPanel.setBackground(Color.BLUE);
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 4;
@@ -90,6 +90,14 @@ public class MainPanel extends JPanel {
 		syncThread.setLoopAction(LoopEnum.LOOP);
 		syncThread.start();
 		
+	}
+
+	public void setLoopType(LoopEnum item) {
+		syncThread.setLoopAction(item);
+	}
+
+	public AnimationSyncThread getSyncThread() {
+		return syncThread;
 	}
 
 }

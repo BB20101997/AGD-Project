@@ -60,10 +60,13 @@ public class PseudocodeView extends JComponent {
 		var indicatorWidth = graphic2d.getFontMetrics().stringWidth(LINE_INDICATOR);
 		var mapping = animation.getGraphStateForFrame(frameSync.getFrame());
 		var currentLine = mapping.getPseudoCodeLine();
+		var color = graphic2d.getColor();
 		
 		for(int i = 0;i<codeLines.size();i++) {
 			if(i==currentLine) {
+				graphic2d.setColor(Color.RED);
 				graphic2d.drawString(LINE_INDICATOR, 0, lineHeight*(i+1));
+				graphic2d.setColor(color);
 			}
 			graphic2d.drawString(String.format("%02d: %2s", i+1,codeLines.get(i)),indicatorWidth  , lineHeight*(i+1));
 		}

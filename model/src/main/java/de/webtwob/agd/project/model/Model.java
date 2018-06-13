@@ -48,6 +48,11 @@ public class Model {
 			// sort out source
 			do {
 				found = false;
+				if(children.isEmpty()) {
+					state = new GraphState(state);
+					state.setPseudoCodeLine(8);
+					steps.add(state);
+				}
 				for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
 					ElkNode node = iter.next();
 					
@@ -71,16 +76,31 @@ public class Model {
 						
 						state = new GraphState(state);
 						state.setHighlight(node, null); //un-highlight current node
+						state.setPseudoCodeLine(14);
 						steps.add(state);
 						
 					}
 				}
+				
+				state = new GraphState(state);
+				state.setPseudoCodeLine(15);
+				steps.add(state);
 
 			} while (found);// stop when an iteration didn't found sinks
 
 			// sort out sink
 			do {
+				state = new GraphState(state);
+				state.setPseudoCodeLine(17);
+				steps.add(state);
 				found = false;
+				
+				if(children.isEmpty()) {
+					state = new GraphState(state);
+					state.setPseudoCodeLine(19);
+					steps.add(state);
+				}
+				
 				for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
 
 					ElkNode node = iter.next();
@@ -106,17 +126,25 @@ public class Model {
 
 						state = new GraphState(state);
 						state.setHighlight(node, null); //un-highlight current node
+						state.setPseudoCodeLine(25);
 						steps.add(state);
 						
 					}
 
 				}
-
+				state = new GraphState(state);
+				state.setPseudoCodeLine(26);
+				steps.add(state);
 			} while (found);// stop when an iteration didn't found sinks
 
 			// find edge with max in-degree to out-degree difference
 			ElkNode maxNode = null;
 			int maxDiff = Integer.MIN_VALUE;
+			if(children.isEmpty()) {
+				state = new GraphState(state);
+				state.setPseudoCodeLine(31);
+				steps.add(state);
+			}
 			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
 
 				ElkNode curNode = iter.next();
@@ -127,6 +155,9 @@ public class Model {
 				steps.add(state);
 
 				int curVal = curNode.getOutgoingEdges().size() - curNode.getIncomingEdges().size();
+				state = new GraphState(state);
+				state.setPseudoCodeLine(33);
+				steps.add(state);
 				if (curVal > maxDiff) {
 					
 					state = new GraphState(state);
@@ -140,11 +171,16 @@ public class Model {
 				}else {
 					state = new GraphState(state);
 					state.setHighlight(curNode, null); //un-highlight current node
+					state.setPseudoCodeLine(37);
 					steps.add(state);
 				}
 
 			}
-
+			if(children.isEmpty()) {
+				state = new GraphState(state);
+				state.setPseudoCodeLine(39);
+				steps.add(state);
+			}
 			// if we still had nodes add the one with max out to in diff to source list
 			if (maxNode != null) {
 				sourceList.addFirst(maxNode);
@@ -194,7 +230,7 @@ public class Model {
 		}
 		
 		state = new GraphState(state);
-		state.setPseudoCodeLine(52);
+		state.setPseudoCodeLine(51);
 		steps.add(state);
 		
 	}

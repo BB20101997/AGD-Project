@@ -22,19 +22,21 @@ public class Util {
 	 */
 	public static void reverseEdge(ElkEdge edge) {
 		replaceEnds(edge, getTarget(edge), getSource(edge));
-		for(ElkEdgeSection sect:edge.getSections()) {
-			//swap start points
+		for (ElkEdgeSection sect : edge.getSections()) {
+			// swap start points
 			var tmpStartX = sect.getStartX();
 			var tmpStartY = sect.getStartY();
 			sect.setStartLocation(sect.getEndX(), sect.getEndY());
 			sect.setEndLocation(tmpStartX, tmpStartY);
-			
-			//reverse bend points
-			var chain = new KVectorChain();
-			for(var bend:sect.getBendPoints()) {
-				chain.addFirst(bend.getX(), bend.getY());
+
+			// reverse bend points
+			if (!sect.getBendPoints().isEmpty()) {
+				var chain = new KVectorChain();
+				for (var bend : sect.getBendPoints()) {
+					chain.addFirst(bend.getX(), bend.getY());
+				}
+				ElkUtil.applyVectorChain(chain, sect);
 			}
-			ElkUtil.applyVectorChain(chain, sect);
 		}
 	}
 

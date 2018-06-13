@@ -31,6 +31,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	public AnimationSyncThread getAnimationPanel(JPanel panel, ElkNode graph) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+		//apply the force layout algorithm to get an initial layout
 		InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 		InitialLayoutUtil.layout(graph);
 

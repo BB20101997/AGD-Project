@@ -3,6 +3,7 @@ package de.webtwob.agd.project.api.util;
 import java.awt.Color;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +23,9 @@ public class GraphState {
 	 * Copy Constructor
 	 * */
 	public GraphState(GraphState copy) {
-		elkBendPointMap.putAll(copy.elkBendPointMap);
-		elkSectionMap.putAll(copy.elkSectionMap);
-		elkNodeMap.putAll(copy.elkNodeMap);
+		copy.elkBendPointMap.forEach((key,value)->elkBendPointMap.put(key, (Double) value.clone()));
+		copy.elkSectionMap.forEach((key,value)->elkSectionMap.put(key, (Line2D.Double) value.clone()));
+		copy.elkNodeMap.forEach((key,value)->elkNodeMap.put(key, (Rectangle2D.Double)value.clone()));
 		
 		highlightMap.putAll(copy.highlightMap);
 		verbosity = copy.verbosity;

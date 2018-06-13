@@ -31,7 +31,7 @@ public class AnimationElkForce {
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 
-		ElkNode start = GraphLoaderHelper.loadGraph(new File("src/test/resources/forceLayoutTest.json")).orElse(null);
+		ElkNode start = GraphLoaderHelper.loadGraph(new File("../main/src/main/resources/example.json")).orElse(null);
 
 		InitialLayoutUtil.setForceLayoutAlgorithm(start);
 

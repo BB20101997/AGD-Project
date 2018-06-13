@@ -24,7 +24,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm{
 		InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 		InitialLayoutUtil.layout(graph);
 		
-		Model.getSteps(graph, new LinkedList<>(), new LinkedList<>());
+		Model mod = new Model();
+		mod.getSteps(graph);
 		
 		AnimationSyncThread syncThread = new AnimationSyncThread();
 		

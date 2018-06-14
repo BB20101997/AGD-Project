@@ -55,7 +55,6 @@ public class AnimatedView extends JComponent {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				/*
-				 * TODO this should not scale linearly for smaller scale it should
 				 * increase/decrease by smaller amounts
 				 */
 				scale = scale + scale * e.getUnitsToScroll() / 32;

@@ -4,7 +4,8 @@ import org.eclipse.elk.graph.ElkNode;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.webtwob.agd.project.file.JSONGraphLoader;
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 
 import java.io.File;
 import java.util.Optional;
@@ -14,14 +15,12 @@ import java.util.stream.Collectors;
 /**
  * Created by BB20101997 on 31. Mai. 2018.
  */
+@SuppressWarnings("unused")
 public class GraphImportTest {
 
 	@Test
 	public void importGraphFromFile() {
-		// TODO why does IGraphLoader.loadGraph not work here, try adding a testRuntime
-		// dependency on the file project
-		Optional<ElkNode> optNode = JSONGraphLoader
-				.importGraphFromFile(new File("src/test/resources/importTestGraph.json"));
+		var optNode = GraphLoaderHelper.loadGraph(new File("src/test/resources/importTestGraph.json"));
 		Assert.assertTrue("Importer returned no Graph", optNode.isPresent());
 		ElkNode node = optNode.get();
 		Assert.assertEquals("root", node.getIdentifier());

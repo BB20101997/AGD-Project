@@ -12,8 +12,6 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Vector;
-
 import static de.webtwob.agd.project.api.util.ViewUtil.getCurrent;
 
 public class Animation implements IAnimation {
@@ -88,7 +86,6 @@ public class Animation implements IAnimation {
 	}
 
 	private void drawEdgeSection(ElkEdgeSection s, Graphics2D g, long frame) {
-		// TODO  draw arrows at the end of an edge
 		// mapping.pointInTime.EndOfSection.pos
 		Path2D path = new Path2D.Double();
 

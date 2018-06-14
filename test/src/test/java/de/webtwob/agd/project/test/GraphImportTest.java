@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
+import de.webtwob.agd.project.file.JSONGraphLoader;
 
 import java.io.File;
 import java.util.Optional;
@@ -20,7 +21,11 @@ public class GraphImportTest {
 
 	@Test
 	public void importGraphFromFile() {
-		var optNode = GraphLoaderHelper.loadGraph(new File("src/test/resources/importTestGraph.json"));
+		
+		//TODO why does GraphLoaderHelper not work here?
+		var file = new File("src/test/resources/importTestGraph.json").getAbsoluteFile();
+		var optNode = JSONGraphLoader.importGraphFromFile(file);
+		
 		Assert.assertTrue("Importer returned no Graph", optNode.isPresent());
 		ElkNode node = optNode.get();
 		Assert.assertEquals("root", node.getIdentifier());

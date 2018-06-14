@@ -36,8 +36,6 @@ public class JSONGraphLoader implements IGraphLoader {
 			} catch (IOException | JsonParseException | JsonImportException e) {
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println(file.getAbsolutePath());
 		}
 
 		return Optional.empty();

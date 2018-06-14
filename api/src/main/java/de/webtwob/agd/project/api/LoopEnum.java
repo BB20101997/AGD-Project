@@ -1,41 +1,34 @@
 package de.webtwob.agd.project.api;
 
-import java.util.function.DoubleConsumer;
-import java.util.function.LongConsumer;
-
 public enum LoopEnum {
 	STOP {
 		@Override
-		public void handle(DoubleConsumer setSpeed, LongConsumer setFrame, long animationLength, long frame,
-				double speed) {
-			setSpeed.accept(0);
-			if (frame > 0) {
-				setFrame.accept(animationLength - 1);
+		public void handle(AnimationSyncThread syncThread) {
+			syncThread.setPaused(true);
+			if (syncThread.getFrame() > 0) {
+				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
+
 			} else {
-				setFrame.accept(0);
+				syncThread.setFrame(0);
 			}
 		}
 	},
 	LOOP {
 		@Override
-		public void handle(DoubleConsumer setSpeed, LongConsumer setFrame, long animationLength, long frame,
-				double speed) {
-			if (frame > 0) {
-				setFrame.accept(0);
+		public void handle(AnimationSyncThread syncThread) {
+			if (syncThread.getFrame() > 0) {
+				syncThread.setFrame(0);
 			} else {
-				setFrame.accept(animationLength - 1);
+				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
 			}
 		}
 	},
 	REVERSE {
 		@Override
-		public void handle(DoubleConsumer setSpeed, LongConsumer setFrame, long animationLength, long frame,
-				double speed) {
-			setSpeed.accept(speed * -1);
-
+		public void handle(AnimationSyncThread syncThread) {
+			syncThread.setSpeed(syncThread.getSpeed()* -1);
 		}
 	};
 
-	public abstract void handle(DoubleConsumer setSpeed, LongConsumer setFrame, long animationLength, long frame,
-			double speed);
+	public abstract void handle(AnimationSyncThread syncThread);
 }

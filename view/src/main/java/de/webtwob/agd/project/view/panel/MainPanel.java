@@ -1,13 +1,14 @@
 package de.webtwob.agd.project.view.panel;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IController;
 
@@ -21,7 +22,7 @@ public class MainPanel extends JPanel {
 	JPanel algorithmPanel = new JPanel();
 	ControllPanel controllPanel;
 	IAlgorithm algorithm = null;
-	AnimationSyncThread syncThread = new AnimationSyncThread();
+	AnimationSyncThread syncThread;
 	transient ElkNode graph;
 
 	/*
@@ -58,13 +59,13 @@ public class MainPanel extends JPanel {
 		constraints.gridy = 0;
 		constraints.gridwidth = 4;
 		constraints.gridheight = 4;
-		constraints.weightx = 4;
+		constraints.weightx = 8;
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.BOTH;
 
 		add(algorithmPanel, constraints);
 
-		algorithmPanel.setBackground(Color.BLUE);
+		//algorithmPanel.setBackground(Color.BLUE);
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 4;
@@ -82,7 +83,21 @@ public class MainPanel extends JPanel {
 	public void setAlgorithm(IAlgorithm alg) {
 		algorithm = alg;
 		algorithmPanel.removeAll();
-		algorithm.getAnimationPanel(algorithmPanel,graph);
+		if(syncThread!=null) {
+			syncThread.interrupt();
+		}
+		syncThread = algorithm.getAnimationPanel(algorithmPanel,graph);
+		syncThread.setLoopAction(LoopEnum.LOOP);
+		syncThread.start();
+		
+	}
+
+	public void setLoopType(LoopEnum item) {
+		syncThread.setLoopAction(item);
+	}
+
+	public AnimationSyncThread getSyncThread() {
+		return syncThread;
 	}
 
 }

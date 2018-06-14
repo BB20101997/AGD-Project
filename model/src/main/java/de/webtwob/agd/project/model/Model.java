@@ -37,7 +37,6 @@ public class Model {
 		LinkedList<ElkNode> sinkList = new LinkedList<>();
 		
 		state =  new GraphState(state);
-		ViewUtil.saveState(graph, state);
 		state.setPseudoCodeLine(4);
 		steps.add(state);
 

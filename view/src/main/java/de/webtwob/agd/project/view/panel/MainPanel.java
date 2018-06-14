@@ -59,7 +59,7 @@ public class MainPanel extends JPanel {
 		constraints.gridy = 0;
 		constraints.gridwidth = 4;
 		constraints.gridheight = 4;
-		constraints.weightx = 4;
+		constraints.weightx = 8;
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.BOTH;
 

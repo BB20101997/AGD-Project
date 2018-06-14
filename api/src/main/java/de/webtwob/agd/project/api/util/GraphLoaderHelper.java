@@ -37,6 +37,9 @@ public class GraphLoaderHelper {
 			return Optional.empty();
 		}
 		return loader.stream().filter(load -> load.getFileFilter().accept(file))
-				.flatMap(l -> l.loadGraphFromFile(file).stream()).findFirst();
-	}
+				.map(load -> load.loadGraphFromFile(file))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.findFirst();
+		}
 }

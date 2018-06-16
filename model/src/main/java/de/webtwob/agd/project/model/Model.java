@@ -182,6 +182,7 @@ public class Model {
 			}
 			// if we still had nodes add the one with max out to in diff to source list
 			if (maxNode != null) {
+				//TODO check if this shouldn't be addLast, also fix pseudo code if it's the case
 				sourceList.addFirst(maxNode);
 				children.remove(maxNode);
 				

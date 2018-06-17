@@ -25,6 +25,9 @@ public class JSONGraphLoader implements IGraphLoader {
 	}
 
 	/**
+	 * @param file the file to try and load a graph from
+	 * @return an Optional which if loading was successful contains the loaded graph
+	 * 
 	 * Uses ElkGraphJson to import an ElkGraph from a Json file
 	 */
 	@SuppressWarnings("exports") // automatic modules should not be exported

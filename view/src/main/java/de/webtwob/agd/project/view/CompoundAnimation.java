@@ -37,6 +37,10 @@ public class CompoundAnimation implements IAnimation {
 	}
 
 	/**
+	 * @param root the graph to animate
+	 * @param mappings a List of configurations for the graph
+	 * @param length the frames between each state
+	 * 
 	 * Creates a CompoundAnimation containing equal long animation of the passed
 	 * mappings, each animation is length long
 	 */

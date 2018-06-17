@@ -20,6 +20,7 @@ public class GraphState {
 	public GraphState() {}
 	
 	/**
+	 * @param copy the GraphState to copy
 	 * Copy Constructor
 	 * */
 	public GraphState(GraphState copy) {

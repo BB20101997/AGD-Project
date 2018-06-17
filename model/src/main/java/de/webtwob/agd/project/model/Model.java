@@ -18,8 +18,8 @@ public class Model {
 	/**
 	 * Greedy cycle break from before
 	 * 
-	 * @param graph
-	 * @return
+	 * @param graph the graph which cycles shall be broken
+	 * @param steps the List to store the GraphStates into
 	 */
 	public static void getSteps(ElkNode graph,List<GraphState> steps) {
 
@@ -37,7 +37,6 @@ public class Model {
 		LinkedList<ElkNode> sinkList = new LinkedList<>();
 		
 		state =  new GraphState(state);
-		ViewUtil.saveState(graph, state);
 		state.setPseudoCodeLine(4);
 		steps.add(state);
 
@@ -183,6 +182,7 @@ public class Model {
 			}
 			// if we still had nodes add the one with max out to in diff to source list
 			if (maxNode != null) {
+				//TODO check if this shouldn't be addLast, also fix pseudo code if it's the case
 				sourceList.addFirst(maxNode);
 				children.remove(maxNode);
 				

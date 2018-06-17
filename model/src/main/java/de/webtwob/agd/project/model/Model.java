@@ -18,8 +18,8 @@ public class Model {
 	/**
 	 * Greedy cycle break from before
 	 * 
-	 * @param graph
-	 * @return
+	 * @param graph the graph which cycles shall be broken
+	 * @param steps the List to store the GraphStates into
 	 */
 	public static void getSteps(ElkNode graph,List<GraphState> steps) {
 

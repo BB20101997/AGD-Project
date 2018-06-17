@@ -41,6 +41,9 @@ public class Util {
 	}
 
 	/**
+	 * @param edge the edge to get the first target from
+	 * @return the first target of the edge
+	 * 
 	 * A version of ElkGraphUtil.getTargetNode which doesn't throw if more than one
 	 * Target is present
 	 */
@@ -54,6 +57,9 @@ public class Util {
 	}
 
 	/**
+	 * @param edge the edge to get the first source from
+	 * @return the first source of the edge
+	 * 
 	 * A version of ElkGraphUtil.getSourceNode which doesn't throw if more than one
 	 * Target is present
 	 */

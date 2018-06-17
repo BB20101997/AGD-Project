@@ -98,6 +98,9 @@ public class AnimatedView extends JComponent {
 	}
 
 	/**
+	 * 
+	 * @param graph the graph that shall be animated 
+	 * @param mapping the mappings for the end and starting configuration of the graph 
 	 * @param length
 	 *            how many frames long shall the animation be at speed 1
 	 * 
@@ -109,6 +112,9 @@ public class AnimatedView extends JComponent {
 		setAnimation(new Animation(graph, mapping, length));
 	}
 
+	/**
+	 * @param animation the animation this View shall display
+	 * */
 	public void setAnimation(IAnimation animation) {
 		frameSync.removeAnimation(this.animation);
 		this.animation = animation;

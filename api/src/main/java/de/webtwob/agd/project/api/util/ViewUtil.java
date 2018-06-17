@@ -16,14 +16,28 @@ public class ViewUtil {
 	}
 
 	/**
-	 * timeLength >= 2
+	 * @param oldPos the last state before the current time
+	 * @param newPos the next state after the current time
+	 * @param timePos the current time
+	 * @param timeLength the distance between oldPos and newPos
+	 *  
+	 * timeLength &gt;= 2
+	 * 
+	 * @return the current value
 	 */
 	public static double getCurrent(double oldPos, double newPos, double timePos, double timeLength) {
 		return oldPos + (newPos - oldPos) * timePos / (timeLength - 1);
 	}
 
 	/**
-	 * timeLength >= 2
+	 * @param oldPos the last state before the current time
+	 * @param newPos the next state after the current time
+	 * @param timePos the current time
+	 * @param timeLength the distance between oldPos and newPos
+	 * 
+	 * timeLength &gt;= 2
+	 * 
+	 * @return the current value
 	 */
 	public static Point2D getCurrent(Point2D oldPos, Point2D newPos, double timePos, double timeLength) {
 		return new Point2D.Double(getCurrent(oldPos.getX(), newPos.getX(), timePos, timeLength),
@@ -31,7 +45,14 @@ public class ViewUtil {
 	}
 
 	/**
-	 * timeLength >= 2
+	 * @param oldPos the last state before the current time
+	 * @param newPos the next state after the current time
+	 * @param timePos the current time
+	 * @param timeLength the distance between oldPos and newPos
+	 * 
+	 * timeLength &gt;= 2
+	 * 
+	 * @return the current value
 	 */
 	public static Rectangle2D.Double getCurrent(Rectangle2D.Double oldPos, Rectangle2D.Double newPos, double timePos,
 			double timeLength) {
@@ -41,6 +62,19 @@ public class ViewUtil {
 				getCurrent(oldPos.getHeight(), newPos.getHeight(), timePos, timeLength));
 	}
 
+	/**
+	 * 
+	 * @param start the last color before the current time
+	 * @param end   the next color after the current time
+	 * @param fallback the color to use if one of start or end is null
+	 * 
+	 * @param timePos the current time
+	 * @param totalTime the distance between oldPos and newPos
+	 * 
+	 * timeLength &gt;= 2
+	 * 
+	 * @return the current value
+	 * */
 	public static Color getCurrent(Color start, Color end,Color fallback, double timePos, double totalTime) {
 		
 		if(start==end) {
@@ -135,6 +169,9 @@ public class ViewUtil {
 	}
 
 	/**
+	 * @param graph the graph to save
+	 * @param state the object to save to
+	 * 
 	 * Save the current state of the Graph in the start part of the mapping
 	 */
 	public static void saveState(@SuppressWarnings("exports") ElkNode graph, GraphState state) {
@@ -151,6 +188,11 @@ public class ViewUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * @param edge the edge to save
+	 * @param state the object to save to
+	 * */
 	public static void saveState(ElkEdge edge, GraphState state) {
 
 		for (var sect : edge.getSections()) {

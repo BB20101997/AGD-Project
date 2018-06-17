@@ -2,6 +2,10 @@ language: java
 
 jdk: 'openjdk10'
 
+script:
+  - ./gradlew check
+  - ./gradlew javadoc
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

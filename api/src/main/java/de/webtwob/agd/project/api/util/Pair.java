@@ -14,8 +14,8 @@ public class Pair<A> {
 
 	public Pair() {
 	}
-	
-	public Pair(A start,A end) {
+
+	public Pair(A start, A end) {
 		this.start = start;
 		this.end = end;
 	}

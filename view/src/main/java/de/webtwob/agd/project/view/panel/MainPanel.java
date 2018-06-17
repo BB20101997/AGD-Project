@@ -65,7 +65,7 @@ public class MainPanel extends JPanel {
 
 		add(algorithmPanel, constraints);
 
-		//algorithmPanel.setBackground(Color.BLUE);
+		// algorithmPanel.setBackground(Color.BLUE);
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 4;
@@ -83,13 +83,13 @@ public class MainPanel extends JPanel {
 	public void setAlgorithm(IAlgorithm alg) {
 		algorithm = alg;
 		algorithmPanel.removeAll();
-		if(syncThread!=null) {
+		if (syncThread != null) {
 			syncThread.interrupt();
 		}
-		syncThread = algorithm.getAnimationPanel(algorithmPanel,graph);
+		syncThread = algorithm.getAnimationPanel(algorithmPanel, graph);
 		syncThread.setLoopAction(LoopEnum.LOOP);
 		syncThread.start();
-		
+
 	}
 
 	public void setLoopType(LoopEnum item) {

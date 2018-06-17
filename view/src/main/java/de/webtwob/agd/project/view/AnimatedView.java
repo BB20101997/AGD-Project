@@ -17,10 +17,10 @@ import javax.swing.JComponent;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphState;
+import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.api.util.Pair;
-import de.webtwob.agd.project.api.util.ViewUtil;
 
 public class AnimatedView extends JComponent {
 
@@ -93,17 +93,19 @@ public class AnimatedView extends JComponent {
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setGraph(ElkNode eg) {
-		setAnimation(new Animation(eg, ViewUtil.createMapping(eg, eg), 2));
+		setAnimation(new Animation(eg, GraphStateUtil.createMapping(eg, eg), 2));
 		repaint();
 	}
 
 	/**
-	 * 
-	 * @param graph the graph that shall be animated 
-	 * @param mapping the mappings for the end and starting configuration of the graph 
+	 *
+	 * @param graph
+	 *            the graph that shall be animated
+	 * @param mapping
+	 *            the mappings for the end and starting configuration of the graph
 	 * @param length
 	 *            how many frames long shall the animation be at speed 1
-	 * 
+	 *
 	 *            If length is less or equal to 0 DEFAULT_ANIMATIN_LENGTH will be
 	 *            used instead of length
 	 */
@@ -113,8 +115,9 @@ public class AnimatedView extends JComponent {
 	}
 
 	/**
-	 * @param animation the animation this View shall display
-	 * */
+	 * @param animation
+	 *            the animation this View shall display
+	 */
 	public void setAnimation(IAnimation animation) {
 		frameSync.removeAnimation(this.animation);
 		this.animation = animation;

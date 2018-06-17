@@ -2,7 +2,7 @@ package de.webtwob.agd.project.api.interfaces;
 
 import java.awt.Graphics2D;
 
-import de.webtwob.agd.project.api.util.GraphState;
+import de.webtwob.agd.project.api.GraphState;
 
 public interface IAnimation {
 
@@ -13,7 +13,7 @@ public interface IAnimation {
 	 *            the Graphics2D object to draw to
 	 */
 	void generateFrame(long frame, Graphics2D graphic);
-	
+
 	GraphState getGraphStateForFrame(long frame);
 
 	/**

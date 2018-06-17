@@ -1,17 +1,14 @@
 package de.webtwob.agd.project.test;
 
+import java.io.File;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.eclipse.elk.graph.ElkNode;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
-import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.file.JSONGraphLoader;
-
-import java.io.File;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by BB20101997 on 31. Mai. 2018.
@@ -21,11 +18,11 @@ public class GraphImportTest {
 
 	@Test
 	public void importGraphFromFile() {
-		
-		//TODO why does GraphLoaderHelper not work here?
+
+		// TODO why does GraphLoaderHelper not work here?
 		var file = new File("src/test/resources/importTestGraph.json").getAbsoluteFile();
 		var optNode = JSONGraphLoader.importGraphFromFile(file);
-		
+
 		Assert.assertTrue("Importer returned no Graph", optNode.isPresent());
 		ElkNode node = optNode.get();
 		Assert.assertEquals("root", node.getIdentifier());

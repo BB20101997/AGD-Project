@@ -6,12 +6,11 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.webtwob.agd.project.api.util.GraphLoaderHelper;
-import de.webtwob.agd.project.control.Control;
-
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
+import de.webtwob.agd.project.control.Control;
 import de.webtwob.agd.project.view.panel.MainPanel;
 
 public class Main {
@@ -45,7 +44,7 @@ public class Main {
 		}
 
 		JFrame frame = new JFrame("Cycle Break Animation");
-		
+
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		IController controller = new Control();

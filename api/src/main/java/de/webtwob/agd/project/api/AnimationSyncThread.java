@@ -1,12 +1,12 @@
 package de.webtwob.agd.project.api;
 
+import java.awt.EventQueue;
+import java.util.LinkedList;
+import java.util.List;
+
 import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
-
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 public class AnimationSyncThread extends Thread {
 
@@ -28,7 +28,7 @@ public class AnimationSyncThread extends Thread {
 	 * Frames per Millisecond
 	 */
 	private volatile double speed = 1;
-	
+
 	private volatile boolean paused = false;
 
 	/**
@@ -67,7 +67,7 @@ public class AnimationSyncThread extends Thread {
 		long end = System.currentTimeMillis();
 
 		while (true) {
-			if (speed != 0&&!paused) {
+			if (speed != 0 && !paused) {
 
 				// update current frame
 				subFrame += (end - start) * speed;
@@ -83,12 +83,14 @@ public class AnimationSyncThread extends Thread {
 				// have we reached the end of the Animation
 				if (getFrame() < startAnimationAt || getFrame() > endAnimationAt) {
 					endAction.handle(this);
-					handlerList.parallelStream().forEach(h -> EventQueue.invokeLater(() -> h.animationEvent(new IAnimationEvent() {})));
+					handlerList.parallelStream()
+							.forEach(h -> EventQueue.invokeLater(() -> h.animationEvent(new IAnimationEvent() {
+							})));
 				}
 
 				//
 				end = System.currentTimeMillis();
-			}else {
+			} else {
 				start = end;
 			}
 		}
@@ -155,7 +157,7 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void setSpeed(double d) {
-		speed = d;		
+		speed = d;
 	}
 
 }

@@ -1,17 +1,20 @@
 package de.webtwob.agd.project.file;
 
-import com.google.gson.JsonParseException;
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
-import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.json.ElkGraphJson;
-import org.eclipse.elk.graph.json.JsonImportException;
-
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
+
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.eclipse.elk.graph.ElkNode;
+import org.eclipse.elk.graph.json.ElkGraphJson;
+import org.eclipse.elk.graph.json.JsonImportException;
+
+import com.google.gson.JsonParseException;
+
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 /**
  * Created by BB20101997 on 31. Mai. 2018.
@@ -25,10 +28,11 @@ public class JSONGraphLoader implements IGraphLoader {
 	}
 
 	/**
-	 * @param file the file to try and load a graph from
+	 * @param file
+	 *            the file to try and load a graph from
 	 * @return an Optional which if loading was successful contains the loaded graph
 	 * 
-	 * Uses ElkGraphJson to import an ElkGraph from a Json file
+	 *         Uses ElkGraphJson to import an ElkGraph from a Json file
 	 */
 	@SuppressWarnings("exports") // automatic modules should not be exported
 	public static Optional<ElkNode> importGraphFromFile(File file) {

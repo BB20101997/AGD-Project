@@ -6,7 +6,7 @@ public enum LoopEnum {
 		public void handle(AnimationSyncThread syncThread) {
 			syncThread.setPaused(true);
 			if (syncThread.getFrame() > 0) {
-				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
+				syncThread.setFrame(syncThread.getEndAnimationAt() - 1);
 
 			} else {
 				syncThread.setFrame(0);
@@ -19,14 +19,14 @@ public enum LoopEnum {
 			if (syncThread.getFrame() > 0) {
 				syncThread.setFrame(0);
 			} else {
-				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
+				syncThread.setFrame(syncThread.getEndAnimationAt() - 1);
 			}
 		}
 	},
 	REVERSE {
 		@Override
 		public void handle(AnimationSyncThread syncThread) {
-			syncThread.setSpeed(syncThread.getSpeed()* -1);
+			syncThread.setSpeed(syncThread.getSpeed() * -1);
 		}
 	};
 

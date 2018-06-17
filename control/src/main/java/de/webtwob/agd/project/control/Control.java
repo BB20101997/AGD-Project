@@ -24,9 +24,9 @@ public class Control implements IController {
 	}
 
 	public void setGraph(ElkNode graph) {
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,9 +99,9 @@ public class Control implements IController {
 	 */
 	@Override
 	public void buttonForward() {
-		
-		//Edgesection colour for edge colour
-		
+
+		// Edgesection colour for edge colour
+
 		// TODO View.graphUpdate steps.get(event);
 	}
 

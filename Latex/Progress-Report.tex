@@ -1,0 +1,51 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage[english]{babel}
+%\usepackage[ngerman]{babel}
+\usepackage{svg}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage[a4paper]{geometry}
+\usepackage[section]{placeins}
+%\usepackage{showframe}
+
+\usepackage{hyperref}
+
+\author{Bennet Bleßmann, Sven Korfmann}
+\title{Cyclebreak Visualization Progress Report}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+As of writing our Programm can
+\begin{list}{-}{}
+\item Load Graphs in the ElkJson format(File passed per commandline or asked for on startup)
+\item Display the loaded Graph
+\item Animate the Cycle-Break Phase on the loaded Graph
+\item Display Pseudo-Code with the current line indicated
+\item Play the Animation forward and backward
+\item Play the Animation once, in a loop or in alternating direction
+\item Pause the Animation
+\item 
+
+\end{list}
+
+As of writing our Programm is lacking
+\begin{list}{-}{}
+\item A Button to change the animation play direction
+\item A Selector for the Animation Speed 
+\item A Step functionality
+\item A Verbosity Setting
+\item A way to load a new Graph
+\end{list}
+
+\end{document}

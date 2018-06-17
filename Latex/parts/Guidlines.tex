@@ -11,23 +11,25 @@ all modules MUST begin with \basemodule,
 
 all packages in a modul MUST start with the modules name.
 
-\item All main functions MUST be in the \basemodule[.main] module.
+\item All main functions not for testing MUST be in the \basemodule[.main] module.
 
 \item All test MUST be in the \basemodule[.test] module.
 
-\item No module SHALL depend on the test module
+\item No module SHALL depend on the module \basemodule[.test]
+
+\item No module SHALL but  \basemodule[.test] MAY depend on the module \basemodule[.main]
 
 \item Loading Graphs from file SHOULD be done in the \basemodule[.file] module
 
-\item Project SHOULD be conform to MVC pattern.
+\item The Project SHOULD be implemented using the MVC pattern.
 
-\item Model SHOULD be in the package \basemodule[.modle].
+\item Models SHOULD be in the package \basemodule[.modle].
 
-\item View SHOULD be in the package \basemodule[.view].
+\item Views SHOULD be in the package \basemodule[.view].
+
+\item Controllers SHOULD be in the package \basemodule[.control].
 
 \item The module \basemodule[.api] SHOULD contain all api related stuff. %TODO
-
-\item Controler SHOULD be in the package \basemodule[.controls].
 
 \item Code Comments and this Specification SHALL be in English.
 
@@ -38,5 +40,5 @@ all packages in a modul MUST start with the modules name.
 \item For Randomness a PRNG SHALL be used with a configurable or fixed seed,
 on re-runs the seed MUST be restored to it's initial value.
 
-\item Magic constants SHOULD be avoided, instead use a constant with a comment.
+\item Magic constants SHOULD be avoided, instead use a commented constant.
 \end{list}

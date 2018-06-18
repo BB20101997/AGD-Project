@@ -1,0 +1,20 @@
+id = "root"
+
+[[children]]
+	id = "n1"
+	width = 20.0
+	height = 20.0
+	
+[[children]]
+	id = "n2"
+	width = 20.0
+	height = 20.0
+
+[[edges]]
+	id = "e1"
+	targets = [
+		"n1",		#commends exist and trailing commas are allowed
+	]
+	sources = [
+		"n2" 
+	]

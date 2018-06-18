@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.file;
+package de.webtwob.agd.project.file.json;
 
 import java.io.File;
 import java.io.IOException;

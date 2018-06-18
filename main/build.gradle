@@ -30,7 +30,7 @@ dependencies {
 	
     implementation project(":control")
       
-	runtimeOnly project(':file') 
+	runtimeOnly project(':file.json') 
 	
     runtimeOnly project(":model")
 	

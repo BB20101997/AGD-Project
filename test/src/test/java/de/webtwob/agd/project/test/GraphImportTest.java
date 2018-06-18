@@ -8,7 +8,7 @@ import org.eclipse.elk.graph.ElkNode;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.webtwob.agd.project.file.JSONGraphLoader;
+import de.webtwob.agd.project.file.json.JSONGraphLoader;
 
 /**
  * Created by BB20101997 on 31. Mai. 2018.

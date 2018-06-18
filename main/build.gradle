@@ -31,6 +31,7 @@ dependencies {
     implementation project(":control")
       
 	runtimeOnly project(':file.json') 
+	runtimeOnly project(':file.toml') 
 	
     runtimeOnly project(":model")
 	

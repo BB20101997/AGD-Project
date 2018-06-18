@@ -19,6 +19,7 @@ include 'services:webservice'
 rootProject.name = 'AGD-Project'
 
 include 'file.json'
+include 'file.toml'
 include 'main'
 include 'test'
 include 'view'

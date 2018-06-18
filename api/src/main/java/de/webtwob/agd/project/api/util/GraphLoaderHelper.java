@@ -39,6 +39,16 @@ public class GraphLoaderHelper {
 			return Optional.empty();
 		}
 		return loader.stream().filter(load -> load.getFileFilter().accept(file))
-				.map(load -> load.loadGraphFromFile(file)).filter(Optional::isPresent).map(Optional::get).findFirst();
+				.map(load -> GraphLoaderHelper.tryLoader(load, file)).filter(Optional::isPresent).map(Optional::get)
+				.findFirst();
+	}
+
+	private static Optional<ElkNode> tryLoader(IGraphLoader loader, File file) {
+		try {
+			return loader.loadGraphFromFile(file);
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+		}
+		return Optional.<ElkNode>empty();
 	}
 }

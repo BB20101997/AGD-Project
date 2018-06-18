@@ -20,6 +20,10 @@ dependencies {
     testImplementation project(":file.json")
     
     testRuntimeOnly    project(":file.json")
+
+    testImplementation project(":file.toml")
+    
+    testRuntimeOnly    project(":file.toml")
     
     testImplementation project(":model")
     

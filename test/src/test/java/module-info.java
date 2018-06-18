@@ -11,6 +11,7 @@ module de.webtwob.agd.project.test {
 	requires de.webtwob.agd.project.model;
 	requires de.webtwob.agd.project.api;
 	requires de.webtwob.agd.project.file.json;
+	requires de.webtwob.agd.project.file.toml;
 	requires de.webtwob.agd.project.main;
 	requires de.webtwob.agd.project.view;
 

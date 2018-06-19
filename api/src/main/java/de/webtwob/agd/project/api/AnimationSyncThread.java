@@ -1,17 +1,17 @@
 package de.webtwob.agd.project.api;
 
 import java.awt.EventQueue;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.webtwob.agd.project.api.events.IAnimationEvent;
+import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
 public class AnimationSyncThread extends Thread {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
-	List<Runnable> synced = new LinkedList<>();
 	List<IAnimation> animations = new LinkedList<>();
 
 	/**
@@ -68,27 +68,22 @@ public class AnimationSyncThread extends Thread {
 
 		while (true) {
 			if (speed != 0 && !paused) {
-
 				// update current frame
-				subFrame += (end - start) * speed;
+				frame += (end - start) * speed;
 				frame += (long) subFrame;
 				subFrame %= 1;
 
 				// set start to current time
 				start = System.currentTimeMillis();
-
-				// inform all about new frame
-				synced.parallelStream().forEach(Runnable::run);
-
+				
 				// have we reached the end of the Animation
 				if (getFrame() < startAnimationAt || getFrame() > endAnimationAt) {
 					endAction.handle(this);
-					handlerList.parallelStream()
-							.forEach(h -> EventQueue.invokeLater(() -> h.animationEvent(new IAnimationEvent() {
-							})));
 				}
 
-				//
+				updateFrame(frame);
+
+
 				end = System.currentTimeMillis();
 			} else {
 				start = end;
@@ -98,19 +93,57 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void subscribeToAnimationEvent(IAnimationEventHandler aeh) {
-		handlerList.add(aeh);
+		if (aeh == null) {
+			return;
+		}
+		synchronized (handlerList) {
+			handlerList.add(aeh);
+		}
 	}
 
-	public void addFrameChangeCallback(Runnable run) {
-		synced.add(run);
+	public void unsubscribeFromAnimationEvent(IAnimationEventHandler eventHandler) {
+		if (eventHandler == null) {
+			return;
+		}
+		synchronized (handlerList) {
+			handlerList.remove(eventHandler);
+		}
 	}
 
 	public void setFrame(long frame) {
+		if(this.frame!=frame) {
+			subFrame = 0;
+			updateFrame(frame);
+		}
+	}
+
+	private void updateFrame(long frame) {
 		this.frame = frame;
-		this.subFrame = 0;
 
 		// inform all about new frame
-		synced.parallelStream().forEach(Runnable::run);
+		List<IAnimationEventHandler> syncedCopy;
+		synchronized (handlerList) {
+			syncedCopy = List.copyOf(handlerList);
+		}
+
+		var update = new AnimationUpdateEvent(frame);
+		// if we are not paused and on the DispatchThread don't send an event this might
+		// cause a positive feedback loop of events
+		if (!EventQueue.isDispatchThread()) {
+			syncedCopy.stream().forEach(h -> {
+				try {
+					EventQueue.invokeAndWait(() -> h.animationEvent(update));
+				} catch (InvocationTargetException | InterruptedException ignore) {
+				}
+			});
+		} else if (isPaused()) {
+			syncedCopy.stream().forEach(h -> {
+				try {
+					h.animationEvent(update);
+				} catch (Exception ignore) {
+				}
+			});
+		}
 	}
 
 	public long getFrame() {
@@ -126,11 +159,17 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void addAnimation(IAnimation animation) {
+		if (animation == null) {
+			return;
+		}
 		animations.add(animation);
 		updateMaxEnd();
 	}
 
 	public void removeAnimation(IAnimation animation) {
+		if (animation == null) {
+			return;
+		}
 		animations.remove(animation);
 		updateMaxEnd();
 	}

@@ -2,9 +2,14 @@ package de.webtwob.agd.project.api.events;
 
 public class AnimationUpdateEvent implements IAnimationEvent {
 
-	public AnimationUpdateEvent() {
-		// TODO add a way to access the current animationState e.g. animation speed,
-		// play/pause/reverse
+	private final long frame;
+	
+	public AnimationUpdateEvent(long newFrame) {
+		frame = newFrame;
+	}
+	
+	public long getFrame() {
+		return frame;
 	}
 
 }

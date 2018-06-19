@@ -39,9 +39,9 @@ public class GraphState {
 
 	private Map<Object, Color> highlightMap = new HashMap<>();
 
-	private int pseudoCodeLine = 0;
+	private String pseudoCodeLine = "line0";
 
-	private IVerbosity verbosity = VerbosityEnum.ONE;
+	private IVerbosity verbosity = VerbosityEnum.DEFAULT;
 
 	@SuppressWarnings("exports")
 	public Rectangle2D.Double getMapping(ElkNode node) {
@@ -79,11 +79,11 @@ public class GraphState {
 		this.verbosity = verbosity;
 	}
 
-	public int getPseudoCodeLine() {
+	public String getPseudoCodeLine() {
 		return pseudoCodeLine;
 	}
 
-	public void setPseudoCodeLine(int pseudoCodeLine) {
+	public void setPseudoCodeLine(String pseudoCodeLine) {
 		this.pseudoCodeLine = pseudoCodeLine;
 	}
 

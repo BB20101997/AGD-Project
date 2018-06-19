@@ -20,7 +20,9 @@ public interface IAlgorithm {
 	 * 
 	 * @return a the new AnimationSyncThread for the generated Animation
 	 */
-	AnimationSyncThread getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph);
+	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,AnimationSyncThread syncThread);
+	
+	String getPseudoCode();
 
 	/**
 	 * @return the name of the algorithm

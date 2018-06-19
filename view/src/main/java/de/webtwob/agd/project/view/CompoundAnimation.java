@@ -106,7 +106,7 @@ public class CompoundAnimation implements IAnimation {
 	}
 
 	@Override
-	public GraphState getGraphStateForFrame(long frame) {
+	public Pair<GraphState> getGraphStatesForFrame(long frame) {
 		var from = this.from;
 		var to = this.to;
 		var currentAnimation = this.currentAnimation;
@@ -121,7 +121,7 @@ public class CompoundAnimation implements IAnimation {
 			}
 		}
 		if (currentAnimation != null) {
-			return currentAnimation.getGraphStateForFrame(frame - from);
+			return currentAnimation.getGraphStatesForFrame(frame - from);
 		}
 		return null;
 	}

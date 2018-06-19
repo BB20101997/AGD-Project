@@ -41,8 +41,12 @@ public class Util {
 	}
 
 	/**
-	 * A version of ElkGraphUtil.getTargetNode which doesn't throw if more than one
-	 * Target is present
+	 * @param edge
+	 *            the edge to get the first target from
+	 * @return the first target of the edge
+	 * 
+	 *         A version of ElkGraphUtil.getTargetNode which doesn't throw if more
+	 *         than one Target is present
 	 */
 	public static ElkNode getTarget(ElkEdge edge) {
 		if (edge.getTargets().isEmpty()) {
@@ -54,8 +58,12 @@ public class Util {
 	}
 
 	/**
-	 * A version of ElkGraphUtil.getSourceNode which doesn't throw if more than one
-	 * Target is present
+	 * @param edge
+	 *            the edge to get the first source from
+	 * @return the first source of the edge
+	 * 
+	 *         A version of ElkGraphUtil.getSourceNode which doesn't throw if more
+	 *         than one Target is present
 	 */
 	public static ElkNode getSource(ElkEdge edge) {
 		if (edge.getSources().isEmpty()) {

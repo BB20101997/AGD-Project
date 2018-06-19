@@ -16,9 +16,9 @@ import javax.swing.JSlider;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphState;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 import de.webtwob.agd.project.model.Model;
 import de.webtwob.agd.project.view.AnimatedView;
@@ -31,7 +31,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	public AnimationSyncThread getAnimationPanel(JPanel panel, ElkNode graph) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		//apply the force layout algorithm to get an initial layout
+		// apply the force layout algorithm to get an initial layout
 		InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 		InitialLayoutUtil.layout(graph);
 

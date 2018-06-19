@@ -65,6 +65,15 @@ subprojects {
             classpath = files()
         }
     }
+    
+    tasks.withType(Javadoc) {
+    	//inputs.property("moduleName",moduleName)
+    	doFirst {
+    		options.addStringOption('-module-path', classpath.asPath)
+    		options.addBooleanOption('html5', true)
+        }
+        //classpath = files()
+    }
 
     //idea should download javadoc and source files
     idea {

@@ -1,15 +1,15 @@
 package de.webtwob.agd.project.view;
 
-import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.util.GraphState;
-import de.webtwob.agd.project.api.util.Pair;
-
-import org.eclipse.elk.graph.ElkNode;
-
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.eclipse.elk.graph.ElkNode;
+
+import de.webtwob.agd.project.api.GraphState;
+import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.Pair;
 
 public class CompoundAnimation implements IAnimation {
 
@@ -37,17 +37,24 @@ public class CompoundAnimation implements IAnimation {
 	}
 
 	/**
-	 * Creates a CompoundAnimation containing equal long animation of the passed
-	 * mappings, each animation is length long
+	 * @param root
+	 *            the graph to animate
+	 * @param mappings
+	 *            a List of configurations for the graph
+	 * @param length
+	 *            the frames between each state
+	 *
+	 *            Creates a CompoundAnimation containing equal long animation of the
+	 *            passed mappings, each animation is length long
 	 */
 	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length) {
-		if(mappings.size()==1) {
-			//only one mapping
-			addAnimation(new Animation(root, new Pair<>(mappings.get(0),mappings.get(0)), length));
-		}else if(!mappings.isEmpty()){
-			//more than one mapping
-			for(int i = 1;i<mappings.size();i++) {
-				addAnimation(new Animation(root,new Pair<>(mappings.get(i-1),mappings.get(i)),length));
+		if (mappings.size() == 1) {
+			// only one mapping
+			addAnimation(new Animation(root, new Pair<>(mappings.get(0), mappings.get(0)), length));
+		} else if (!mappings.isEmpty()) {
+			// more than one mapping
+			for (int i = 1; i < mappings.size(); i++) {
+				addAnimation(new Animation(root, new Pair<>(mappings.get(i - 1), mappings.get(i)), length));
 			}
 		}
 	}
@@ -106,15 +113,15 @@ public class CompoundAnimation implements IAnimation {
 		if (frame < from || frame > to) {
 			var opt = IntStream.range(0, animationList.size())
 					.filter(i -> animationStarts.get(i) <= frame && animationEnds.get(i) >= frame).findFirst();
-			if(opt.isPresent()) {
+			if (opt.isPresent()) {
 				var i = opt.getAsInt();
 				currentAnimation = animationList.get(i);
-						from = animationStarts.get(i);
-						to = animationEnds.get(i);
+				from = animationStarts.get(i);
+				to = animationEnds.get(i);
 			}
 		}
 		if (currentAnimation != null) {
-			return currentAnimation.getGraphStateForFrame(frame-from);
+			return currentAnimation.getGraphStateForFrame(frame - from);
 		}
 		return null;
 	}

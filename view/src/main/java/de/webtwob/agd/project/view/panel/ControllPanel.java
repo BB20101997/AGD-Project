@@ -50,43 +50,43 @@ public class ControllPanel extends JPanel {
 		var algChoise = Box.createHorizontalBox();
 
 		algChoise.add(algorithmChoises);
-		
+
 		add(algChoise);
 
 		var loopChoiseBox = Box.createHorizontalBox();
 
 		var loopChoiseCombo = new JComboBox<>(LoopEnum.values());
-		
+
 		loopChoiseCombo.setSelectedItem(LoopEnum.LOOP);
-		
+
 		loopChoiseBox.add(loopChoiseCombo);
-		
+
 		add(loopChoiseBox);
-		
+
 		var actionBox = Box.createHorizontalBox();
-		
+
 		var playButton = new JButton("\u23F5");
 		var pauseButton = new JButton("\u23F8");
-		
+
 		playButton.setMinimumSize(new Dimension(100, 100));
-		
+
 		actionBox.add(playButton);
 		actionBox.add(pauseButton);
-		
+
 		add(actionBox);
-		
+
 		playButton.addActionListener(event -> {
 			mainPanel.getSyncThread().setPaused(false);
 		});
-		
+
 		pauseButton.addActionListener(event -> {
 			mainPanel.getSyncThread().setPaused(true);
 		});
-		
-		loopChoiseCombo.addItemListener(event->{
-			mainPanel.setLoopType((LoopEnum)event.getItem());
+
+		loopChoiseCombo.addItemListener(event -> {
+			mainPanel.setLoopType((LoopEnum) event.getItem());
 		});
-		
+
 		algorithmChoises.addItemListener(this::algorithmChangeEvent);
 
 		if (!algorithms.isEmpty()) {

@@ -22,26 +22,24 @@ public class PseudocodeView extends JComponent {
 	private AnimationSyncThread frameSync = new AnimationSyncThread();
 	private IAnimation animation;
 
-	public PseudocodeView(List<String> codeLines,AnimationSyncThread syncThread,IAnimation animation) {
+	public PseudocodeView(List<String> codeLines, AnimationSyncThread syncThread, IAnimation animation) {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
 		this.codeLines = codeLines;
 		this.setAnimation(animation);
-		
+
 		frameSync = syncThread;
 
 		frameSync.addFrameChangeCallback(this::repaint);
 
 	}
 
-	public PseudocodeView(List<String> codeLines,IAnimation animation) {
-		this(codeLines,new AnimationSyncThread(),animation);
+	public PseudocodeView(List<String> codeLines, IAnimation animation) {
+		this(codeLines, new AnimationSyncThread(), animation);
 		if (frameSync.getState() == State.NEW) {
 			frameSync.start();
 		}
 	}
-	
-	
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setCode(List<String> codeLines) {
@@ -54,21 +52,21 @@ public class PseudocodeView extends JComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D graphic2d = (Graphics2D) g;
-		
-		
+
 		int lineHeight = graphic2d.getFontMetrics().getHeight();
 		var indicatorWidth = graphic2d.getFontMetrics().stringWidth(LINE_INDICATOR);
 		var mapping = animation.getGraphStateForFrame(frameSync.getFrame());
 		var currentLine = mapping.getPseudoCodeLine();
 		var color = graphic2d.getColor();
-		
-		for(int i = 0;i<codeLines.size();i++) {
-			if(i==currentLine) {
+
+		for (int i = 0; i < codeLines.size(); i++) {
+			if (i == currentLine) {
 				graphic2d.setColor(Color.RED);
-				graphic2d.drawString(LINE_INDICATOR, 0, lineHeight*(i+1));
+				graphic2d.drawString(LINE_INDICATOR, 0, lineHeight * (i + 1));
 				graphic2d.setColor(color);
 			}
-			graphic2d.drawString(String.format("%02d: %2s", i+1,codeLines.get(i)),indicatorWidth  , lineHeight*(i+1));
+			graphic2d.drawString(String.format("%02d: %2s", i + 1, codeLines.get(i)), indicatorWidth,
+					lineHeight * (i + 1));
 		}
 	}
 

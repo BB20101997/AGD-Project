@@ -7,12 +7,12 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.LoopEnum;
-import de.webtwob.agd.project.api.util.ViewUtil;
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
+import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.view.AnimatedView;
 
 public class ShowAnAnimatedGraph {
@@ -39,8 +39,8 @@ public class ShowAnAnimatedGraph {
 
 		syncThread.setLoopAction(LoopEnum.REVERSE);
 		syncThread.start();
-		
-		sgv.animateGraph(start, ViewUtil.createMapping(start, end), 20000);
+
+		sgv.animateGraph(start, GraphStateUtil.createMapping(start, end), 20000);
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}

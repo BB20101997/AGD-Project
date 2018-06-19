@@ -13,11 +13,18 @@ import de.webtwob.agd.project.api.AnimationSyncThread;
 public interface IAlgorithm {
 
 	/**
-	 * @returns a JPanel containing all Animated Components already setup for
-	 *          Animation the provided Graph
+	 * @param panel
+	 *            the panel to insert the Animation Setup into
+	 * @param graph
+	 *            the graph to animate
+	 * 
+	 * @return a the new AnimationSyncThread for the generated Animation
 	 */
-	AnimationSyncThread getAnimationPanel(JPanel panel,@SuppressWarnings("exports") ElkNode graph);
-	
+	AnimationSyncThread getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph);
+
+	/**
+	 * @return the name of the algorithm
+	 */
 	String getName();
 
 }

@@ -1,7 +1,7 @@
 children = graph.getChildren()
 sources = new List
 sinks = new List
-    
+
 while(!children.isEmpty){
     found = false
     do{
@@ -14,7 +14,7 @@ while(!children.isEmpty){
             }
         }
     }while(found)
-    
+
     do{
         found = false
         for(child : children){
@@ -25,7 +25,7 @@ while(!children.isEmpty){
             }
         }
     }while(found)
-    
+
     maxNode = null
     maxDiff = Integer.MIN_VAL
 
@@ -36,9 +36,9 @@ while(!children.isEmpty){
             maxDiff = diff;
         }
     }
-    
+
     if(maxNode!=null){
-        sources.addFirst(maxNode)
+        sources.addFirst(maxNode) //TODO shouldn't this be addLast()?
         children.remove(maxNode)
     }
 }

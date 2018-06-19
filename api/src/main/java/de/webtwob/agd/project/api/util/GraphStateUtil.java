@@ -1,77 +1,20 @@
 package de.webtwob.agd.project.api.util;
 
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
-import java.awt.Color;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import de.webtwob.agd.project.api.GraphState;
 
-public class ViewUtil {
-
-	private ViewUtil() {
-	}
-
-	/**
-	 * timeLength >= 2
-	 */
-	public static double getCurrent(double oldPos, double newPos, double timePos, double timeLength) {
-		return oldPos + (newPos - oldPos) * timePos / (timeLength - 1);
-	}
-
-	/**
-	 * timeLength >= 2
-	 */
-	public static Point2D getCurrent(Point2D oldPos, Point2D newPos, double timePos, double timeLength) {
-		return new Point2D.Double(getCurrent(oldPos.getX(), newPos.getX(), timePos, timeLength),
-				getCurrent(oldPos.getY(), newPos.getY(), timePos, timeLength));
-	}
-
-	/**
-	 * timeLength >= 2
-	 */
-	public static Rectangle2D.Double getCurrent(Rectangle2D.Double oldPos, Rectangle2D.Double newPos, double timePos,
-			double timeLength) {
-		return new Rectangle2D.Double(getCurrent(oldPos.getX(), newPos.getX(), timePos, timeLength),
-				getCurrent(oldPos.getY(), newPos.getY(), timePos, timeLength),
-				getCurrent(oldPos.getWidth(), newPos.getWidth(), timePos, timeLength),
-				getCurrent(oldPos.getHeight(), newPos.getHeight(), timePos, timeLength));
-	}
-
-	public static Color getCurrent(Color start, Color end,Color fallback, double timePos, double totalTime) {
-		
-		if(start==end) {
-			return start;
-		}
-		
-		//assumes WHITE Background Color
-		if(start == null) {
-			start = fallback;
-		}
-		if(end == null) {
-			end = fallback;
-		}
-
-		var startAlpha = start.getAlpha() * start.getAlpha();
-		var startBlue  = start.getBlue()  * start.getBlue();
-		var startGreen = start.getGreen() * start.getGreen();
-		var startRed   = start.getRed()   * start.getRed();
-
-		var endAlpha = end.getAlpha() * end.getAlpha();
-		var endBlue  = end.getBlue()  * end.getBlue();
-		var endGreen = end.getGreen() * end.getGreen();
-		var endRed   = end.getRed()   * end.getRed();
-		
-		var resAlpha = (int)Math.sqrt(getCurrent(startAlpha,endAlpha ,timePos,totalTime));
-		var resBlue  = (int)Math.sqrt(getCurrent(startBlue ,endBlue  ,timePos,totalTime));
-		var resGreen = (int)Math.sqrt(getCurrent(startGreen,endGreen ,timePos,totalTime));
-		var resRed   = (int)Math.sqrt(getCurrent(startRed  ,endRed   ,timePos,totalTime));	
-		
-		return new Color(resRed,resGreen,resBlue,resAlpha);
-	}
+/**
+ * Created by BB20101997 on 17. Jun. 2018.
+ */
+public class GraphStateUtil {
 
 	@SuppressWarnings("exports")
 	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
@@ -135,7 +78,13 @@ public class ViewUtil {
 	}
 
 	/**
-	 * Save the current state of the Graph in the start part of the mapping
+	 * @param graph
+	 *            the graph to save
+	 * @param state
+	 *            the object to save to
+	 *
+	 *            Save the current state of the Graph in the start part of the
+	 *            mapping
 	 */
 	public static void saveState(@SuppressWarnings("exports") ElkNode graph, GraphState state) {
 		var nodeMapping = state.getMapping(graph);
@@ -151,6 +100,13 @@ public class ViewUtil {
 		}
 	}
 
+	/**
+	 *
+	 * @param edge
+	 *            the edge to save
+	 * @param state
+	 *            the object to save to
+	 */
 	public static void saveState(ElkEdge edge, GraphState state) {
 
 		for (var sect : edge.getSections()) {
@@ -176,5 +132,4 @@ public class ViewUtil {
 		mapping.setLocation(bend.getX(), bend.getY());
 
 	}
-
 }

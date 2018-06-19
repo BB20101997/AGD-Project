@@ -277,3 +277,12 @@ TSWLatexianTemp*
 /control/bin/
 /model/.settings/
 /model/bin/
+/file/out/
+/api/out/
+/control/out/
+/main/out/
+/model/out/
+/view/out/
+/file.toml/bin/
+/file.toml/.settings/
+/file.toml/build/

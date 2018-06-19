@@ -17,9 +17,13 @@ dependencies {
     
     testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.core'      , version: '0.3.0'
 
-    testImplementation project(":file")
+    testImplementation project(":file.json")
     
-    testRuntimeOnly    project(":file")
+    testRuntimeOnly    project(":file.json")
+
+    testImplementation project(":file.toml")
+    
+    testRuntimeOnly    project(":file.toml")
     
     testImplementation project(":model")
     

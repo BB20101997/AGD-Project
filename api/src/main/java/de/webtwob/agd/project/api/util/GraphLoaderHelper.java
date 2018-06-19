@@ -1,14 +1,16 @@
 package de.webtwob.agd.project.api.util;
 
-import de.webtwob.agd.project.api.interfaces.IGraphLoader;
-import org.eclipse.elk.graph.ElkNode;
-
-import javax.swing.*;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
+
+import javax.swing.JFileChooser;
+
+import org.eclipse.elk.graph.ElkNode;
+
+import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 public class GraphLoaderHelper {
 
@@ -37,9 +39,16 @@ public class GraphLoaderHelper {
 			return Optional.empty();
 		}
 		return loader.stream().filter(load -> load.getFileFilter().accept(file))
-				.map(load -> load.loadGraphFromFile(file))
-				.filter(Optional::isPresent)
-				.map(Optional::get)
+				.map(load -> GraphLoaderHelper.tryLoader(load, file)).filter(Optional::isPresent).map(Optional::get)
 				.findFirst();
+	}
+
+	private static Optional<ElkNode> tryLoader(IGraphLoader loader, File file) {
+		try {
+			return loader.loadGraphFromFile(file);
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
 		}
+		return Optional.<ElkNode>empty();
+	}
 }

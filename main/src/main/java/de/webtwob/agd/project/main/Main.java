@@ -4,9 +4,10 @@ import java.awt.BorderLayout;
 import java.io.File;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.WindowConstants;
-
-import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IController;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
@@ -28,28 +29,27 @@ public class Main {
 			}
 		}
 
-		ElkNode graph;
-
-		if (tmpFile != null) {
-			// try to load file passed via the command line
-			graph = GraphLoaderHelper.loadGraph(tmpFile).orElse(null);
-		} else {
-			// ask the user for a file and load it
-			graph = GraphLoaderHelper.loadGraph().orElse(null);
-		}
-
-		if (graph == null) {
-			System.err.println("No Graph Loaded!");
-			System.exit(2);
-		}
-
 		JFrame frame = new JFrame("Cycle Break Animation");
-
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
 		IController controller = new Control();
 
-		MainPanel mainPanel = new MainPanel(graph, controller);
+		MainPanel mainPanel = new MainPanel(controller);
+		
+		if (tmpFile != null) {
+			// try to load file passed via the command line
+			GraphLoaderHelper.loadGraph(tmpFile).ifPresent(mainPanel::setGraph);
+		}
+
+		var menuBar = new JMenuBar();
+		var fileMenu = new JMenu("File");
+		var loadButton = new JMenuItem("Load");
+
+		loadButton.addActionListener(e -> GraphLoaderHelper.loadGraph().ifPresent(mainPanel::setGraph));
+
+		fileMenu.add(loadButton);
+		menuBar.add(fileMenu);
+		frame.setJMenuBar(menuBar);
+
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		frame.setLayout(new BorderLayout());
 

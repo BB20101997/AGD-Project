@@ -34,14 +34,11 @@ public class MainPanel extends JPanel {
 	transient ElkNode graph;
 
 	/**
-	 * @param graph
-	 *            the graph to initialize this {@link JPanel} with
 	 * @param controller
 	 *            the controller to use (only passed on to {@link ControllPanel})
 	 */
-	public MainPanel(@SuppressWarnings("exports") ElkNode graph, IController controller) {
+	public MainPanel(IController controller) {
 
-		this.graph = graph;
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints;
@@ -149,8 +146,10 @@ public class MainPanel extends JPanel {
 				animation = algorithm.getAnimationPanel(algorithmPanel, graph, syncThread);
 				syncThread.addAnimation(animation);
 				pseudocodeView.setAnimation(animation);
+				timeLine.setMaximum((int) syncThread.getEndAnimationAt());
 			}
 		}
+		syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
 		syncThread.setPaused(false);
 		revalidate();
 		repaint();

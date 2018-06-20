@@ -13,6 +13,9 @@ import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
 public class GraphStateListBuilder {
 	
+	int lastSink = 0;
+	int lastSource = 0;
+	
 	@FunctionalInterface
 	public interface AtLine {
 		GraphStateListBuilder atLine(String t);
@@ -35,6 +38,10 @@ public class GraphStateListBuilder {
 			return in(Color.BLUE);
 		}
 	}
+
+	public static final Color SOURCE = Color.CYAN;
+
+	public static final Color SINK = Color.LIGHT_GRAY;
 
 	List<GraphState> graphStateList = new LinkedList<>();
 	GraphState current;
@@ -87,6 +94,18 @@ public class GraphStateListBuilder {
 		
 		public GraphStateBuilder updateNode(ElkNode node) {
 			GraphStateUtil.saveState(node, current);
+			return this;
+		}
+		
+		public GraphStateBuilder addSource(ElkNode node){
+			highlight(node).as(SOURCE);
+			current.setPossition(node, ++lastSource);
+			return this;
+		}
+		
+		public GraphStateBuilder addSink(ElkNode node) {
+			highlight(node).as(SINK);
+			current.setPossition(node, --lastSource);
 			return this;
 		}
 		

@@ -36,10 +36,12 @@ public class GraphState {
 	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
 	private Map<ElkEdgeSection, Line2D.Double> elkSectionMap = new HashMap<>();
 	private Map<ElkBendPoint, Point2D.Double> elkBendPointMap = new HashMap<>();
+	private Map<ElkNode, Integer> nodePositionsTopological = new HashMap<>();
 
 	private Map<Object, Color> highlightMap = new HashMap<>();
 
 	private String pseudoCodeLine = "line0";
+	
 
 	private IVerbosity verbosity = VerbosityEnum.DEFAULT;
 
@@ -86,5 +88,11 @@ public class GraphState {
 	public void setPseudoCodeLine(String pseudoCodeLine) {
 		this.pseudoCodeLine = pseudoCodeLine;
 	}
+	
+	public void setPossition(ElkNode node, Integer i) {
+		this.nodePositionsTopological.put(node, i);
+	}
+	
+	
 
 }

@@ -34,8 +34,6 @@ public class MainPanel extends JPanel {
 	transient ElkNode graph;
 
 	/**
-	 * @param graph
-	 *            the graph to initialize this {@link JPanel} with
 	 * @param controller
 	 *            the controller to use (only passed on to {@link ControllPanel})
 	 */

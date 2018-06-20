@@ -137,7 +137,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 					stateBuilder.atLine("is_source");
 					if (currentNode.getIncomingEdges().parallelStream().map(Util::getSource)
 							.noneMatch(children::contains)) {
-						stateBuilder.atLine("mark_source").highlight(currentNode).in(Color.CYAN);
+						stateBuilder.atLine("mark_source").addSource(currentNode);
 						sourceList.addLast(currentNode);
 						iter.remove(); // avoid ConcurrentModificationException
 						found = true;
@@ -174,7 +174,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 							.noneMatch(children::contains)) {
 						sinkList.addFirst(currentNode);
 
-						stateBuilder.atLine("mark_sink").highlight(currentNode).in(Color.LIGHT_GRAY);
+						stateBuilder.atLine("mark_sink").addSink(currentNode);
 
 						iter.remove(); // avoid ConcurrentModificationException
 						found = true;
@@ -221,7 +221,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			if (maxNode != null) {
 				sourceList.addLast(maxNode);
 				children.remove(maxNode);
-				stateBuilder.atLine("max_as_source").highlight(maxNode).in(Color.CYAN);
+				stateBuilder.atLine("max_as_source").addSource(maxNode);
 			}
 
 		}

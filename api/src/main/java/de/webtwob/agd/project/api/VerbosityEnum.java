@@ -4,8 +4,12 @@ import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
 public enum VerbosityEnum implements IVerbosity {
 
-	FINEST(Integer.MAX_VALUE), FINER(1000), FINE(100), ONE(1);
-
+	ALLWAYS(0),
+	
+	DEFAULT(500),
+	
+	NEVER(Integer.MAX_VALUE);
+	
 	final int level;
 
 	private VerbosityEnum(int level) {

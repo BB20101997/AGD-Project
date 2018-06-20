@@ -2,6 +2,7 @@ package de.webtwob.agd.project.view.panel;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -11,6 +12,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.webtwob.agd.project.api.LoopEnum;
@@ -33,11 +36,14 @@ public class ControllPanel extends JPanel {
 
 	private MainPanel mainPanel;
 
-	private JComboBox<String> algorithmChoises = new JComboBox<>(algorithms.keySet().toArray(new String[0]));
-
 	public ControllPanel(MainPanel mainPanel, IController controller) {
 
 		this.mainPanel = mainPanel;
+
+		JComboBox<String> algorithmChoises = new JComboBox<>(algorithms.keySet().toArray(new String[0]));
+
+		algorithmChoises.setPreferredSize(new Dimension(algorithmChoises.getPreferredSize().width,
+				(int) algorithmChoises.getMinimumSize().height));
 
 		// setBackground(Color.YELLOW);
 
@@ -47,11 +53,10 @@ public class ControllPanel extends JPanel {
 
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		var algChoise = Box.createHorizontalBox();
+		var algBox = Box.createHorizontalBox();
 
-		algChoise.add(algorithmChoises);
+		algBox.add(algorithmChoises);
 
-		add(algChoise);
 
 		var loopChoiseBox = Box.createHorizontalBox();
 
@@ -61,21 +66,38 @@ public class ControllPanel extends JPanel {
 
 		loopChoiseBox.add(loopChoiseCombo);
 
-		add(loopChoiseBox);
-
 		var actionBox = Box.createHorizontalBox();
 
+		var playReversedButton = new JButton("\u23F4");
 		var playButton = new JButton("\u23F5");
 		var pauseButton = new JButton("\u23F8");
 
 		playButton.setMinimumSize(new Dimension(100, 100));
 
+		actionBox.add(playReversedButton);
 		actionBox.add(playButton);
 		actionBox.add(pauseButton);
 
+		var speedBox = Box.createHorizontalBox();
+
+		speedBox.add(new JLabel("Speed"));
+		var speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
+		speedField.setValue(1);
+		speedField.addActionListener(e -> mainPanel.getSyncThread().setSpeed(Double.parseDouble(speedField.getText())));
+		speedBox.add(speedField);
+
+		add(algBox);
+		add(loopChoiseBox);
+		add(speedBox);
 		add(actionBox);
 
+		playReversedButton.addActionListener(event -> {
+			mainPanel.getSyncThread().setSpeed(-Math.abs(mainPanel.getSyncThread().getSpeed()));
+			mainPanel.getSyncThread().setPaused(false);
+		});
+		
 		playButton.addActionListener(event -> {
+			mainPanel.getSyncThread().setSpeed(Math.abs(mainPanel.getSyncThread().getSpeed()));
 			mainPanel.getSyncThread().setPaused(false);
 		});
 

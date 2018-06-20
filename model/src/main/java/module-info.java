@@ -11,6 +11,7 @@ module de.webtwob.agd.project.model {
 
 	requires de.webtwob.agd.project.api;
 	requires de.webtwob.agd.project.view;
+	requires java.desktop;
 
 	exports de.webtwob.agd.project.model;
 

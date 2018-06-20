@@ -43,7 +43,7 @@ public class AnimatedView extends JComponent {
 
 		frameSync = syncThread;
 
-		frameSync.addFrameChangeCallback(this::repaint);
+		frameSync.subscribeToAnimationEvent(e->this.repaint());
 
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 

@@ -1,20 +1,26 @@
-id = "root"
+# ids for nodes and edge are mandatory
+id = "root" # the id of the root node (does not have to be named root)
 
-[[children]]
+# children are optional
+[[children]] # the first entry in the array of tables containing the tables defining the children of the root node
 	id = "n1"
-	width = 20.0
+	#width and height are optional (as can be seen on the root node) and default to 0.0
+	width = 20.0 
 	height = 20.0
 	
-[[children]]
+[[children]] # the second entry in the array of tables containing the tables defining the children of the root node
 	id = "n2"
 	width = 20.0
 	height = 20.0
 
-[[edges]]
+#edges are optional
+[[edges]] # the first entry in the array of tables containing the tables defining the edges of the root node
 	id = "e1"
+	#an edge needs at least one target
 	targets = [
 		"n1",		#commends exist and trailing commas are allowed
 	]
+	#an edge needs at least one source
 	sources = [
 		"n2" 
 	]

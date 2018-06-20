@@ -1,40 +1,48 @@
 package de.webtwob.agd.project.view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.io.IOException;
 import java.lang.Thread.State;
-import java.util.List;
 
-import javax.swing.JComponent;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Element;
+import javax.swing.text.html.HTMLDocument;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
+import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
-public class PseudocodeView extends JComponent {
+public class PseudocodeView extends JTextPane {
 	/**
 	 * generated serialVarsionUID
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
-	private List<String> codeLines;
+	private final IAnimationEventHandler eventHandler = this::updateAnimation;
+	private final HTMLDocument doc = new HTMLDocument();
 
 	private AnimationSyncThread frameSync = new AnimationSyncThread();
 	private IAnimation animation;
 
-	public PseudocodeView(List<String> codeLines, AnimationSyncThread syncThread, IAnimation animation) {
+	public PseudocodeView() {
 		setDoubleBuffered(true);
-		setBackground(Color.WHITE);
-		this.codeLines = codeLines;
-		this.setAnimation(animation);
-
-		frameSync = syncThread;
-
-		frameSync.addFrameChangeCallback(this::repaint);
-
+		this.setContentType("text/html");
+		super.setDocument(doc);
+		setEditable(false);
 	}
 
-	public PseudocodeView(List<String> codeLines, IAnimation animation) {
+	public PseudocodeView(String codeLines, AnimationSyncThread syncThread, IAnimation animation) {
+		this();
+		setText(codeLines);
+		setAnimation(animation);
+		setSyncThread(syncThread);
+	}
+
+	public PseudocodeView(String codeLines, IAnimation animation) {
 		this(codeLines, new AnimationSyncThread(), animation);
 		if (frameSync.getState() == State.NEW) {
 			frameSync.start();
@@ -42,41 +50,64 @@ public class PseudocodeView extends JComponent {
 	}
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
-	public void setCode(List<String> codeLines) {
-		this.codeLines = codeLines;
+	public void setCode(String codeLines) {
+		this.setContentType("text/html");
+		try {
+			doc.setOuterHTML(doc.getDefaultRootElement(), codeLines);
+		} catch (BadLocationException | IOException e) {
+			e.printStackTrace();
+		}
+		this.setText(codeLines);
 		repaint();
 	}
 
-	private static final String LINE_INDICATOR = "\u27a1 ";
+	public void setAnimation(IAnimation animation) {
+		if (frameSync != null) {
+			frameSync.removeAnimation(this.animation);
+			frameSync.addAnimation(animation);
+		}
+		this.animation = animation;
+	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		Graphics2D graphic2d = (Graphics2D) g;
-
-		int lineHeight = graphic2d.getFontMetrics().getHeight();
-		var indicatorWidth = graphic2d.getFontMetrics().stringWidth(LINE_INDICATOR);
-		var mapping = animation.getGraphStateForFrame(frameSync.getFrame());
-		var currentLine = mapping.getPseudoCodeLine();
-		var color = graphic2d.getColor();
-
-		for (int i = 0; i < codeLines.size(); i++) {
-			if (i == currentLine) {
-				graphic2d.setColor(Color.RED);
-				graphic2d.drawString(LINE_INDICATOR, 0, lineHeight * (i + 1));
-				graphic2d.setColor(color);
-			}
-			graphic2d.drawString(String.format("%02d: %2s", i + 1, codeLines.get(i)), indicatorWidth,
-					lineHeight * (i + 1));
+	public void setSyncThread(AnimationSyncThread thread) {
+		if (frameSync != null) {
+			frameSync.removeAnimation(animation);
+			frameSync.unsubscribeFromAnimationEvent(eventHandler);
+		}
+		frameSync = thread;
+		if (frameSync != null) {
+			frameSync.addAnimation(animation);
+			frameSync.subscribeToAnimationEvent(eventHandler);
 		}
 	}
 
 	@Override
-	public void update(Graphics g) {
-		paint(g);
+	public void setDocument(javax.swing.text.Document doc) {
 	}
 
-	public void setAnimation(IAnimation animation) {
-		this.animation = animation;
+	private void updateAnimation(IAnimationEvent event) {
+		if (animation == null || frameSync == null) {
+			return;
+		}
+		if (event instanceof AnimationUpdateEvent) {
+			var updateEvent = (AnimationUpdateEvent) event;
+			var line = animation.getGraphStatesForFrame(updateEvent.getFrame()).getStart().getPseudoCodeLine();
+			Element elem;
+			if (line != null) {
+				elem = doc.getElement(line);
+			} else {
+				elem = null;
+			}
+			getHighlighter().removeAllHighlights();
+			if (elem != null) {
+				try {
+					getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(),
+							new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY));
+				} catch (BadLocationException ignore) {
+				}
+			}
+			repaint();
+		}
 	}
 
 }

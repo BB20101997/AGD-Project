@@ -27,12 +27,11 @@ dependencies {
     implementation 'com.google.guava:guava:18.0'
 
 	implementation project(':view')
-	
-    implementation project(":control")
       
+    
 	runtimeOnly project(':file.json') 
 	runtimeOnly project(':file.toml') 
 	
-    runtimeOnly project(":model")
+    runtimeOnly project(":algorithm.greedy")
 	
 }

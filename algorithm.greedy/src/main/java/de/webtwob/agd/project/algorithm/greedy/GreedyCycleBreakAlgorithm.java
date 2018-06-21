@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.model.alg;
+package de.webtwob.agd.project.algorithm.greedy;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,6 @@ import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
-import de.webtwob.agd.project.model.Util;
 import de.webtwob.agd.project.view.AnimatedView;
 import de.webtwob.agd.project.view.CompoundAnimation;
 

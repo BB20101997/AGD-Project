@@ -20,7 +20,6 @@ import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
-import de.webtwob.agd.project.api.interfaces.IController;
 
 public class ControllPanel extends JPanel {
 
@@ -53,7 +52,7 @@ public class ControllPanel extends JPanel {
 		}
 	};
 
-	public ControllPanel(IController controller) {
+	public ControllPanel() {
 
 		// setBackground(Color.YELLOW);
 

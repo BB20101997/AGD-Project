@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.model;
+package de.webtwob.agd.project.algorithm.greedy;
 
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.util.ElkUtil;

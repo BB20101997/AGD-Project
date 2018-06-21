@@ -9,9 +9,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.WindowConstants;
 
-import de.webtwob.agd.project.api.interfaces.IController;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
-import de.webtwob.agd.project.control.Control;
 import de.webtwob.agd.project.view.panel.MainPanel;
 
 public class Main {
@@ -30,9 +28,8 @@ public class Main {
 		}
 
 		JFrame frame = new JFrame("Cycle Break Animation");
-		IController controller = new Control();
 
-		MainPanel mainPanel = new MainPanel(controller);
+		MainPanel mainPanel = new MainPanel();
 		
 		if (tmpFile != null) {
 			// try to load file passed via the command line

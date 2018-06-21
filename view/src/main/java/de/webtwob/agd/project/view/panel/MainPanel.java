@@ -13,7 +13,6 @@ import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
-import de.webtwob.agd.project.api.interfaces.IController;
 import de.webtwob.agd.project.view.PseudocodeView;
 
 public class MainPanel extends JPanel {
@@ -34,10 +33,8 @@ public class MainPanel extends JPanel {
 	transient ElkNode graph;
 
 	/**
-	 * @param controller
-	 *            the controller to use (only passed on to {@link ControllPanel})
 	 */
-	public MainPanel(IController controller) {
+	public MainPanel() {
 
 		setLayout(new GridBagLayout());
 
@@ -71,7 +68,7 @@ public class MainPanel extends JPanel {
 
 		// algorithmPanel.setBackground(Color.BLUE);
 
-		controllPanel = new ControllPanel(controller);
+		controllPanel = new ControllPanel();
 		controllPanel.setMainPanel(this);
 
 		constraints = new GridBagConstraints();

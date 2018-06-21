@@ -1,5 +1,3 @@
-import de.webtwob.agd.project.api.interfaces.IAlgorithm;
-
 module de.webtwob.agd.project.view {
 
 	// java requires
@@ -18,7 +16,5 @@ module de.webtwob.agd.project.view {
 	// exports
 	exports de.webtwob.agd.project.view;
 	exports de.webtwob.agd.project.view.panel;
-
-	uses IAlgorithm;
 
 }

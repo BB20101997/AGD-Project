@@ -31,3 +31,11 @@ dependencies {
 
 
 }
+
+tasks.withType(Test) {
+    doFirst {
+        jvmArgs('--module-path', classpath.asPath)
+        jvmArgs('--add-modules',"ALL-MODULE-PATH")
+        jvmArgs('--add-reads','de.webtwob.agd.project.test=junit')
+    }
+}

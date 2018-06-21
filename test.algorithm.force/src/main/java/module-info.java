@@ -1,9 +1,9 @@
-import de.webtwob.agd.project.algorithm.greedy.GreedyCycleBreakAlgorithm;
+import de.webtwob.agd.project.test.algorith.force.ForceTestAlgorithm;
 
 /**
  * Created by BB20101997 on 31. Mai. 2018.
  */
-module de.webtwob.agd.project.algorithm.greedy {
+module de.webtwob.agd.project.test.algorithm.force {
 
 	requires org.eclipse.elk.graph;
 	requires org.eclipse.elk.core;
@@ -12,5 +12,5 @@ module de.webtwob.agd.project.algorithm.greedy {
 	requires de.webtwob.agd.project.view;
 	requires java.desktop;
 
-	provides de.webtwob.agd.project.api.interfaces.IAlgorithm with GreedyCycleBreakAlgorithm;
+	provides de.webtwob.agd.project.api.interfaces.IAlgorithm with ForceTestAlgorithm;
 }

@@ -54,6 +54,7 @@ subprojects {
                 }
             }
         }
+        
     }
 
     //add not yet modularised jars to the module-path to form automatic-modules

@@ -67,11 +67,11 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	public String getPseudoCode() {
 		String lines = null;
 		try {
-			var uri = getClass().getResource("de/webtwob/agd/project/model/alg/GreedyCycleBreakPseudoCode.html");
+			var uri = getClass().getResource("de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html");
 
 			if (uri == null) {
 				uri = new File(
-						"../model/src/main/resources/de/webtwob/agd/project/model/alg/GreedyCycleBreakPseudoCode.html")
+						"../algorithm.greedy/src/main/resources/de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html")
 								.toURI().toURL();
 			}
 

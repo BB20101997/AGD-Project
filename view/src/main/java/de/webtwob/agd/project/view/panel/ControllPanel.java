@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,6 +19,7 @@ import de.webtwob.agd.project.api.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
+import de.webtwob.agd.project.api.util.AlgorithmLoaderHelper;
 
 public class ControllPanel extends JPanel {
 
@@ -34,7 +34,7 @@ public class ControllPanel extends JPanel {
 
 	static {
 		// load all algorithms into the algorithm map
-		ServiceLoader.load(IAlgorithm.class).forEach(alg -> algorithms.put(alg.getName(), alg));
+		AlgorithmLoaderHelper.getAlgorithms().forEach(alg -> algorithms.put(alg.getName(), alg));
 	}
 
 	private MainPanel mainPanel;

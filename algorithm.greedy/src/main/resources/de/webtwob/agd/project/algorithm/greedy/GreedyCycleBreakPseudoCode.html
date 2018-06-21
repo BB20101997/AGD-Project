@@ -1,0 +1,67 @@
+<style>
+    code.source {
+        background-color: aqua;
+    }
+    code.sink {
+        background-color: #D3D3D3;
+    }
+    code.active {
+        color: #00008B;
+    }
+</style>
+<pre>
+
+<code id="line0"></code><br />
+children = graph.getChildren()<br />
+<code class="source">sources</code> = new List()<br />
+<code class="sink">sinks</code> = new List()<br />
+<br />
+<code id="while_has_children"> while(!children.isEmpty){</code><br />
+  <code id="do_source_found">do{</code><br />
+    found = false<br />
+    <code id="for_each_child_source">for(<code class="active">child</code> : children){</code><br />
+      <code id="is_source">if(child.isSource()){</code><br />
+	    children.remove(child)<br />
+        found = true<br /> 
+        <code id="mark_source">sources.addLast(child)</code><br />
+      <code id="line12">}</code><br />
+    <code id="line13">}</code><br />
+  <code id="while_source_found">}while(found)</code><br />
+  <br />
+  <code id="do_sink_found">do{</code><br />
+    found = false<br />
+    <code id="for_each_child_sink">for(<code class="active">child</code> : children){</code><br />
+      <code id="is_sink">if(child.isSink()){</code><br />
+        children.remove(child)<br />
+        found = true<br />
+        <code id="mark_sink">sinks.addFirst(child)</cod><br />
+      }<br />
+    }<br />
+   <code id="while_sink_found">}while(found)</code><br />
+  <br />
+  maxNode = null<br />
+  maxDiff = Integer.MIN_VAL<br />
+  <br />
+  <code id="for_each_remaining">for(child : children){</code><br />
+    diff = child.outDegree - child.inDegree<br />
+    <code id="is_new_max">if(maxDiff&lt;diff){</code><br />
+      maxDiff = diff;<br />
+      <code id="set_max">maxNode = child;</code><br />
+    }<br />
+  <code id="end_for_each_remaining">}</code><br />
+  <br />
+  if(maxNode!=null){<br />
+    children.remove(maxNode)<br />
+    <code id="max_as_source">sources.addLast(maxNode)</code><br />
+  }<br />
+<code id ="no_children_left">}</code><br />
+<br />
+combined = sources + sinks<br />
+<br />
+<code id="for_each_edge">for(edge : graph.getEdges()){</code><br />
+  <code id="needs_to_be_reversed">if(combined.indexOf(edge.source) > combined.indexOf(edge.target)){</code><br />
+    <code id="reverse_edge">edge.reverse()</code><br />
+  }<br />
+}<br />
+<code id="the_end"></code><br />
+</pre>

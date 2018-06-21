@@ -12,4 +12,5 @@ module de.webtwob.agd.project.api {
 	exports de.webtwob.agd.project.api.interfaces;
 
 	uses de.webtwob.agd.project.api.interfaces.IGraphLoader;
+	uses de.webtwob.agd.project.api.interfaces.IAlgorithm;
 }

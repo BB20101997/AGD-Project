@@ -83,18 +83,8 @@ public class MainPanel extends JPanel {
 		add(controllPanel, constraints);
 
 		timeLine = new JSlider();
-		timeLine.setMaximum((int) syncThread.getEndAnimationAt());
 		timeLine.setMajorTickSpacing(500);
 		timeLine.setPaintTicks(true);
-
-		syncThread.subscribeToAnimationEvent(event -> {
-			if (event instanceof AnimationUpdateEvent) {
-				var val = (int) ((AnimationUpdateEvent) event).getFrame();
-				if (timeLine.getValue() != val && !timeLine.getValueIsAdjusting()) {
-					timeLine.setValue(val);
-				}
-			}
-		});
 
 		timeLine.addChangeListener(event -> {
 			// timeLine.setValueIsAdjusting(true);
@@ -129,6 +119,14 @@ public class MainPanel extends JPanel {
 		if (syncThread == null) {
 			syncThread = new AnimationSyncThread();
 			syncThread.setLoopAction(LoopEnum.LOOP);
+			syncThread.subscribeToAnimationEvent(event -> {
+				if (event instanceof AnimationUpdateEvent) {
+					var val = (int) ((AnimationUpdateEvent) event).getFrame();
+					if (timeLine.getValue() != val && !timeLine.getValueIsAdjusting()) {
+						timeLine.setValue(val);
+					}
+				}
+			});
 			pseudocodeView.setSyncThread(syncThread);
 			controllPanel.setSyncThread(syncThread);
 			syncThread.start();

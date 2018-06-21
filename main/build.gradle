@@ -1,5 +1,8 @@
 group 'de.webtwob.agd.project'
 
+
+apply plugin: 'application'
+
 dependencies {
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -32,6 +35,17 @@ dependencies {
 	runtimeOnly project(':file.json') 
 	runtimeOnly project(':file.toml') 
 	
+    runtimeOnly project(":test.algorithm.force")
     runtimeOnly project(":algorithm.greedy")
 	
+}
+
+mainClassName = "de.webtwob.agd.project.main.Main"
+
+
+tasks.withType(JavaExec) {
+    doFirst {
+        jvmArgs('--module-path', classpath.asPath)
+        jvmArgs('--add-modules',"ALL-MODULE-PATH")
+    }
 }

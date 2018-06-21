@@ -71,7 +71,8 @@ public class MainPanel extends JPanel {
 
 		// algorithmPanel.setBackground(Color.BLUE);
 
-		controllPanel = new ControllPanel(this, controller);
+		controllPanel = new ControllPanel(controller);
+		controllPanel.setMainPanel(this);
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 2;
@@ -132,6 +133,7 @@ public class MainPanel extends JPanel {
 			syncThread = new AnimationSyncThread();
 			syncThread.setLoopAction(LoopEnum.LOOP);
 			pseudocodeView.setSyncThread(syncThread);
+			controllPanel.setSyncThread(syncThread);
 			syncThread.start();
 		} else {
 			syncThread.setPaused(true);

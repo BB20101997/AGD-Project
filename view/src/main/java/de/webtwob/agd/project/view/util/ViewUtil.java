@@ -1,6 +1,8 @@
 package de.webtwob.agd.project.view.util;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -118,4 +120,46 @@ public class ViewUtil {
 		return new Color(resRed, resGreen, resBlue, resAlpha);
 	}
 
+	
+	public static void drawNode(Graphics2D graphics,String label,Rectangle2D node,Color fillColor) {
+		
+		if(fillColor!=null) {
+			var color = graphics.getColor();
+			graphics.setColor(fillColor);
+			graphics.fill(node);
+			graphics.setColor(color);
+		}
+		
+		graphics.draw(node);
+		
+		var glyphV = graphics.getFont().createGlyphVector(graphics.getFontRenderContext(), label);
+		var bounds = glyphV.getVisualBounds();
+		graphics.drawGlyphVector(glyphV, (float) (node.getCenterX() - bounds.getCenterX()),
+				(float) (node.getCenterY() - bounds.getCenterY()));
+		
+	}
+	
+	public static void drawEdgeSection(Graphics2D graphics, Path2D segment,double headOrientation, Color color) {
+		if(color!=null) {
+			graphics.setColor(color);
+		}
+		graphics.draw(segment);
+		if(!Double.isNaN(headOrientation)) {
+			drawEdgeArrow(graphics, segment.getCurrentPoint(), headOrientation);
+		}
+	}
+	
+	public static void drawEdgeArrow(Graphics2D graphics,Point2D endpoint,double orientation) {
+		var head = new Path2D.Double();
+		head.moveTo(0, 0);
+		head.lineTo(-3, 6);
+		head.lineTo(3, 6);
+		head.closePath();
+		
+		graphics.translate(endpoint.getX(), endpoint.getY());
+		graphics.rotate(orientation);
+		graphics.fill(head);
+	}
+	
+	
 }

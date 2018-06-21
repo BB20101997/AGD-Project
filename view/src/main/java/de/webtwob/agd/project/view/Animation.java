@@ -15,6 +15,7 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.Pair;
+import de.webtwob.agd.project.view.util.ViewUtil;
 
 public class Animation implements IAnimation {
 
@@ -57,22 +58,7 @@ public class Animation implements IAnimation {
 		var color = getCurrent(mapping.getStart().getHighlight(node), mapping.getEnd().getHighlight(node),
 				graphic.getBackground(), frame, lengthInMills);
 
-		if (color != null) {
-			var forground = graphic.getColor();
-			var background = graphic.getBackground();
-			graphic.setColor(color);
-			graphic.fill(rect);
-			graphic.setColor(forground);
-			graphic.setBackground(background);
-		}
-
-		graphic.draw(rect);
-
-		// draw label centered on node
-		var glyphV = graphic.getFont().createGlyphVector(graphic.getFontRenderContext(), node.getIdentifier());
-		var bounds = glyphV.getVisualBounds();
-		graphic.drawGlyphVector(glyphV, (float) (rect.getCenterX() - bounds.getCenterX()),
-				(float) (rect.getCenterY() - bounds.getCenterY()));
+		ViewUtil.drawNode((Graphics2D) graphic.create(), node.getIdentifier(), rect, color);
 
 		// draw the sub-graph
 		Graphics2D subGraphic = (Graphics2D) graphic.create((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(),
@@ -114,35 +100,15 @@ public class Animation implements IAnimation {
 
 		point = getCurrent(mapping.getStart().getMapping(s).getP2(), mapping.getEnd().getMapping(s).getP2(), frame,
 				lengthInMills);
+
 		path.lineTo(point.getX(), point.getY());
 
 		var diff = new Point2D.Double(point.getX() - secondToLast.getX(), point.getY() - secondToLast.getY());
 
-		var head = new Path2D.Double();
-		head.moveTo(0, 0);
-		head.lineTo(-5, 10);
-		head.lineTo(5, 10);
-		head.closePath();
-
 		var color = getCurrent(mapping.getStart().getHighlight(s), mapping.getEnd().getHighlight(s), g.getColor(),
 				frame, lengthInMills);
-
-		if (color != null) {
-			var forground = g.getColor();
-			g.setColor(color);
-			g.draw(path);
-			var g2 = (Graphics2D) g.create();
-			g2.translate(point.getX(), point.getY());
-			g2.rotate(Math.atan2(diff.getY(), diff.getX()));
-			g2.fill(head);
-			g.setColor(forground);
-		} else {
-			g.draw(path);
-			var g2 = (Graphics2D) g.create();
-			g2.translate(point.getX(), point.getY());
-			g2.rotate(Math.atan2(diff.getX(), -diff.getY()));
-			g2.fill(head);
-		}
+		
+		ViewUtil.drawEdgeSection((Graphics2D) g.create(), path, Math.atan2(diff.getX(),-diff.getY()), color);
 	}
 
 	private Point2D getBendPoint(ElkBendPoint p, long frame) {

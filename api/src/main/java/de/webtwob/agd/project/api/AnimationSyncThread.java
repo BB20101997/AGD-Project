@@ -5,7 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
+import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
@@ -75,7 +77,7 @@ public class AnimationSyncThread extends Thread {
 
 				// set start to current time
 				start = System.currentTimeMillis();
-				
+
 				// have we reached the end of the Animation
 				if (getFrame() < startAnimationAt || getFrame() > endAnimationAt) {
 					endAction.handle(this);
@@ -83,13 +85,41 @@ public class AnimationSyncThread extends Thread {
 
 				updateFrame(frame);
 
-
 				end = System.currentTimeMillis();
 			} else {
 				start = end;
 			}
 		}
 
+	}
+
+	private void fireEvent(IAnimationEvent event) {
+
+		List<IAnimationEventHandler> syncedCopy;
+
+		synchronized (handlerList) {
+			syncedCopy = List.copyOf(handlerList);
+		}
+
+		// if we are not paused and on the DispatchThread don't send an event this might
+		// cause a positive feedback loop of events
+		if (!EventQueue.isDispatchThread()) {
+			try {
+				EventQueue.invokeAndWait(() -> syncedCopy.stream().forEach(h -> {
+					try {
+						h.animationEvent(event);
+					} catch (Exception ignore) {}
+				}));
+			} catch (InvocationTargetException | InterruptedException ignore) {
+			}
+
+		} else {
+			syncedCopy.stream().forEach(h -> {
+				try {
+					h.animationEvent(event);
+				} catch (Exception ignore) {}
+			});
+		}
 	}
 
 	public void subscribeToAnimationEvent(IAnimationEventHandler aeh) {
@@ -111,7 +141,7 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void setFrame(long frame) {
-		if(this.frame!=frame) {
+		if (this.frame != frame) {
 			subFrame = 0;
 			updateFrame(frame);
 		}
@@ -119,31 +149,10 @@ public class AnimationSyncThread extends Thread {
 
 	private void updateFrame(long frame) {
 		this.frame = frame;
+		var update = new AnimationUpdateEvent(frame);
 
 		// inform all about new frame
-		List<IAnimationEventHandler> syncedCopy;
-		synchronized (handlerList) {
-			syncedCopy = List.copyOf(handlerList);
-		}
-
-		var update = new AnimationUpdateEvent(frame);
-		// if we are not paused and on the DispatchThread don't send an event this might
-		// cause a positive feedback loop of events
-		if (!EventQueue.isDispatchThread()) {
-			syncedCopy.stream().forEach(h -> {
-				try {
-					EventQueue.invokeAndWait(() -> h.animationEvent(update));
-				} catch (InvocationTargetException | InterruptedException ignore) {
-				}
-			});
-		} else if (isPaused()) {
-			syncedCopy.stream().forEach(h -> {
-				try {
-					h.animationEvent(update);
-				} catch (Exception ignore) {
-				}
-			});
-		}
+		fireEvent(update);
 	}
 
 	public long getFrame() {
@@ -197,6 +206,7 @@ public class AnimationSyncThread extends Thread {
 
 	public void setSpeed(double d) {
 		speed = d;
+		fireEvent(new AnimationSpeedUpdateEvent(speed));
 	}
 
 }

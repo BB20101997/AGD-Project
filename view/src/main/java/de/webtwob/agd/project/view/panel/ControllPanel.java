@@ -1,7 +1,6 @@
 package de.webtwob.agd.project.view.panel;
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;

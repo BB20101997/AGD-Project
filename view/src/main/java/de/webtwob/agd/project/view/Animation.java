@@ -129,8 +129,12 @@ public class Animation implements IAnimation {
 	}
 
 	@Override
-	public Pair<GraphState> getGraphStatesForFrame(long frame) {
-		return mapping;
+	public GraphState getGraphStatesForFrame(long frame) {
+		if(frame<lengthInMills/2) {
+			return mapping.getStart();
+		}else {
+			return mapping.getEnd();
+		}
 	}
 
 }

@@ -35,7 +35,7 @@ public class JSONGraphLoader implements IGraphLoader {
 				return Files.readAllLines(file.toPath().toAbsolutePath()).stream().reduce((s1, s2) -> s1 + s2)
 						.map(ElkGraphJson::forGraph).map(ElkGraphJson.ImportBuilder::toElk);
 			} catch (IOException | JsonParseException | JsonImportException e) {
-				e.printStackTrace();
+				//loading failed going with empty optional
 			}
 		}
 

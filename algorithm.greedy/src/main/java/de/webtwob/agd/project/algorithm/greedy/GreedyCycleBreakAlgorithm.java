@@ -66,6 +66,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	@Override
 	public String getPseudoCode() {
 		String lines = null;
+
 		try {
 			var uri = getClass().getResource("de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html");
 
@@ -74,15 +75,11 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 						"../algorithm.greedy/src/main/resources/de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html")
 								.toURI().toURL();
 			}
-
-			var resStream = uri.openStream();
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(resStream));
-			lines = reader.lines().collect(Collectors.joining());
-			reader.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
+			try (var reader = new BufferedReader(new InputStreamReader(uri.openStream()))) {
+				lines = reader.lines().collect(Collectors.joining());
+			}
+		} catch (IOException ignore) {
+			// will just return null for pseudo-code
 		}
 		return lines;
 	}
@@ -97,7 +94,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	 */
 	public static void getSteps(ElkNode graph, List<GraphState> steps) {
 
-		var stateBuilder = GraphStateListBuilder.createBuilder().startWith(graph).atLine("line0");
+		var stateBuilder = GraphStateListBuilder.createBuilder().startWith(graph).atLine("the_start");
 
 		// copy child list so we can remove already sorted ones
 		List<ElkNode> children = new LinkedList<>(graph.getChildren());
@@ -110,81 +107,12 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		if (children.isEmpty()) {
 			stateBuilder.atLine("while_has_children");
 		}
-		// 0 Steps
+
 		while (!children.isEmpty()) {
 			stateBuilder.atLine("while_has_children");
 
-			boolean found;
-			// sort out source
-			do {
-				stateBuilder.atLine("do_source_found");
-
-				found = false;
-
-				if (children.isEmpty()) {
-					stateBuilder.atLine("for_each_child_source");
-				}
-
-				ElkNode lastNode = null;
-
-				for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
-					ElkNode currentNode = iter.next();
-
-					stateBuilder.atLine("for_each_child_source").unhighlight(lastNode).highlight(currentNode).active();
-
-					// is node a Source given the currently present nodes in children
-					stateBuilder.atLine("is_source");
-					if (currentNode.getIncomingEdges().parallelStream().map(Util::getSource)
-							.noneMatch(children::contains)) {
-						stateBuilder.atLine("mark_source").addSource(currentNode);
-						sourceList.addLast(currentNode);
-						iter.remove(); // avoid ConcurrentModificationException
-						found = true;
-						lastNode = null;
-					} else {
-						lastNode = currentNode;
-					}
-				}
-
-				stateBuilder.atLine("while_source_found").unhighlight(lastNode);
-
-			} while (found);// stop when an iteration didn't found sinks
-
-			// sort out sink
-			do {
-				stateBuilder.atLine("do_sink_found");
-				found = false;
-
-				if (children.isEmpty()) {
-					stateBuilder.atLine("for_each_child_sink");
-				}
-
-				ElkNode lastNode = null;
-
-				for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
-
-					ElkNode currentNode = iter.next();
-
-					stateBuilder.atLine("for_each_child_sink").unhighlight(lastNode).highlight(currentNode).active();
-
-					// is node a Source given the currently present nodes in children
-					stateBuilder.atLine("is_sink");
-					if (currentNode.getOutgoingEdges().parallelStream().map(Util::getTarget)
-							.noneMatch(children::contains)) {
-						sinkList.addFirst(currentNode);
-
-						stateBuilder.atLine("mark_sink").addSink(currentNode);
-
-						iter.remove(); // avoid ConcurrentModificationException
-						found = true;
-						lastNode = null;
-					} else {
-						lastNode = currentNode;
-					}
-
-				}
-				stateBuilder.atLine("while_sink_found").unhighlight(lastNode);
-			} while (found);// stop when an iteration didn't found sinks
+			findSources(stateBuilder, children, sourceList);
+			findSinks(stateBuilder, children, sinkList);
 
 			// find edge with max in-degree to out-degree difference
 			ElkNode maxNode = null;
@@ -227,6 +155,94 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 		stateBuilder.atLine("no_children_left");
 
+		removeCycles(graph, stateBuilder, sourceList, sinkList);
+		
+		stateBuilder.atLine("the_end").withVerbosity(VerbosityEnum.ALLWAYS);
+
+		steps.addAll(stateBuilder.getList());
+	}
+
+	private static void findSinks(GraphStateListBuilder stateBuilder, List<ElkNode> children,
+			LinkedList<ElkNode> sinkList) {
+		boolean found;
+		// sort out sink
+		do {
+			stateBuilder.atLine("do_sink_found");
+			found = false;
+
+			if (children.isEmpty()) {
+				stateBuilder.atLine("for_each_child_sink");
+			}
+
+			ElkNode lastNode = null;
+
+			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
+
+				ElkNode currentNode = iter.next();
+
+				stateBuilder.atLine("for_each_child_sink").unhighlight(lastNode).highlight(currentNode).active();
+
+				// is node a Source given the currently present nodes in children
+				stateBuilder.atLine("is_sink");
+				if (currentNode.getOutgoingEdges().parallelStream().map(Util::getTarget)
+						.noneMatch(children::contains)) {
+					sinkList.addFirst(currentNode);
+
+					stateBuilder.atLine("mark_sink").addSink(currentNode);
+
+					iter.remove(); // avoid ConcurrentModificationException
+					found = true;
+					lastNode = null;
+				} else {
+					lastNode = currentNode;
+				}
+
+			}
+			stateBuilder.atLine("while_sink_found").unhighlight(lastNode);
+		} while (found);// stop when an iteration didn't found sinks
+	}
+
+	private static void findSources(GraphStateListBuilder stateBuilder, List<ElkNode> children,
+			LinkedList<ElkNode> sourceList) {
+		boolean found;
+		// sort out source
+		do {
+			stateBuilder.atLine("do_source_found");
+
+			found = false;
+
+			if (children.isEmpty()) {
+				stateBuilder.atLine("for_each_child_source");
+			}
+
+			ElkNode lastNode = null;
+
+			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
+				ElkNode currentNode = iter.next();
+
+				stateBuilder.atLine("for_each_child_source").unhighlight(lastNode).highlight(currentNode).active();
+
+				// is node a Source given the currently present nodes in children
+				stateBuilder.atLine("is_source");
+				if (currentNode.getIncomingEdges().parallelStream().map(Util::getSource)
+						.noneMatch(children::contains)) {
+					stateBuilder.atLine("mark_source").addSource(currentNode);
+					sourceList.addLast(currentNode);
+					iter.remove(); // avoid ConcurrentModificationException
+					found = true;
+					lastNode = null;
+				} else {
+					lastNode = currentNode;
+				}
+			}
+
+			stateBuilder.atLine("while_source_found").unhighlight(lastNode);
+
+		} while (found);// stop when an iteration didn't found sinks
+	}
+
+	private static void removeCycles(ElkNode graph, GraphStateListBuilder stateBuilder, LinkedList<ElkNode> sourceList,
+			LinkedList<ElkNode> sinkList) {
 		// remove cycles
 		List<ElkNode> combinedList = new LinkedList<>();
 		combinedList.addAll(sourceList);
@@ -254,9 +270,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			}
 		}
 
-		stateBuilder.atLine("the_end").unhighlight(lastEdge).withVerbosity(VerbosityEnum.ALLWAYS);
-
-		steps.addAll(stateBuilder.getList());
+		stateBuilder.atLine("for_each_edge_end").unhighlight(lastEdge);
 	}
 
 }

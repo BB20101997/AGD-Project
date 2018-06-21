@@ -26,9 +26,9 @@ public class MainPanel extends JPanel {
 	JPanel algorithmPanel;
 	PseudocodeView pseudocodeView;
 	ControllPanel controllPanel;
-	IAlgorithm algorithm;
-	IAnimation animation;
-	AnimationSyncThread syncThread;
+	transient IAlgorithm algorithm;
+	transient IAnimation animation;
+	transient AnimationSyncThread syncThread;
 	JSlider timeLine;
 	transient ElkNode graph;
 
@@ -66,8 +66,6 @@ public class MainPanel extends JPanel {
 
 		add(algorithmPanel, constraints);
 
-		// algorithmPanel.setBackground(Color.BLUE);
-
 		controllPanel = new ControllPanel();
 		controllPanel.setMainPanel(this);
 
@@ -86,11 +84,7 @@ public class MainPanel extends JPanel {
 		timeLine.setMajorTickSpacing(500);
 		timeLine.setPaintTicks(true);
 
-		timeLine.addChangeListener(event -> {
-			// timeLine.setValueIsAdjusting(true);
-			syncThread.setFrame(timeLine.getValue());
-			// timeLine.setValueIsAdjusting(false);
-		});
+		timeLine.addChangeListener(event -> syncThread.setFrame(timeLine.getValue()));
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
@@ -118,7 +112,6 @@ public class MainPanel extends JPanel {
 		algorithmPanel.removeAll();
 		if (syncThread == null) {
 			syncThread = new AnimationSyncThread();
-			syncThread.setLoopAction(LoopEnum.LOOP);
 			syncThread.subscribeToAnimationEvent(event -> {
 				if (event instanceof AnimationUpdateEvent) {
 					var val = (int) ((AnimationUpdateEvent) event).getFrame();
@@ -130,13 +123,13 @@ public class MainPanel extends JPanel {
 			pseudocodeView.setSyncThread(syncThread);
 			controllPanel.setSyncThread(syncThread);
 			syncThread.start();
-		} else {
-			syncThread.setPaused(true);
-			syncThread.setFrame(0);
-			syncThread.setLoopAction(LoopEnum.LOOP);
 		}
-		syncThread.removeAnimation(animation);
 		
+		syncThread.setPaused(true);
+		syncThread.setFrame(0);
+
+		syncThread.removeAnimation(animation);
+
 		if (algorithm != null) {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
@@ -146,6 +139,7 @@ public class MainPanel extends JPanel {
 				timeLine.setMaximum((int) syncThread.getEndAnimationAt());
 			}
 		}
+		
 		syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
 		syncThread.setPaused(false);
 		revalidate();

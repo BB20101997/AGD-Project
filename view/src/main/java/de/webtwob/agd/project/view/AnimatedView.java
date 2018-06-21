@@ -33,9 +33,9 @@ public class AnimatedView extends JComponent {
 	private volatile double scale = 1;
 	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 
-	private volatile IAnimation animation;
+	private transient volatile IAnimation animation;
 
-	private AnimationSyncThread frameSync = new AnimationSyncThread();
+	private transient AnimationSyncThread frameSync = new AnimationSyncThread();
 
 	public AnimatedView(AnimationSyncThread syncThread) {
 		setDoubleBuffered(true);

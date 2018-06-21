@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 
 public class AlgorithmLoaderHelper {
+	
+	private AlgorithmLoaderHelper() {}
+	
 	private static final List<IAlgorithm> loader = ServiceLoader.load(IAlgorithm.class).stream()
 			.map(ServiceLoader.Provider::get).collect(Collectors.toList());
 

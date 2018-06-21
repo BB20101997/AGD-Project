@@ -30,7 +30,7 @@ public class ControllPanel extends JPanel {
 
 	private static Map<String, IAlgorithm> algorithms = new HashMap<>();
 
-	private AnimationSyncThread syncThread;
+	private transient AnimationSyncThread syncThread;
 
 	static {
 		// load all algorithms into the algorithm map
@@ -46,15 +46,13 @@ public class ControllPanel extends JPanel {
 	private JButton pause;
 	private JFormattedTextField speedField;
 
-	private IAnimationEventHandler speedUpdate = e -> {
+	private transient IAnimationEventHandler speedUpdate = e -> {
 		if (e instanceof AnimationSpeedUpdateEvent) {
 			speedField.setText(Double.toString(((AnimationSpeedUpdateEvent) e).getSpeed()));
 		}
 	};
 
 	public ControllPanel() {
-
-		// setBackground(Color.YELLOW);
 
 		var boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
 
@@ -128,9 +126,7 @@ public class ControllPanel extends JPanel {
 			}
 		});
 
-		loopChoise.addItemListener(event -> {
-			mainPanel.setLoopType((LoopEnum) event.getItem());
-		});
+		loopChoise.addItemListener(event -> mainPanel.setLoopType((LoopEnum) event.getItem()));
 
 		algChoise.addItemListener(event -> mainPanel.setAlgorithm(algorithms.get(event.getItem())));
 
@@ -155,6 +151,7 @@ public class ControllPanel extends JPanel {
 		syncThread = thread;
 		if (syncThread != null) {
 			syncThread.subscribeToAnimationEvent(speedUpdate);
+			loopChoise.setSelectedItem(syncThread.getLoopAction());
 		}
 	}
 

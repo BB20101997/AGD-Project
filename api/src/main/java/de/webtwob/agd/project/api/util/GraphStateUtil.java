@@ -16,6 +16,9 @@ import de.webtwob.agd.project.api.GraphState;
  */
 public class GraphStateUtil {
 
+	private GraphStateUtil() {
+	}
+
 	@SuppressWarnings("exports")
 	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
 		var mapping = new Pair<>(GraphState::new);

@@ -71,9 +71,9 @@ public class AnimationSyncThread extends Thread {
 		while (true) {
 			if (speed != 0 && !paused) {
 				// update current frame
-				frame += (end - start) * speed;
+				subFrame += (end - start) * speed;
 				frame += (long) subFrame;
-				subFrame %= 1;
+				subFrame %= 1; // yes, this actually does something since subFrame is a double
 
 				// set start to current time
 				start = System.currentTimeMillis();
@@ -84,6 +84,7 @@ public class AnimationSyncThread extends Thread {
 				}
 
 				updateFrame(frame);
+				interrupted();//possibly clear interrupt flag
 
 				end = System.currentTimeMillis();
 			} else {
@@ -105,21 +106,33 @@ public class AnimationSyncThread extends Thread {
 		// cause a positive feedback loop of events
 		if (!EventQueue.isDispatchThread()) {
 			try {
-				EventQueue.invokeAndWait(() -> syncedCopy.stream().forEach(h -> {
-					try {
-						h.animationEvent(event);
-					} catch (Exception ignore) {}
-				}));
-			} catch (InvocationTargetException | InterruptedException ignore) {
+				EventQueue.invokeAndWait(()->fireEventOnEventQueue(syncedCopy, event));
+			} catch (InvocationTargetException ignore) {
+				// we want to keep running even when the event handler fails
+			} catch (InterruptedException interrupt) {
+				Thread.currentThread().interrupt();
 			}
-
 		} else {
-			syncedCopy.stream().forEach(h -> {
-				try {
-					h.animationEvent(event);
-				} catch (Exception ignore) {}
-			});
+			fireEventOnEventQueue(syncedCopy, event);
 		}
+	}
+	
+	/**
+	 * This method handles dispatching Events, it assumes to be called on the DispatchThread
+	 * */
+	private void fireEventOnEventQueue(List<IAnimationEventHandler> handlers ,IAnimationEvent event) {
+		if(!EventQueue.isDispatchThread()) {
+			throw new IllegalThreadStateException("This methode might only be called on the DispatchThread!");
+		}
+		 handlers.stream().forEach(h -> {
+			try {
+				h.animationEvent(event);
+			} catch (ThreadDeath e) {
+				throw e;
+			} catch (Exception ignore) {
+				// we want to keep running even when the event handler fails
+			}
+		});
 	}
 
 	public void subscribeToAnimationEvent(IAnimationEventHandler aeh) {
@@ -161,6 +174,10 @@ public class AnimationSyncThread extends Thread {
 
 	public void setLoopAction(LoopEnum loopAction) {
 		endAction = loopAction;
+	}
+	
+	public LoopEnum getLoopAction() {
+		return endAction;
 	}
 
 	public void setAnimationEnd(long end) {

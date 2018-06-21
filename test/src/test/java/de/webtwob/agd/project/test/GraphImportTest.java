@@ -21,7 +21,6 @@ public class GraphImportTest {
 	@Test
 	public void importGraphFromJSONFile() {
 
-		// TODO why does GraphLoaderHelper not work here?
 		var file = new File("src/test/resources/importTestGraph.json").getAbsoluteFile();
 		var optNode = new JSONGraphLoader().loadGraphFromFile(file);
 
@@ -36,7 +35,6 @@ public class GraphImportTest {
 	@Test
 	public void importGraphFromTOMLFile() {
 
-		// TODO why does GraphLoaderHelper not work here?
 		var file = new File("src/test/resources/importTestGraph.toml").getAbsoluteFile();
 		var optNode = new TOMLGraphLoader().loadGraphFromFile(file);
 

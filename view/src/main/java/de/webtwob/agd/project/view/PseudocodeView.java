@@ -16,17 +16,18 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
+@SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PseudocodeView extends JTextPane {
 	/**
 	 * generated serialVarsionUID
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
-	private final IAnimationEventHandler eventHandler = this::updateAnimation;
+	private final transient IAnimationEventHandler eventHandler = this::updateAnimation;
 	private final HTMLDocument doc = new HTMLDocument();
 
-	private AnimationSyncThread frameSync = new AnimationSyncThread();
-	private IAnimation animation;
+	private transient AnimationSyncThread frameSync = new AnimationSyncThread();
+	private transient IAnimation animation;
 
 	public PseudocodeView() {
 		setDoubleBuffered(true);
@@ -54,8 +55,8 @@ public class PseudocodeView extends JTextPane {
 		this.setContentType("text/html");
 		try {
 			doc.setOuterHTML(doc.getDefaultRootElement(), codeLines);
-		} catch (BadLocationException | IOException e) {
-			e.printStackTrace();
+		} catch (BadLocationException | IOException ignore) {
+			// we will just leave the view empty
 		}
 		this.setText(codeLines);
 		repaint();
@@ -83,6 +84,7 @@ public class PseudocodeView extends JTextPane {
 
 	@Override
 	public void setDocument(javax.swing.text.Document doc) {
+		//we want to keep our HTMLDocument
 	}
 
 	private void updateAnimation(IAnimationEvent event) {
@@ -91,7 +93,7 @@ public class PseudocodeView extends JTextPane {
 		}
 		if (event instanceof AnimationUpdateEvent) {
 			var updateEvent = (AnimationUpdateEvent) event;
-			var line = animation.getGraphStatesForFrame(updateEvent.getFrame()).getStart().getPseudoCodeLine();
+			var line = animation.getGraphStatesForFrame(updateEvent.getFrame()).getPseudoCodeLine();
 			Element elem;
 			if (line != null) {
 				elem = doc.getElement(line);
@@ -104,6 +106,7 @@ public class PseudocodeView extends JTextPane {
 					getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(),
 							new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY));
 				} catch (BadLocationException ignore) {
+					// something went wrong so we just won't highlight anything
 				}
 			}
 			repaint();

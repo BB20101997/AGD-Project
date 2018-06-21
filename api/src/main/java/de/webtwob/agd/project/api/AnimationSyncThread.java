@@ -71,9 +71,9 @@ public class AnimationSyncThread extends Thread {
 		while (true) {
 			if (speed != 0 && !paused) {
 				// update current frame
-				frame += (end - start) * speed;
+				subFrame += (end - start) * speed;
 				frame += (long) subFrame;
-				subFrame %= 1;
+				subFrame %= 1; // yes, this actually does something since subFrame is a double
 
 				// set start to current time
 				start = System.currentTimeMillis();
@@ -108,7 +108,8 @@ public class AnimationSyncThread extends Thread {
 				EventQueue.invokeAndWait(() -> syncedCopy.stream().forEach(h -> {
 					try {
 						h.animationEvent(event);
-					} catch (Exception ignore) {}
+					} catch (Exception ignore) {
+					}
 				}));
 			} catch (InvocationTargetException | InterruptedException ignore) {
 			}
@@ -117,7 +118,8 @@ public class AnimationSyncThread extends Thread {
 			syncedCopy.stream().forEach(h -> {
 				try {
 					h.animationEvent(event);
-				} catch (Exception ignore) {}
+				} catch (Exception ignore) {
+				}
 			});
 		}
 	}

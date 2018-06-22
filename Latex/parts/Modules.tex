@@ -1,0 +1,46 @@
+\section{Modules}
+
+\begin{list}{-}{The Project consists of the following Modules}
+\item \basemodule[.api]
+\item \basemodule[.main]
+\item \basemodule[.view]
+\item \basemodule[.file.json]
+\item \basemodule[.file.toml]
+\item \basemodule[.algorithm.greedy]
+\item \basemodule[.test]
+\item \basemodule[.test.algorithm.force]
+\end{list}
+
+Required Direct Dependencies
+
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|m{43mm}|m{70mm}|}
+\hline 
+\rule[-1ex]{0pt}{2.5ex} Module & External& Internal \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.api] & org.eclipse.elk.graph \, org.eclipse.elk.alg.force & - \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.main] & org.eclipse.elk.graph & \basemodule[.api] \, \basemodule[.view] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.view] & org.eclipse.elk.graph & \basemodule[.api] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.file.json] & org.eclipse.elk.graph.json & \basemodule[.api] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.file.toml] & org.eclipse.elk.graph \, toml4j & \basemodule[.api] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.algorithm.greedy] & org.eclipse.elk.graph \, org.eclipse.elk.core & \basemodule[.api] \, \basemodule[.view] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.test] & junit \, org.eclipse.elk.alg.force & \basemodule[.api] \, \basemodule[.main] \, \basemodule[.view] \, \basemodule[.file.json] \, \basemodule[.file.toml] \, \basemodule[.algorithm.greedy] \\ 
+\hline 
+\rule[-1ex]{0pt}{2.5ex} \basemodule[.test.algorithm.force] & org.eclipse.elk.graph \, org.eclipse.elk.core & \basemodule[.api] \, \basemodule[.view] \\ 
+\hline 
+\end{tabular}
+\end{adjustbox}
+
+\par
+
+\basemodule[.main] also has optional runtime dependencies of two types, per type at least one should be present for our program to be useful.
+
+The first Type is IAlgoritm which is implemented by \basemodule[.algorithm.greedy] or \basemodule[.test.algorithm.force].
+
+The second Type is IGraphLoader wich is implemented by  \basemodule[.file.json] or \basemodule[.file.toml].

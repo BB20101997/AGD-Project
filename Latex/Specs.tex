@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 %\usepackage[ngerman]{babel}
 \usepackage{svg}
+\usepackage{array}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -22,6 +23,10 @@
 
 \makeindex
 
+\newcommand{\basemodule}[1][]{\textit{de.webtwob.agd.projekt#1}}
+
+\setlength{\parindent}{0pt}
+
 \begin{document}
 
 \maketitle
@@ -35,6 +40,8 @@
 \include{parts/Guidlines}
 % why are we doing what we are doing
 \include{parts/Reasoning}
+
+\include{parts/Modules}
 % How we use the the Graph and how we perform cycle breaking
 \include{parts/Model}
 % How we represent the the Graph and animate the steps

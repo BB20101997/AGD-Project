@@ -89,6 +89,7 @@ public class AnimationSyncThread extends Thread {
 				end = System.currentTimeMillis();
 			} else {
 				start = end;
+				subFrame = 0;
 			}
 		}
 

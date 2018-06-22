@@ -66,20 +66,6 @@ public class MainPanel extends JPanel {
 
 		add(algorithmPanel, constraints);
 
-		controllPanel = new ControllPanel();
-		controllPanel.setMainPanel(this);
-
-		constraints = new GridBagConstraints();
-		constraints.gridx = 2;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 5;
-		constraints.weightx = 0;
-		constraints.weighty = 0;
-		constraints.fill = GridBagConstraints.BOTH;
-
-		add(controllPanel, constraints);
-
 		timeLine = new JSlider();
 		timeLine.setMajorTickSpacing(500);
 		timeLine.setPaintTicks(true);
@@ -96,6 +82,21 @@ public class MainPanel extends JPanel {
 		constraints.fill = GridBagConstraints.BOTH;
 
 		add(timeLine, constraints);
+		
+		controllPanel = new ControllPanel();
+		controllPanel.setMainPanel(this);
+
+		constraints = new GridBagConstraints();
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 5;
+		constraints.weightx = 0;
+		constraints.weighty = 0;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		add(controllPanel, constraints);
+		
 		revalidate();
 		repaint();
 
@@ -127,6 +128,7 @@ public class MainPanel extends JPanel {
 		
 		syncThread.setPaused(true);
 		syncThread.setFrame(0);
+		timeLine.setValue(0);
 
 		syncThread.removeAnimation(animation);
 
@@ -137,11 +139,11 @@ public class MainPanel extends JPanel {
 				syncThread.addAnimation(animation);
 				pseudocodeView.setAnimation(animation);
 				timeLine.setMaximum((int) syncThread.getEndAnimationAt());
+				syncThread.setPaused(false);
 			}
 		}
 		
 		syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
-		syncThread.setPaused(false);
 		revalidate();
 		repaint();
 	}

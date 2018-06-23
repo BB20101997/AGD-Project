@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;

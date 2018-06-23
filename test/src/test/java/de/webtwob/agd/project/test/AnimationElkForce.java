@@ -11,7 +11,7 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.GraphState;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;

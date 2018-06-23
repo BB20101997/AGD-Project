@@ -1,4 +1,4 @@
-package de.webtwob.agd.project.api;
+package de.webtwob.agd.project.api.enums;
 
 import de.webtwob.agd.project.api.interfaces.IVerbosity;
 

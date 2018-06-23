@@ -8,7 +8,7 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.GraphState;
-import de.webtwob.agd.project.api.VerbosityEnum;
+import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
 public class GraphStateListBuilder {

@@ -8,7 +8,7 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    // Use JUnit test framework
+    // Use JUnit 4 test framework
     testImplementation 'junit:junit:4.12'
 
     testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.force' , version: '0.3.0'
@@ -24,7 +24,6 @@ dependencies {
     testImplementation project(":file.json")
 
     testImplementation project(":file.toml")
-
 
 }
 

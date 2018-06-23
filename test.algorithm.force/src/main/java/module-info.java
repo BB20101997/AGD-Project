@@ -6,7 +6,6 @@ import de.webtwob.agd.project.test.algorith.force.ForceTestAlgorithm;
 module de.webtwob.agd.project.test.algorithm.force {
 
 	requires org.eclipse.elk.graph;
-	requires org.eclipse.elk.core;
 
 	requires de.webtwob.agd.project.api;
 	requires de.webtwob.agd.project.view;

@@ -20,7 +20,7 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
 import de.webtwob.agd.project.api.GraphState;
-import de.webtwob.agd.project.api.VerbosityEnum;
+import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;

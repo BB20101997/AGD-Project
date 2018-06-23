@@ -5,11 +5,10 @@ apply plugin: 'application'
 
 dependencies {
     
-    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
+    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
 
     implementation project(':api')
 	implementation project(':view')
-      
     
 	runtimeOnly project(':file.json') 
 	runtimeOnly project(':file.toml') 
@@ -27,4 +26,15 @@ tasks.withType(JavaExec) {
         jvmArgs('--module-path', classpath.asPath)
         jvmArgs('--add-modules',"ALL-MODULE-PATH")
     }
+}
+
+tasks.withType(CreateStartScripts){
+    List<String> opts = new ArrayList<>()
+    // TODO get this working
+    //opts.add('--module-path')
+    //opts.add(getRelativeClasspath().asPath)
+    opts.add('--add-modules')
+    opts.add('ALL-MODULE-PATH')
+
+    setDefaultJvmOpts(opts)
 }

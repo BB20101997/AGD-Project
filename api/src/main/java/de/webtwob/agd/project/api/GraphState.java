@@ -12,6 +12,7 @@ import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 
+import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
 public class GraphState {

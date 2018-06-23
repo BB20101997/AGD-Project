@@ -9,7 +9,7 @@ import javax.swing.JSlider;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;

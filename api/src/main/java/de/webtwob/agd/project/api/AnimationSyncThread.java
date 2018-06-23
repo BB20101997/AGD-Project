@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.events.IAnimationEvent;

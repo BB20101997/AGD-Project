@@ -11,6 +11,6 @@ module de.webtwob.agd.project.algorithm.greedy {
 	requires de.webtwob.agd.project.api;
 	requires de.webtwob.agd.project.view;
 	requires java.desktop;
-
+	
 	provides de.webtwob.agd.project.api.interfaces.IAlgorithm with GreedyCycleBreakAlgorithm;
 }

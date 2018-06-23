@@ -43,6 +43,7 @@ public class Main {
 		loadButton.addActionListener(e -> GraphLoaderHelper.loadGraph().ifPresent(mainPanel::setGraph));
 
 		fileMenu.add(loadButton);
+		fileMenu.add(mainPanel.getSaveMenuItem());
 		menuBar.add(fileMenu);
 		frame.setJMenuBar(menuBar);
 

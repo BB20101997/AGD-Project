@@ -85,12 +85,15 @@ public class PseudocodeView extends JTextPane {
 	}
 
 	private void updateAnimation(IAnimationEvent event) {
-		if (animation == null || frameSync == null) {
+		if (animation == null || frameSync == null || event == null) {
 			return;
 		}
 		if (event instanceof AnimationUpdateEvent) {
 			var updateEvent = (AnimationUpdateEvent) event;
-			var line = animation.getGraphStatesForFrame(updateEvent.getFrame()).getPseudoCodeLine();
+			var state = animation.getGraphStatesForFrame(updateEvent.getFrame());
+			if(state==null)
+				return;
+			var line = state.getPseudoCodeLine();
 			Element elem;
 			if (line != null) {
 				elem = doc.getElement(line);

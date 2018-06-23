@@ -11,10 +11,12 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.ImageWriter;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 
 import org.eclipse.elk.graph.ElkNode;
@@ -190,13 +192,27 @@ public class MainPanel extends JPanel {
 				}else {
 					choose.getSelectedFile().getParentFile().mkdirs();
 				}
-				saveAnimation(choose.getSelectedFile());
+				var dialog = new JDialog();
+				var progressBar = new JProgressBar();
+				dialog.add(progressBar);
+				saveAnimation(choose.getSelectedFile(),progressBar);
+				dialog.setTitle("Animation saving Progress");
+				dialog.pack();
+				dialog.setLocationRelativeTo(this);
+				dialog.setLocation(this.getWidth()/2, this.getHeight()/2);
+				dialog.setVisible(true);
+				progressBar.addChangeListener(event->{
+					if(progressBar.getValue()==progressBar.getMaximum()) {
+						dialog.setVisible(false);
+						dialog.dispose();
+					}
+					});
 			}
 		});
 		return save;
 	}
 
-	private void saveAnimation(File file){
+	private void saveAnimation(File file, JProgressBar progressBar){
 
 		var thread = new Thread(() -> {
 
@@ -225,6 +241,8 @@ public class MainPanel extends JPanel {
 				writer.setOutput(stream);
 
 				writer.prepareWriteSequence(null);
+				
+				progressBar.setMaximum((int) (animation.getLength()/100));
 
 				for (long frame = 0; frame < animation.getLength(); frame += 100) {
 					BufferedImage frameImage = new BufferedImage((int) Math.ceil(animation.getWidth()*Math.sqrt(10)),
@@ -238,6 +256,7 @@ public class MainPanel extends JPanel {
 					animation.generateFrame(frame, canvis);
 					canvis.dispose();
 					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
+					progressBar.setValue((int)(frame/100));
 				}
 
 				writer.endWriteSequence();
@@ -246,6 +265,7 @@ public class MainPanel extends JPanel {
 
 				stream.flush();
 				stream.close();
+				progressBar.setValue(progressBar.getMaximum());
 				JOptionPane.showMessageDialog(this, "Animation saving completed!", "Completed saving Animation!",
 						JOptionPane.PLAIN_MESSAGE);
 			} catch (IOException io) {

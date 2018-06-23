@@ -82,13 +82,13 @@ public class ControllerModel {
 			synchronized (this) {
 				if (syncThread != null) {
 					stop = true;
-					syncThread.interrupt();
+					notifyAll();
 					while (syncThread.isAlive())
 						try {
 							syncThread.join();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} catch (InterruptedException ignore) {
+							// should never happen
+							Thread.currentThread().interrupt();
 						}
 					syncThread = null;
 				}
@@ -96,10 +96,11 @@ public class ControllerModel {
 		}
 	}
 
+	@SuppressWarnings("squid:S3776")//this method is a bit too complex
 	private void run() {
 
 		long start = System.currentTimeMillis();
-		long end = System.currentTimeMillis();
+		long end = start;
 
 		while (!stop) {
 			if (speed != 0 && !paused) {
@@ -117,23 +118,22 @@ public class ControllerModel {
 				}
 
 				updateFrame(frame);
-				Thread.interrupted(); // clear interrupt flag
 
 				end = System.currentTimeMillis();
 			} else {
 				start = end;
 				subFrame = 0;
-				synchronized (syncThread) {
+				synchronized (this) {
 					while (speed == 0 || paused) {
 						try {
-							syncThread.wait();
+							wait();
 						} catch (InterruptedException e) {
-							if (stop) {
-								return;
-							}
+							Thread.currentThread().interrupt();
 						}
+
 					}
 				}
+
 			}
 		}
 
@@ -173,8 +173,6 @@ public class ControllerModel {
 		handlers.stream().forEach(h -> {
 			try {
 				h.animationEvent(event);
-			} catch (ThreadDeath e) {
-				throw e;
 			} catch (Exception ignore) {
 				// we want to keep running even when the event handler fails
 			}
@@ -258,8 +256,8 @@ public class ControllerModel {
 	public void setPaused(boolean paused) {
 		if (this.paused && !paused) {
 			this.paused = paused;
-			synchronized (syncThread) {
-				syncThread.notify();
+			synchronized (this) {
+				notifyAll();
 			}
 		} else {
 			this.paused = paused;
@@ -275,12 +273,12 @@ public class ControllerModel {
 	}
 
 	public void setSpeed(double d) {
-		if(speed==0&&d!=0) {
+		if (speed == 0 && d != 0) {
 			speed = d;
-			synchronized (syncThread) {
-				syncThread.notify();
-			}	
-		}else {
+			synchronized (this) {
+				notifyAll();
+			}
+		} else {
 			speed = d;
 		}
 		fireEvent(new AnimationSpeedUpdateEvent(speed));

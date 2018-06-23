@@ -94,6 +94,10 @@ public class GraphState {
 		this.nodePositionsTopological.put(node, i);
 	}
 	
+	public int getPosition(ElkNode node) {
+		return nodePositionsTopological.get(node);
+	}
+	
 	
 
 }

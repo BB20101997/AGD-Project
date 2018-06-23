@@ -18,9 +18,8 @@ import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
-import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
@@ -31,7 +30,7 @@ import de.webtwob.agd.project.view.CompoundAnimation;
 public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 	@Override
-	public IAnimation getAnimationPanel(JPanel panel, ElkNode graph, AnimationSyncThread thread) {
+	public IAnimation getAnimationPanel(JPanel panel, ElkNode graph, ControllerModel thread) {
 
 		panel.setLayout(new BorderLayout());
 
@@ -94,7 +93,9 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	 */
 	public static void getSteps(ElkNode graph, List<GraphState> steps) {
 
-		var stateBuilder = GraphStateListBuilder.createBuilder().startWith(graph).atLine("the_start");
+		var stateBuilder = GraphStateListBuilder.startWith(graph);
+		
+		stateBuilder.atLine("the_start").starteFunction();
 
 		// copy child list so we can remove already sorted ones
 		List<ElkNode> children = new LinkedList<>(graph.getChildren());
@@ -107,9 +108,9 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		if (children.isEmpty()) {
 			stateBuilder.atLine("while_has_children");
 		}
-
+		
 		while (!children.isEmpty()) {
-			stateBuilder.atLine("while_has_children");
+			stateBuilder.atLine("while_has_children").starteLoop();
 
 			findSources(stateBuilder, children, sourceList);
 			findSinks(stateBuilder, children, sinkList);
@@ -126,12 +127,11 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_remaining").unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_remaining").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
 
 				int curVal = currentNode.getOutgoingEdges().size() - currentNode.getIncomingEdges().size();
 
-				stateBuilder.atLine("is_new_max");
-
+				stateBuilder.atLine("is_new_max").starteIf();
 				if (curVal > maxDiff) {
 					stateBuilder.atLine("set_max").unhighlight(maxNode).highlight(currentNode).in(Color.RED);
 					maxDiff = curVal;
@@ -140,15 +140,18 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 				} else {
 					lastNode = currentNode;
 				}
+				stateBuilder.endIf().endLoop();
 			}
 
 			stateBuilder.atLine("end_for_each_remaining").unhighlight(lastNode);
 
 			// if we still had nodes add the one with max out to in diff to source list
 			if (maxNode != null) {
+				stateBuilder.atLine("has_max_node").starteIf();
 				sourceList.addLast(maxNode);
 				children.remove(maxNode);
 				stateBuilder.atLine("max_as_source").addSource(maxNode);
+				stateBuilder.endIf();
 			}
 
 		}
@@ -157,7 +160,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 		removeCycles(graph, stateBuilder, sourceList, sinkList);
 		
-		stateBuilder.atLine("the_end").withVerbosity(VerbosityEnum.ALLWAYS);
+		stateBuilder.endFunction().atLine("the_end");
 
 		steps.addAll(stateBuilder.getList());
 	}
@@ -167,7 +170,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		boolean found;
 		// sort out sink
 		do {
-			stateBuilder.atLine("do_sink_found");
+			stateBuilder.atLine("do_sink_found").starteLoop();
 			found = false;
 
 			if (children.isEmpty()) {
@@ -180,10 +183,10 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_child_sink").unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_child_sink").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
 
 				// is node a Source given the currently present nodes in children
-				stateBuilder.atLine("is_sink");
+				stateBuilder.atLine("is_sink").starteIf();
 				if (currentNode.getOutgoingEdges().parallelStream().map(Util::getTarget)
 						.noneMatch(children::contains)) {
 					sinkList.addFirst(currentNode);
@@ -196,9 +199,9 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 				} else {
 					lastNode = currentNode;
 				}
-
+				stateBuilder.endIf().endLoop();
 			}
-			stateBuilder.atLine("while_sink_found").unhighlight(lastNode);
+			stateBuilder.endLoop().atLine("while_sink_found").unhighlight(lastNode);
 		} while (found);// stop when an iteration didn't found sinks
 	}
 
@@ -207,7 +210,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		boolean found;
 		// sort out source
 		do {
-			stateBuilder.atLine("do_source_found");
+			stateBuilder.atLine("do_source_found").starteLoop();
 
 			found = false;
 
@@ -220,10 +223,10 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_child_source").unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_child_source").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
 
 				// is node a Source given the currently present nodes in children
-				stateBuilder.atLine("is_source");
+				stateBuilder.atLine("is_source").starteIf();
 				if (currentNode.getIncomingEdges().parallelStream().map(Util::getSource)
 						.noneMatch(children::contains)) {
 					stateBuilder.atLine("mark_source").addSource(currentNode);
@@ -231,12 +234,14 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 					iter.remove(); // avoid ConcurrentModificationException
 					found = true;
 					lastNode = null;
+
 				} else {
 					lastNode = currentNode;
 				}
+				stateBuilder.endIf().endLoop();
 			}
 
-			stateBuilder.atLine("while_source_found").unhighlight(lastNode);
+			stateBuilder.endLoop().atLine("while_source_found").unhighlight(lastNode);
 
 		} while (found);// stop when an iteration didn't found sinks
 	}
@@ -256,11 +261,11 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 		for (var edge : graph.getContainedEdges()) {
 
-			stateBuilder.atLine("for_each_edge").unhighlight(lastEdge).highlight(edge).in(Color.BLUE);
+			stateBuilder.atLine("for_each_edge").starteLoop().unhighlight(lastEdge).highlight(edge).in(Color.BLUE);
 
 			// reverse all edges where the source Node index is higher than the target node
 			// index
-			stateBuilder.atLine("needs_to_be_reversed");
+			stateBuilder.atLine("needs_to_be_reversed").starteIf();
 			if (combinedList.indexOf(Util.getSource(edge)) > combinedList.indexOf(Util.getTarget(edge))) {
 				Util.reverseEdge(edge);
 				stateBuilder.atLine("reverse_edge").updateEdge(edge).highlight(edge).in(Color.GREEN);
@@ -268,6 +273,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			} else {
 				lastEdge = edge;
 			}
+			stateBuilder.endIf().endLoop();
 		}
 
 		stateBuilder.atLine("for_each_edge_end").unhighlight(lastEdge);

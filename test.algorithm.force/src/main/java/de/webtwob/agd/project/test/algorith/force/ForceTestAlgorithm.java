@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
@@ -20,17 +20,19 @@ import de.webtwob.agd.project.view.CompoundAnimation;
 public class ForceTestAlgorithm implements IAlgorithm {
 
 	@Override
-	public IAnimation getAnimationPanel(JPanel panel, ElkNode graph, AnimationSyncThread syncThread) {
+	public IAnimation getAnimationPanel(JPanel panel, ElkNode graph, ControllerModel syncThread) {
 		panel.setLayout(new BorderLayout());
 
 		LinkedList<GraphState> steps = new LinkedList<>();
 
-		var builder = GraphStateListBuilder.createBuilder().startWith(graph).atLine("line0");
+		var builder = GraphStateListBuilder.startWith(graph);
+		
+		builder.atLine("line0").starteFunction();
 		
 		InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 		InitialLayoutUtil.layout(graph);	
 		
-		builder.atLine("line0").updateNode(graph);
+		builder.endFunction().atLine("line0").updateNode(graph);
 		
 		steps.addAll(builder.getList());
 		

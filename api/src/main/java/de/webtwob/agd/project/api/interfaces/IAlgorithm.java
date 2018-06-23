@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 
 /**
  * An Interface used to represent all Algorithms that can be animated
@@ -20,7 +20,7 @@ public interface IAlgorithm {
 	 * 
 	 * @return a the new AnimationSyncThread for the generated Animation
 	 */
-	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,AnimationSyncThread syncThread);
+	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
 	
 	String getPseudoCode();
 

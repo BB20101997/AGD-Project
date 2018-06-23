@@ -44,7 +44,7 @@ public class GraphState {
 	private String pseudoCodeLine = "line0";
 	
 
-	private IVerbosity verbosity = VerbosityEnum.DEFAULT;
+	private IVerbosity verbosity = VerbosityEnum.OFF;
 
 	@SuppressWarnings("exports")
 	public Rectangle2D.Double getMapping(ElkNode node) {

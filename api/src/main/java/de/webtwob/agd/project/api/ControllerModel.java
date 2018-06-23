@@ -12,10 +12,15 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
-public class AnimationSyncThread extends Thread {
+public class ControllerModel {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
 	List<IAnimation> animations = new LinkedList<>();
+
+	private volatile Thread syncThread;
+
+	// should the thread terminate
+	private volatile boolean stop = false;
 
 	/**
 	 * The frame that should currently be displayed
@@ -38,7 +43,7 @@ public class AnimationSyncThread extends Thread {
 	 * Represents the action to perform when the animation reaches the end e.g.
 	 * reverse/loop/stop
 	 */
-	volatile LoopEnum endAction = LoopEnum.STOP;
+	private volatile LoopEnum endAction = LoopEnum.STOP;
 
 	/**
 	 * Determines where to start the animation and where to stop if playing
@@ -58,18 +63,45 @@ public class AnimationSyncThread extends Thread {
 	 */
 	private volatile long maxEndAnimationAt = Long.MAX_VALUE;
 
-	public AnimationSyncThread() {
-		this.setDaemon(true);
-		this.setName("AnimationSyncThread");
+	public void start() {
+		if (syncThread == null) {
+			synchronized (this) {
+				if (syncThread == null) {
+					stop = false;
+					syncThread = new Thread(this::run);
+					syncThread.setDaemon(true);
+					syncThread.setName("Animation Update Thread");
+					syncThread.start();
+				}
+			}
+		}
 	}
 
-	@Override
-	public void run() {
+	public void stop() {
+		if (syncThread != null) {
+			synchronized (this) {
+				if (syncThread != null) {
+					stop = true;
+					syncThread.interrupt();
+					while (syncThread.isAlive())
+						try {
+							syncThread.join();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					syncThread = null;
+				}
+			}
+		}
+	}
+
+	private void run() {
 
 		long start = System.currentTimeMillis();
 		long end = System.currentTimeMillis();
 
-		while (true) {
+		while (!stop) {
 			if (speed != 0 && !paused) {
 				// update current frame
 				subFrame += (end - start) * speed;
@@ -85,12 +117,23 @@ public class AnimationSyncThread extends Thread {
 				}
 
 				updateFrame(frame);
-				interrupted();//possibly clear interrupt flag
+				Thread.interrupted(); // clear interrupt flag
 
 				end = System.currentTimeMillis();
 			} else {
 				start = end;
 				subFrame = 0;
+				synchronized (syncThread) {
+					while (speed == 0 || paused) {
+						try {
+							syncThread.wait();
+						} catch (InterruptedException e) {
+							if (stop) {
+								return;
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -108,7 +151,7 @@ public class AnimationSyncThread extends Thread {
 		// cause a positive feedback loop of events
 		if (!EventQueue.isDispatchThread()) {
 			try {
-				EventQueue.invokeAndWait(()->fireEventOnEventQueue(syncedCopy, event));
+				EventQueue.invokeAndWait(() -> fireEventOnEventQueue(syncedCopy, event));
 			} catch (InvocationTargetException ignore) {
 				// we want to keep running even when the event handler fails
 			} catch (InterruptedException interrupt) {
@@ -118,15 +161,16 @@ public class AnimationSyncThread extends Thread {
 			fireEventOnEventQueue(syncedCopy, event);
 		}
 	}
-	
+
 	/**
-	 * This method handles dispatching Events, it assumes to be called on the DispatchThread
-	 * */
-	private void fireEventOnEventQueue(List<IAnimationEventHandler> handlers ,IAnimationEvent event) {
-		if(!EventQueue.isDispatchThread()) {
+	 * This method handles dispatching Events, it assumes to be called on the
+	 * DispatchThread
+	 */
+	private void fireEventOnEventQueue(List<IAnimationEventHandler> handlers, IAnimationEvent event) {
+		if (!EventQueue.isDispatchThread()) {
 			throw new IllegalThreadStateException("This methode might only be called on the DispatchThread!");
 		}
-		 handlers.stream().forEach(h -> {
+		handlers.stream().forEach(h -> {
 			try {
 				h.animationEvent(event);
 			} catch (ThreadDeath e) {
@@ -177,7 +221,7 @@ public class AnimationSyncThread extends Thread {
 	public void setLoopAction(LoopEnum loopAction) {
 		endAction = loopAction;
 	}
-	
+
 	public LoopEnum getLoopAction() {
 		return endAction;
 	}
@@ -212,7 +256,14 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void setPaused(boolean paused) {
-		this.paused = paused;
+		if (this.paused && !paused) {
+			this.paused = paused;
+			synchronized (syncThread) {
+				syncThread.notify();
+			}
+		} else {
+			this.paused = paused;
+		}
 	}
 
 	public long getEndAnimationAt() {
@@ -224,7 +275,14 @@ public class AnimationSyncThread extends Thread {
 	}
 
 	public void setSpeed(double d) {
-		speed = d;
+		if(speed==0&&d!=0) {
+			speed = d;
+			synchronized (syncThread) {
+				syncThread.notify();
+			}	
+		}else {
+			speed = d;
+		}
 		fireEvent(new AnimationSpeedUpdateEvent(speed));
 	}
 

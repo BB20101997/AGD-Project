@@ -2,7 +2,6 @@ package de.webtwob.agd.project.view;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.lang.Thread.State;
 
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
@@ -10,7 +9,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
@@ -26,7 +25,7 @@ public class PseudocodeView extends JTextPane {
 	private final transient IAnimationEventHandler eventHandler = this::updateAnimation;
 	private final HTMLDocument doc = new HTMLDocument();
 
-	private transient AnimationSyncThread frameSync = new AnimationSyncThread();
+	private transient ControllerModel frameSync = new ControllerModel();
 	private transient IAnimation animation;
 
 	public PseudocodeView() {
@@ -36,18 +35,16 @@ public class PseudocodeView extends JTextPane {
 		setEditable(false);
 	}
 
-	public PseudocodeView(String codeLines, AnimationSyncThread syncThread, IAnimation animation) {
+	public PseudocodeView(String codeLines, ControllerModel syncThread, IAnimation animation) {
 		this();
 		setText(codeLines);
 		setAnimation(animation);
-		setSyncThread(syncThread);
+		setModel(syncThread);
 	}
 
 	public PseudocodeView(String codeLines, IAnimation animation) {
-		this(codeLines, new AnimationSyncThread(), animation);
-		if (frameSync.getState() == State.NEW) {
-			frameSync.start();
-		}
+		this(codeLines, new ControllerModel(), animation);
+		frameSync.start();
 	}
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
@@ -70,7 +67,7 @@ public class PseudocodeView extends JTextPane {
 		this.animation = animation;
 	}
 
-	public void setSyncThread(AnimationSyncThread thread) {
+	public void setModel(ControllerModel thread) {
 		if (frameSync != null) {
 			frameSync.removeAnimation(animation);
 			frameSync.unsubscribeFromAnimationEvent(eventHandler);

@@ -9,7 +9,7 @@ import javax.swing.WindowConstants;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
@@ -24,9 +24,9 @@ public class AnimationElkForce {
 
 	public static void main(String[] args) {
 
-		AnimationSyncThread syncThread = new AnimationSyncThread();
+		ControllerModel model = new ControllerModel();
 
-		AnimatedView sgv = new AnimatedView(syncThread);
+		AnimatedView sgv = new AnimatedView(model);
 
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
@@ -59,9 +59,10 @@ public class AnimationElkForce {
 		comAnim.addAnimation(new Animation(start, mapping, 2000));
 		comAnim.addAnimation(new Animation(start, new Pair<>(pause, pause), 500));
 
-		syncThread.setLoopAction(LoopEnum.LOOP);
-		syncThread.start();
-
+		model.setLoopAction(LoopEnum.LOOP);
+		
+		model.start();
+		
 		sgv.setAnimation(comAnim);
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

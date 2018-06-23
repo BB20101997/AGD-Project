@@ -14,8 +14,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
@@ -30,7 +30,7 @@ public class ControllPanel extends JPanel {
 
 	private static Map<String, IAlgorithm> algorithms = new HashMap<>();
 
-	private transient AnimationSyncThread syncThread;
+	private transient ControllerModel syncThread;
 
 	static {
 		// load all algorithms into the algorithm map
@@ -54,10 +54,7 @@ public class ControllPanel extends JPanel {
 
 	public ControllPanel() {
 
-		var boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-
-		setLayout(boxLayout);
-
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		// setup elements
@@ -77,7 +74,7 @@ public class ControllPanel extends JPanel {
 
 		speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
 		speedField.setValue(1);
-		speedField.addActionListener(e -> mainPanel.getSyncThread().setSpeed(Double.parseDouble(speedField.getText())));
+		speedField.addActionListener(e -> mainPanel.getModel().setSpeed(Double.parseDouble(speedField.getText())));
 
 		// create boxes
 		var algBox = Box.createHorizontalBox();
@@ -86,15 +83,17 @@ public class ControllPanel extends JPanel {
 		var speedBox = Box.createHorizontalBox();
 
 		// fill boxes
+		algBox.add(new JLabel("Algorithm:"));
 		algBox.add(algChoise);
 
+		loopChoiseBox.add(new JLabel("After Animation:"));
 		loopChoiseBox.add(loopChoise);
 
 		actionBox.add(reversedPlay);
 		actionBox.add(play);
 		actionBox.add(pause);
 
-		speedBox.add(new JLabel("Speed"));
+		speedBox.add(new JLabel("Speed:"));
 		speedBox.add(speedField);
 
 		// add boxes to panel
@@ -107,7 +106,7 @@ public class ControllPanel extends JPanel {
 
 		reversedPlay.addActionListener(event -> {
 			if (syncThread != null) {
-				syncThread.setSpeed(-Math.abs(mainPanel.getSyncThread().getSpeed()));
+				syncThread.setSpeed(-Math.abs(mainPanel.getModel().getSpeed()));
 				syncThread.setPaused(false);
 
 			}
@@ -115,7 +114,7 @@ public class ControllPanel extends JPanel {
 
 		play.addActionListener(event -> {
 			if (syncThread != null) {
-				syncThread.setSpeed(Math.abs(mainPanel.getSyncThread().getSpeed()));
+				syncThread.setSpeed(Math.abs(mainPanel.getModel().getSpeed()));
 				syncThread.setPaused(false);
 			}
 		});
@@ -144,7 +143,7 @@ public class ControllPanel extends JPanel {
 		}
 	}
 
-	public void setSyncThread(AnimationSyncThread thread) {
+	public void setModel(ControllerModel thread) {
 		if (syncThread != null) {
 			syncThread.unsubscribeFromAnimationEvent(speedUpdate);
 		}

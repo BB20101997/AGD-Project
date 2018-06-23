@@ -8,8 +8,8 @@ import javax.swing.JSlider;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
@@ -28,7 +28,8 @@ public class MainPanel extends JPanel {
 	ControllPanel controllPanel;
 	transient IAlgorithm algorithm;
 	transient IAnimation animation;
-	transient AnimationSyncThread syncThread;
+	transient ControllerModel model;
+	transient Thread syncThread;
 	JSlider timeLine;
 	transient ElkNode graph;
 
@@ -66,6 +67,23 @@ public class MainPanel extends JPanel {
 
 		add(algorithmPanel, constraints);
 
+		timeLine = new JSlider();
+		timeLine.setMajorTickSpacing(500);
+		timeLine.setPaintTicks(true);
+
+		timeLine.addChangeListener(event -> model.setFrame(timeLine.getValue()));
+
+		constraints = new GridBagConstraints();
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		constraints.gridwidth = 2;
+		constraints.gridheight = 1;
+		constraints.weightx = 0;
+		constraints.weighty = 0;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		add(timeLine, constraints);
+		
 		controllPanel = new ControllPanel();
 		controllPanel.setMainPanel(this);
 
@@ -79,23 +97,7 @@ public class MainPanel extends JPanel {
 		constraints.fill = GridBagConstraints.BOTH;
 
 		add(controllPanel, constraints);
-
-		timeLine = new JSlider();
-		timeLine.setMajorTickSpacing(500);
-		timeLine.setPaintTicks(true);
-
-		timeLine.addChangeListener(event -> syncThread.setFrame(timeLine.getValue()));
-
-		constraints = new GridBagConstraints();
-		constraints.gridx = 0;
-		constraints.gridy = 4;
-		constraints.gridwidth = 2;
-		constraints.gridheight = 1;
-		constraints.weightx = 0;
-		constraints.weighty = 0;
-		constraints.fill = GridBagConstraints.BOTH;
-
-		add(timeLine, constraints);
+		
 		revalidate();
 		repaint();
 
@@ -110,9 +112,9 @@ public class MainPanel extends JPanel {
 
 	public void redoAnimationPanel() {
 		algorithmPanel.removeAll();
-		if (syncThread == null) {
-			syncThread = new AnimationSyncThread();
-			syncThread.subscribeToAnimationEvent(event -> {
+		if (model == null) {
+			model = new ControllerModel();
+			model.subscribeToAnimationEvent(event -> {
 				if (event instanceof AnimationUpdateEvent) {
 					var val = (int) ((AnimationUpdateEvent) event).getFrame();
 					if (timeLine.getValue() != val && !timeLine.getValueIsAdjusting()) {
@@ -120,28 +122,29 @@ public class MainPanel extends JPanel {
 					}
 				}
 			});
-			pseudocodeView.setSyncThread(syncThread);
-			controllPanel.setSyncThread(syncThread);
-			syncThread.start();
+			pseudocodeView.setModel(model);
+			controllPanel.setModel(model);
+			model.start();
 		}
 		
-		syncThread.setPaused(true);
-		syncThread.setFrame(0);
+		model.setPaused(true);
+		model.setFrame(0);
+		timeLine.setValue(0);
 
-		syncThread.removeAnimation(animation);
+		model.removeAnimation(animation);
 
 		if (algorithm != null) {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
-				animation = algorithm.getAnimationPanel(algorithmPanel, graph, syncThread);
-				syncThread.addAnimation(animation);
+				animation = algorithm.getAnimationPanel(algorithmPanel, graph, model);
+				model.addAnimation(animation);
 				pseudocodeView.setAnimation(animation);
-				timeLine.setMaximum((int) syncThread.getEndAnimationAt());
+				timeLine.setMaximum((int) model.getEndAnimationAt());
+				model.setPaused(false);
 			}
 		}
 		
-		syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
-		syncThread.setPaused(false);
+		model.setSpeed(Math.abs(model.getSpeed()));
 		revalidate();
 		repaint();
 	}
@@ -154,11 +157,11 @@ public class MainPanel extends JPanel {
 	}
 
 	public void setLoopType(LoopEnum item) {
-		syncThread.setLoopAction(item);
+		model.setLoopAction(item);
 	}
 
-	public AnimationSyncThread getSyncThread() {
-		return syncThread;
+	public ControllerModel getModel() {
+		return model;
 	}
 
 }

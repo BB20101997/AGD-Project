@@ -2,8 +2,7 @@ group 'de.webtwob.agd.project'
 
 dependencies {
 
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.graph.json
-    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
+    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
     
     api project(":api")
 

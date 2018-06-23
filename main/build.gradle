@@ -4,33 +4,11 @@ group 'de.webtwob.agd.project'
 apply plugin: 'application'
 
 dependencies {
-
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.core
-    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
     
-    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
-    
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.common.compaction
-    api group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.common.compaction', version: '0.3.0'
+    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
 
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.mrtree
-    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.mrtree', version: '0.3.0'
-
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.mrtree
-    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.force', version: '0.3.0'
-
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.mrtree
-    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.layered', version: '0.3.0'
-
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.graph.json
-    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph.json', version: '0.3.0'
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:18.0'
-
+    implementation project(':api')
 	implementation project(':view')
-      
     
 	runtimeOnly project(':file.json') 
 	runtimeOnly project(':file.toml') 
@@ -48,4 +26,15 @@ tasks.withType(JavaExec) {
         jvmArgs('--module-path', classpath.asPath)
         jvmArgs('--add-modules',"ALL-MODULE-PATH")
     }
+}
+
+tasks.withType(CreateStartScripts){
+    List<String> opts = new ArrayList<>()
+    // TODO get this working
+    //opts.add('--module-path')
+    //opts.add(getRelativeClasspath().asPath)
+    opts.add('--add-modules')
+    opts.add('ALL-MODULE-PATH')
+
+    setDefaultJvmOpts(opts)
 }

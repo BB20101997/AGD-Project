@@ -9,8 +9,8 @@ import javax.swing.WindowConstants;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.view.AnimatedView;
@@ -19,9 +19,9 @@ public class ShowAnAnimatedGraph {
 
 	public static void main(String[] args) {
 
-		AnimationSyncThread syncThread = new AnimationSyncThread();
+		ControllerModel model = new ControllerModel();
 
-		AnimatedView sgv = new AnimatedView(syncThread);
+		AnimatedView sgv = new AnimatedView(model);
 
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
@@ -37,8 +37,9 @@ public class ShowAnAnimatedGraph {
 		frame.setVisible(true);
 		frame.pack();
 
-		syncThread.setLoopAction(LoopEnum.REVERSE);
-		syncThread.start();
+		model.setLoopAction(LoopEnum.REVERSE);
+
+		model.start();
 
 		sgv.animateGraph(start, GraphStateUtil.createMapping(start, end), 20000);
 

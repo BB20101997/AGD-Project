@@ -10,13 +10,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.lang.Thread.State;
 
 import javax.swing.JComponent;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateUtil;
@@ -33,17 +32,17 @@ public class AnimatedView extends JComponent {
 	private volatile double scale = 1;
 	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 
-	private volatile IAnimation animation;
+	private transient volatile IAnimation animation;
 
-	private AnimationSyncThread frameSync = new AnimationSyncThread();
+	private transient ControllerModel model = new ControllerModel();
 
-	public AnimatedView(AnimationSyncThread syncThread) {
+	public AnimatedView(ControllerModel syncThread) {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
 
-		frameSync = syncThread;
+		model = syncThread;
 
-		frameSync.subscribeToAnimationEvent(e->this.repaint());
+		model.subscribeToAnimationEvent(e->this.repaint());
 
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 
@@ -85,10 +84,8 @@ public class AnimatedView extends JComponent {
 	}
 
 	public AnimatedView() {
-		this(new AnimationSyncThread());
-		if (frameSync.getState() == State.NEW) {
-			frameSync.start();
-		}
+		this(new ControllerModel());
+		model.start();
 	}
 
 	@SuppressWarnings("exports") // automatic modules should not be exported
@@ -119,9 +116,9 @@ public class AnimatedView extends JComponent {
 	 *            the animation this View shall display
 	 */
 	public void setAnimation(IAnimation animation) {
-		frameSync.removeAnimation(this.animation);
+		model.removeAnimation(this.animation);
 		this.animation = animation;
-		frameSync.addAnimation(this.animation);
+		model.addAnimation(this.animation);
 	}
 
 	@Override
@@ -146,7 +143,7 @@ public class AnimatedView extends JComponent {
 		graphic.scale(subScale, subScale);
 		graphic.scale(scale, scale);
 
-		animation.generateFrame(frameSync.getFrame(), graphic);
+		animation.generateFrame(model.getFrame(), graphic);
 
 		graphic.dispose();
 	}

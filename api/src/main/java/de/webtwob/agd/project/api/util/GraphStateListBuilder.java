@@ -8,23 +8,8 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.GraphState;
-import de.webtwob.agd.project.api.VerbosityEnum;
-import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
 public class GraphStateListBuilder {
-	
-	int lastSink = 0;
-	int lastSource = 0;
-	
-	@FunctionalInterface
-	public interface AtLine {
-		GraphStateListBuilder atLine(String t);
-	}
-	
-	@FunctionalInterface
-	public interface StartNode {
-		AtLine startWith(ElkNode t);
-	}
 	
 	@FunctionalInterface
 	public interface In{
@@ -38,6 +23,10 @@ public class GraphStateListBuilder {
 			return in(Color.BLUE);
 		}
 	}
+	
+	int lastSink = 0;
+	int lastSource = 0;
+	int depth = 0;
 
 	public static final Color SOURCE = Color.CYAN;
 
@@ -46,17 +35,14 @@ public class GraphStateListBuilder {
 	List<GraphState> graphStateList = new LinkedList<>();
 	GraphState current;
 
-	private GraphStateListBuilder(ElkNode graph, String line) {
+	private GraphStateListBuilder(ElkNode graph) {
 		var state = new GraphState();
 		GraphStateUtil.saveState(graph, state);
-		state.setPseudoCodeLine(line);
 		current = state;
-		current.setVerbosity(VerbosityEnum.ALLWAYS);
-		graphStateList.add(current);
 	}
 
-	public static StartNode createBuilder() {
-		return  graph -> line -> new GraphStateListBuilder(graph, line);
+	public static GraphStateListBuilder startWith(ElkNode graph) {
+		return  new GraphStateListBuilder(graph);
 	}
 
 	public List<GraphState> getList() {
@@ -67,17 +53,33 @@ public class GraphStateListBuilder {
 		current = new GraphState(current);
 		current.setPseudoCodeLine(line);
 		graphStateList.add(current);
-		return  new GraphStateBuilder(current);
+		return new GraphStateBuilder(current);
 	}
-
 	
+	public GraphStateListBuilder endIf() {
+		return decreaseDepth();
+	}
+	
+	public GraphStateListBuilder endLoop() {
+		return decreaseDepth();
+	}
+	
+	public GraphStateListBuilder endFunction() {
+		return decreaseDepth();
+	}
+	
+	private GraphStateListBuilder decreaseDepth() {
+		depth --;
+		return this;
+	}
 	
 	public class GraphStateBuilder {
 		private GraphState current;
 		
 		private GraphStateBuilder(GraphState current) {
 			this.current = current;
-			current.setVerbosity(VerbosityEnum.DEFAULT);
+			int level = depth*100;
+			current.setVerbosity(()->level);
 		}
 
 		public In highlight(Object object) {
@@ -114,12 +116,24 @@ public class GraphStateListBuilder {
 			return this;
 		}
 		
-		public GraphStateBuilder withVerbosity(IVerbosity verbos) {
-			current.setVerbosity(verbos);
+		public GraphStateBuilder starteIf() {
+			return increaseDepth();
+		}
+		
+		public GraphStateBuilder starteLoop() {
+			return increaseDepth();
+		}
+		
+		public GraphStateBuilder starteFunction() {
+			return increaseDepth();
+		}
+		
+		private GraphStateBuilder increaseDepth() {
+			depth++;
 			return this;
 		}
 
-		
 	}
+
 
 }

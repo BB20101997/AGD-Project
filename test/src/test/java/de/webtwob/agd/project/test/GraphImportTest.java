@@ -8,6 +8,7 @@ import org.eclipse.elk.graph.ElkNode;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.file.json.JSONGraphLoader;
 import de.webtwob.agd.project.file.toml.TOMLGraphLoader;
 
@@ -20,7 +21,6 @@ public class GraphImportTest {
 	@Test
 	public void importGraphFromJSONFile() {
 
-		// TODO why does GraphLoaderHelper not work here?
 		var file = new File("src/test/resources/importTestGraph.json").getAbsoluteFile();
 		var optNode = new JSONGraphLoader().loadGraphFromFile(file);
 
@@ -35,7 +35,6 @@ public class GraphImportTest {
 	@Test
 	public void importGraphFromTOMLFile() {
 
-		// TODO why does GraphLoaderHelper not work here?
 		var file = new File("src/test/resources/importTestGraph.toml").getAbsoluteFile();
 		var optNode = new TOMLGraphLoader().loadGraphFromFile(file);
 
@@ -45,5 +44,17 @@ public class GraphImportTest {
 		Assert.assertEquals(2, node.getChildren().size());
 		Assert.assertEquals(Set.of("n1", "n2"),
 				node.getChildren().stream().map(ElkNode::getIdentifier).collect(Collectors.toSet()));
+	}
+	
+	@Test
+	public void serviceLoaderTestTOMLFile() {
+		var graph = GraphLoaderHelper.loadGraph(new File("src/test/resources/importTestGraph.toml").getAbsoluteFile());
+		Assert.assertTrue(graph.isPresent());
+	}
+	
+	@Test
+	public void serviceLoaderTestJSONFile() {
+		var graph = GraphLoaderHelper.loadGraph(new File("src/test/resources/importTestGraph.json").getAbsoluteFile());
+		Assert.assertTrue(graph.isPresent());
 	}
 }

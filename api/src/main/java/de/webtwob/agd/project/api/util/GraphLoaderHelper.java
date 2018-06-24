@@ -13,6 +13,8 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
 public class GraphLoaderHelper {
+	
+	private GraphLoaderHelper() {}
 
 	private static final List<IGraphLoader> loader = ServiceLoader.load(IGraphLoader.class).stream()
 			.map(ServiceLoader.Provider::get).collect(Collectors.toList());
@@ -46,8 +48,8 @@ public class GraphLoaderHelper {
 	private static Optional<ElkNode> tryLoader(IGraphLoader loader, File file) {
 		try {
 			return loader.loadGraphFromFile(file);
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
+		} catch (NoClassDefFoundError ignore) {
+			//loading failed going to return empty optional
 		}
 		return Optional.<ElkNode>empty();
 	}

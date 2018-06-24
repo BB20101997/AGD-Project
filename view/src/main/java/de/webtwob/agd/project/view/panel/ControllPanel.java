@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,12 +14,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.webtwob.agd.project.api.AnimationSyncThread;
-import de.webtwob.agd.project.api.LoopEnum;
+import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
-import de.webtwob.agd.project.api.interfaces.IController;
+import de.webtwob.agd.project.api.util.AlgorithmLoaderHelper;
 
 public class ControllPanel extends JPanel {
 
@@ -31,11 +30,11 @@ public class ControllPanel extends JPanel {
 
 	private static Map<String, IAlgorithm> algorithms = new HashMap<>();
 
-	private AnimationSyncThread syncThread;
+	private transient ControllerModel syncThread;
 
 	static {
 		// load all algorithms into the algorithm map
-		ServiceLoader.load(IAlgorithm.class).forEach(alg -> algorithms.put(alg.getName(), alg));
+		AlgorithmLoaderHelper.getAlgorithms().forEach(alg -> algorithms.put(alg.getName(), alg));
 	}
 
 	private MainPanel mainPanel;
@@ -47,20 +46,15 @@ public class ControllPanel extends JPanel {
 	private JButton pause;
 	private JFormattedTextField speedField;
 
-	private IAnimationEventHandler speedUpdate = e -> {
+	private transient IAnimationEventHandler speedUpdate = e -> {
 		if (e instanceof AnimationSpeedUpdateEvent) {
 			speedField.setText(Double.toString(((AnimationSpeedUpdateEvent) e).getSpeed()));
 		}
 	};
 
-	public ControllPanel(IController controller) {
+	public ControllPanel() {
 
-		// setBackground(Color.YELLOW);
-
-		var boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-
-		setLayout(boxLayout);
-
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		// setup elements
@@ -80,7 +74,7 @@ public class ControllPanel extends JPanel {
 
 		speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
 		speedField.setValue(1);
-		speedField.addActionListener(e -> mainPanel.getSyncThread().setSpeed(Double.parseDouble(speedField.getText())));
+		speedField.addActionListener(e -> mainPanel.getModel().setSpeed(Double.parseDouble(speedField.getText())));
 
 		// create boxes
 		var algBox = Box.createHorizontalBox();
@@ -89,15 +83,17 @@ public class ControllPanel extends JPanel {
 		var speedBox = Box.createHorizontalBox();
 
 		// fill boxes
+		algBox.add(new JLabel("Algorithm:"));
 		algBox.add(algChoise);
 
+		loopChoiseBox.add(new JLabel("After Animation:"));
 		loopChoiseBox.add(loopChoise);
 
 		actionBox.add(reversedPlay);
 		actionBox.add(play);
 		actionBox.add(pause);
 
-		speedBox.add(new JLabel("Speed"));
+		speedBox.add(new JLabel("Speed:"));
 		speedBox.add(speedField);
 
 		// add boxes to panel
@@ -110,7 +106,7 @@ public class ControllPanel extends JPanel {
 
 		reversedPlay.addActionListener(event -> {
 			if (syncThread != null) {
-				syncThread.setSpeed(-Math.abs(mainPanel.getSyncThread().getSpeed()));
+				syncThread.setSpeed(-Math.abs(mainPanel.getModel().getSpeed()));
 				syncThread.setPaused(false);
 
 			}
@@ -118,7 +114,7 @@ public class ControllPanel extends JPanel {
 
 		play.addActionListener(event -> {
 			if (syncThread != null) {
-				syncThread.setSpeed(Math.abs(mainPanel.getSyncThread().getSpeed()));
+				syncThread.setSpeed(Math.abs(mainPanel.getModel().getSpeed()));
 				syncThread.setPaused(false);
 			}
 		});
@@ -129,9 +125,7 @@ public class ControllPanel extends JPanel {
 			}
 		});
 
-		loopChoise.addItemListener(event -> {
-			mainPanel.setLoopType((LoopEnum) event.getItem());
-		});
+		loopChoise.addItemListener(event -> mainPanel.setLoopType((LoopEnum) event.getItem()));
 
 		algChoise.addItemListener(event -> mainPanel.setAlgorithm(algorithms.get(event.getItem())));
 
@@ -149,13 +143,14 @@ public class ControllPanel extends JPanel {
 		}
 	}
 
-	public void setSyncThread(AnimationSyncThread thread) {
+	public void setModel(ControllerModel thread) {
 		if (syncThread != null) {
 			syncThread.unsubscribeFromAnimationEvent(speedUpdate);
 		}
 		syncThread = thread;
 		if (syncThread != null) {
 			syncThread.subscribeToAnimationEvent(speedUpdate);
+			loopChoise.setSelectedItem(syncThread.getLoopAction());
 		}
 	}
 

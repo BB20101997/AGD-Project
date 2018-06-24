@@ -8,34 +8,29 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    // Use JUnit test framework
+    // Use JUnit 4 test framework
     testImplementation 'junit:junit:4.12'
 
-    testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph.json', version: '0.3.0'
-    
     testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.force' , version: '0.3.0'
     
-    testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.core'      , version: '0.3.0'
-
-    testImplementation project(":file.json")
-    
-    testRuntimeOnly    project(":file.json")
-
-    testImplementation project(":file.toml")
-    
-    testRuntimeOnly    project(":file.toml")
-    
-    testImplementation project(":model")
-    
-    testImplementation project(":control")
-
     testImplementation project(":main")
-    
-    testImplementation project(":control")
     
     testImplementation project(":view")
     
     testImplementation project(":api")
 
+    testImplementation project(":algorithm.greedy")
+    
+    testImplementation project(":file.json")
 
+    testImplementation project(":file.toml")
+
+}
+
+tasks.withType(Test) {
+    doFirst {
+        jvmArgs('--module-path', classpath.asPath)
+        jvmArgs('--add-modules',"ALL-MODULE-PATH")
+        jvmArgs('--add-reads','de.webtwob.agd.project.test=junit')
+    }
 }

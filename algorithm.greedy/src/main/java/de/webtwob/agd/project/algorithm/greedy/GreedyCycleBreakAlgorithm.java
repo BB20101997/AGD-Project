@@ -279,4 +279,27 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		stateBuilder.atLine("for_each_edge_end").unhighlight(lastEdge);
 	}
 
+	@Override
+	public IAnimation getAnimationPanelTopo(JPanel panel, ElkNode graph, ControllerModel thread) {
+		panel.setLayout(new BorderLayout());
+
+		
+
+		LinkedList<GraphState> steps = new LinkedList<>();
+
+		getSteps(graph, steps);
+
+		IAnimation anim = CompoundAnimation.compoundAnimationTopo(graph, steps, 500);
+
+		var animView = new AnimatedView(thread);
+		animView.setAnimation(anim);
+
+		panel.setPreferredSize(new Dimension((int) Math.ceil(anim.getWidth()), (int) Math.ceil(anim.getHeight())));
+
+		panel.add(animView, BorderLayout.CENTER);
+		panel.repaint();
+
+		return anim;
+	}
+
 }

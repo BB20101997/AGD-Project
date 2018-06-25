@@ -58,6 +58,20 @@ public class CompoundAnimation implements IAnimation {
 			}
 		}
 	}
+	
+	public static CompoundAnimation compoundAnimationTopo(ElkNode root, List<GraphState> mappings, int length) {
+		CompoundAnimation comp = new CompoundAnimation();
+		if (mappings.size() == 1) {
+			// only one mapping
+			comp.addAnimation(new AnimationTopo(root, new Pair<>(mappings.get(0), mappings.get(0)), length));
+		} else if (!mappings.isEmpty()) {
+			// more than one mapping
+			for (int i = 1; i < mappings.size(); i++) {
+				comp.addAnimation(new AnimationTopo(root, new Pair<>(mappings.get(i - 1), mappings.get(i)), length));
+			}
+		}
+		return comp;
+	}
 
 	public void addAnimation(IAnimation anim) {
 		animationList.add(anim);

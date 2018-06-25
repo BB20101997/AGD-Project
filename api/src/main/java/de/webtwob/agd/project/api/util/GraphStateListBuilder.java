@@ -119,7 +119,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param object
 		 *            the object to highlight
-		 * @returns a function to highlight the passed object
+		 * @return a function to highlight the passed object
 		 */
 		public In highlight(Object object) {
 			return color -> {

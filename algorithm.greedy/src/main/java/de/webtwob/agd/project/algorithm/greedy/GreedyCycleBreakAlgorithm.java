@@ -1,8 +1,6 @@
 package de.webtwob.agd.project.algorithm.greedy;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,53 +10,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JPanel;
-
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
-import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
-import de.webtwob.agd.project.view.AnimatedView;
-import de.webtwob.agd.project.view.CompoundAnimation;
 
 public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 	@Override
-	public IAnimation getAnimationPanel(JPanel panel, ElkNode graph, ControllerModel thread) {
-
-		panel.setLayout(new BorderLayout());
-
+	public List<GraphState> getGraphStates(ElkNode graph) {
+		var list = new LinkedList<GraphState>();
+		
 		if (!graph.getProperty(CoreOptions.NO_LAYOUT)) {
 			// apply the force layout algorithm to get an initial layout
 			InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 			InitialLayoutUtil.layout(graph);
 		}
-
-		LinkedList<GraphState> steps = new LinkedList<>();
-
-		//generate the steps of applying the algorithm
-		getSteps(graph, steps);
-
-		//generate an animation from the steps
-		IAnimation anim = new CompoundAnimation(graph, steps, 500);
-
 		
-		//setup the JPanel
-		var animView = new AnimatedView(thread);
-		animView.setAnimation(anim);
-
-		panel.setPreferredSize(new Dimension((int) Math.ceil(anim.getWidth()), (int) Math.ceil(anim.getHeight())));
-
-		panel.add(animView, BorderLayout.CENTER);
-		panel.repaint();
-
-		return anim;
+		getSteps(graph, list);
+		
+		return list;
 	}
 
 	@Override
@@ -70,7 +45,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	public String getPseudoCode() {
 		String lines = null;
 
-		//try to load the pseudocode from file
+		// try to load the pseudocode from file
 		try {
 			var uri = getClass().getResource("de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html");
 
@@ -96,10 +71,10 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	 * @param steps
 	 *            the List to store the GraphStates into
 	 */
-	public static void getSteps(ElkNode graph, List<GraphState> steps) {
+	private static void getSteps(ElkNode graph, List<GraphState> steps) {
 
 		var stateBuilder = GraphStateListBuilder.startWith(graph);
-		
+
 		stateBuilder.atLine("the_start").starteFunction();
 
 		// copy child list so we can remove already sorted ones
@@ -113,7 +88,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		if (children.isEmpty()) {
 			stateBuilder.atLine("while_has_children");
 		}
-		
+
 		while (!children.isEmpty()) {
 			stateBuilder.atLine("while_has_children").starteLoop();
 
@@ -132,7 +107,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_remaining").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_remaining").starteLoop().unhighlight(lastNode).highlight(currentNode)
+						.active();
 
 				int curVal = currentNode.getOutgoingEdges().size() - currentNode.getIncomingEdges().size();
 
@@ -164,7 +140,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		stateBuilder.atLine("no_children_left");
 
 		removeCycles(graph, stateBuilder, sourceList, sinkList);
-		
+
 		stateBuilder.endFunction().atLine("the_end");
 
 		steps.addAll(stateBuilder.getList());
@@ -188,7 +164,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_child_sink").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_child_sink").starteLoop().unhighlight(lastNode).highlight(currentNode)
+						.active();
 
 				// is node a Source given the currently present nodes in children
 				stateBuilder.atLine("is_sink").starteIf();
@@ -228,7 +205,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
 				ElkNode currentNode = iter.next();
 
-				stateBuilder.atLine("for_each_child_source").starteLoop().unhighlight(lastNode).highlight(currentNode).active();
+				stateBuilder.atLine("for_each_child_source").starteLoop().unhighlight(lastNode).highlight(currentNode)
+						.active();
 
 				// is node a Source given the currently present nodes in children
 				stateBuilder.atLine("is_source").starteIf();
@@ -285,26 +263,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	}
 
 	@Override
-	public IAnimation getAnimationPanelTopo(JPanel panel, ElkNode graph, ControllerModel thread) {
-		panel.setLayout(new BorderLayout());
-
-		
-
-		LinkedList<GraphState> steps = new LinkedList<>();
-
-		getSteps(graph, steps);
-
-		IAnimation anim = CompoundAnimation.compoundAnimationTopo(graph, steps, 500);
-
-		var animView = new AnimatedView(thread);
-		animView.setAnimation(anim);
-
-		panel.setPreferredSize(new Dimension((int) Math.ceil(anim.getWidth()), (int) Math.ceil(anim.getHeight())));
-
-		panel.add(animView, BorderLayout.CENTER);
-		panel.repaint();
-
-		return anim;
+	public boolean animationTopology() {
+		return true;
 	}
 
 }

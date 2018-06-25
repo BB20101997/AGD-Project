@@ -267,6 +267,11 @@ public class ControllerModel {
 		animations.remove(animation);
 		updateMaxEnd();
 	}
+	
+	public void removeAllAnimations() {
+		animations.clear();
+		updateMaxEnd();
+	}
 
 	public void updateMaxEnd() {
 		maxEndAnimationAt = animations.stream().mapToLong(IAnimation::getLength).min().orElse(Long.MAX_VALUE);

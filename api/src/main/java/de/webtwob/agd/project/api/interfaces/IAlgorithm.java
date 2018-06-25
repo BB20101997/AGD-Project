@@ -1,10 +1,10 @@
 package de.webtwob.agd.project.api.interfaces;
 
-import javax.swing.JPanel;
+import java.util.List;
 
 import org.eclipse.elk.graph.ElkNode;
 
-import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.GraphState;
 
 /**
  * An Interface used to represent all Algorithms that can be animated
@@ -12,18 +12,8 @@ import de.webtwob.agd.project.api.ControllerModel;
  */
 public interface IAlgorithm {
 
-	/**
-	 * @param panel
-	 *            the panel to insert the Animation Setup into
-	 * @param graph
-	 *            the graph to animate
-	 * 
-	 * @param syncThread the model to be used
-	 * @return an IAnimation 
-	 */
-	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
-	
-	IAnimation getAnimationPanelTopo(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
+
+	boolean animationTopology();
 	
 	/**
 	 * @return the pseudocode for this algorithm as a HTML String
@@ -34,5 +24,12 @@ public interface IAlgorithm {
 	 * @return the name of the algorithm
 	 */
 	String getName();
+
+	
+	/**
+	 * @param graph the graph to act upon
+	 * @return List of graph states for this graph and algorithm
+	 * */
+	List<GraphState> getGraphStates(ElkNode graph);
 
 }

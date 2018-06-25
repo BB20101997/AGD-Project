@@ -19,9 +19,9 @@ import de.webtwob.agd.project.view.util.ViewUtil;
 
 public class Animation implements IAnimation {
 
-	private final long lengthInMills;
-	private final Pair<GraphState> mapping;
-	private final ElkNode root;
+	protected final long lengthInMills;
+	protected final Pair<GraphState> mapping;
+	protected final ElkNode root;
 
 	/**
 	 *
@@ -50,7 +50,7 @@ public class Animation implements IAnimation {
 		}
 	}
 
-	private void drawNode(ElkNode node, Graphics2D graphic, long frame) {
+	protected void drawNode(ElkNode node, Graphics2D graphic, long frame) {
 
 		Rectangle2D.Double rect = getCurrent(mapping.getStart().getMapping(node), mapping.getEnd().getMapping(node),
 				frame, lengthInMills);

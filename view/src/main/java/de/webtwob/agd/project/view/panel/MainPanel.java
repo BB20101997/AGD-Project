@@ -1,11 +1,13 @@
 package de.webtwob.agd.project.view.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -19,15 +21,17 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 
-import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.view.AnimatedView;
+import de.webtwob.agd.project.view.AnimationTopo;
+import de.webtwob.agd.project.view.CompoundAnimation;
 import de.webtwob.agd.project.view.PseudocodeView;
 
 public class MainPanel extends JPanel {
@@ -38,17 +42,16 @@ public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	// this will contain the algorithm specific animation layout
-	JPanel algorithmPanel;
-	JPanel algorithmTopoPanel;
-	PseudocodeView pseudocodeView;
-	ControllPanel controllPanel;
-	transient IAlgorithm algorithm;
-	transient IAnimation animation;
-	transient IAnimation animationTopo;
-	transient ControllerModel model;
-	transient Thread syncThread;
-	JSlider timeLine;
-	transient ElkNode graph;
+	private JPanel algorithmPanel;
+	private PseudocodeView pseudocodeView;
+	private ControllPanel controllPanel;
+	private transient IAlgorithm algorithm;
+	private transient List<GraphState> states;
+	private transient IAnimation animation;
+	private transient IAnimation animationTopo;
+	private transient ControllerModel model;
+	private JSlider timeLine;
+	private transient ElkNode graph;
 
 	/**
 	 */
@@ -64,7 +67,7 @@ public class MainPanel extends JPanel {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
-		constraints.gridheight = 4;
+		constraints.gridheight = 1;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
 		constraints.fill = GridBagConstraints.BOTH;
@@ -77,25 +80,12 @@ public class MainPanel extends JPanel {
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
-		constraints.gridheight = 4;
+		constraints.gridheight = 1;
 		constraints.weightx = 1;
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.BOTH;
 
 		add(algorithmPanel, constraints);
-		
-		algorithmTopoPanel = new JPanel();
-
-		constraints = new GridBagConstraints();
-		constraints.gridx = 2;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 4;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		constraints.fill = GridBagConstraints.BOTH;
-
-		add(algorithmTopoPanel, constraints);
 
 		timeLine = new JSlider();
 		timeLine.setMajorTickSpacing(500);
@@ -105,8 +95,8 @@ public class MainPanel extends JPanel {
 
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
-		constraints.gridy = 4;
-		constraints.gridwidth = 3;
+		constraints.gridy = 1;
+		constraints.gridwidth = 2;
 		constraints.gridheight = 1;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
@@ -118,10 +108,10 @@ public class MainPanel extends JPanel {
 		controllPanel.setMainPanel(this);
 
 		constraints = new GridBagConstraints();
-		constraints.gridx = 3;
+		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
-		constraints.gridheight = 5;
+		constraints.gridheight = 2;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
 		constraints.fill = GridBagConstraints.BOTH;
@@ -142,7 +132,7 @@ public class MainPanel extends JPanel {
 
 	private void redoAnimationPanel() {
 		algorithmPanel.removeAll();
-		algorithmTopoPanel.removeAll();
+	
 		if (model == null) {
 			model = new ControllerModel();
 			model.subscribeToAnimationEvent(event -> {
@@ -158,19 +148,36 @@ public class MainPanel extends JPanel {
 			model.start();
 		}
 
+		model.removeAllAnimations();
 		model.setPaused(true);
 		model.setFrame(0);
 		timeLine.setValue(0);
 
-		model.removeAnimation(animation);
-
 		if (algorithm != null) {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
-				animation = algorithm.getAnimationPanel(algorithmPanel, graph, model);
-				animationTopo = algorithm.getAnimationPanelTopo(algorithmTopoPanel, graph, model);
+				states = algorithm.getGraphStates(graph);
+				
+				animation = new CompoundAnimation(graph, states, 500);
 				model.addAnimation(animation);
 				pseudocodeView.setAnimation(animation);
+				
+				var animView = new AnimatedView(model);
+				animView.setAnimation(animation);
+				algorithmPanel.setLayout(new BorderLayout());
+				algorithmPanel.add(animView,BorderLayout.CENTER);
+				algorithmPanel.setBackground(Color.red);
+				
+				if(algorithm.animationTopology()) {
+					animationTopo = new CompoundAnimation(graph, states, 500, AnimationTopo::new);
+					model.addAnimation(animationTopo);
+					var animTopoView = new AnimatedView(model);
+					animTopoView.setAnimation(animationTopo);
+					algorithmPanel.add(animTopoView,BorderLayout.EAST);
+				}
+				
+				repaint();
+				
 				timeLine.setMaximum((int) model.getEndAnimationAt());
 				model.setPaused(false);
 			}

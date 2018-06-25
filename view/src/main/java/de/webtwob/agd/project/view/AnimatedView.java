@@ -2,6 +2,7 @@ package de.webtwob.agd.project.view;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -119,6 +120,9 @@ public class AnimatedView extends JComponent {
 		model.removeAnimation(this.animation);
 		this.animation = animation;
 		model.addAnimation(this.animation);
+		if(animation!=null) {
+			setPreferredSize(new Dimension((int)Math.ceil(animation.getWidth()), (int)Math.ceil(animation.getHeight())));
+		}
 	}
 
 	@Override

@@ -198,7 +198,8 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @see ControllerModel#setLoopAction(LoopEnum)
+	 * @param item the value to set the models' Action to be performed at the end of the animation
+	 *  @see ControllerModel#setLoopAction(LoopEnum)
 	 * */
 	public void setLoopType(LoopEnum item) {
 		model.setLoopAction(item);

@@ -19,8 +19,8 @@ public class Main {
 	 * 
 	 * This is the beginning of everything
 	 * 
-	 * -file <file> the graph to load on startup
-	 * -debug <true|false> run with debugging settings
+	 * -file &lt;file&gt; the graph to load on startup
+	 * -debug &lt;true|false&gt; run with debugging settings
 	 * 
 	 */
 	public static void main(String[] args) {

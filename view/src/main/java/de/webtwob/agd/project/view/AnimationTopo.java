@@ -13,7 +13,7 @@ import de.webtwob.agd.project.view.util.ViewUtil;
 
 public class AnimationTopo extends Animation {
 
-	private static final double NODE_SIZE = 40;
+	private static final double NODE_SIZE = 60;
 	private static final double SPACING = 10;
 
 	/**
@@ -49,10 +49,10 @@ public class AnimationTopo extends Animation {
 		int pos = mapping.getEnd().getPosition(node);
 		int size = root.getChildren().size();
 		if (pos >= 0) {
-			rect.setRect(SPACING, (NODE_SIZE + SPACING) * pos, NODE_SIZE, NODE_SIZE);
+			rect.setRect(SPACING, SPACING + (NODE_SIZE + SPACING) * pos, NODE_SIZE, NODE_SIZE);
 		} else {
 
-			rect.setRect(SPACING, (NODE_SIZE + SPACING) * (size + pos), NODE_SIZE, NODE_SIZE);
+			rect.setRect(SPACING, SPACING + (NODE_SIZE + SPACING) * (size + pos), NODE_SIZE, NODE_SIZE);
 		}
 
 		var color = getCurrent(mapping.getStart().getHighlight(node), mapping.getEnd().getHighlight(node),
@@ -79,6 +79,7 @@ public class AnimationTopo extends Animation {
 		if (root.getChildren().isEmpty()) {
 			return 0;
 		}
+		//return Double.MAX_VALUE;
 		return root.getChildren().size() * (NODE_SIZE + SPACING) + SPACING;
 	}
 }

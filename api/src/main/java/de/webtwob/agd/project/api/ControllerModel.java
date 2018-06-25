@@ -63,6 +63,11 @@ public class ControllerModel {
 	 * The maximum value endAnimationAt may contain
 	 */
 	private volatile long maxEndAnimationAt = Long.MAX_VALUE;
+	
+	/**
+	 * Are we in debug mode?
+	 * */
+	private boolean debug;
 
 	/**
 	 * Start the animation thread
@@ -323,6 +328,14 @@ public class ControllerModel {
 			speed = d;
 		}
 		fireEvent(new AnimationSpeedUpdateEvent(speed));
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+	
+	public boolean getDebug() {
+		return debug;
 	}
 
 }

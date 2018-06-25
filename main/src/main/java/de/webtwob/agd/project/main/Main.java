@@ -16,24 +16,29 @@ public class Main {
 
 	/**
 	 * This is the beginning of everything
-	 * */
-	@SuppressWarnings("squid:S1066") // not collapsing if statement in case we want to add more commandline parameter
+	 */
 	public static void main(String[] args) {
 
 		File tmpFile = null;
+		boolean debug = false;
 
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
 				if (args[i].equals("-file") && i + 1 < args.length) {
 					tmpFile = new File(args[i + 1]);
 				}
+				if (args[i].equals("-debug") && i + 1 < args.length) {
+					debug = Boolean.parseBoolean(args[i+1]);
+				}
 			}
 		}
-
+		
 		JFrame frame = new JFrame("Cycle Break Animation");
 
 		MainPanel mainPanel = new MainPanel();
 		
+		mainPanel.getModel().setDebug(debug);
+
 		if (tmpFile != null) {
 			// try to load file passed via the command line
 			GraphLoaderHelper.loadGraph(tmpFile).ifPresent(mainPanel::setGraph);

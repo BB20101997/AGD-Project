@@ -11,8 +11,11 @@ import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.view.util.ViewUtil;
 
-public class AnimationTopo extends Animation  {
-	
+public class AnimationTopo extends Animation {
+
+	private static final double NODE_SIZE = 40;
+	private static final double SPACING = 10;
+
 	/**
 	 *
 	 * @param root
@@ -32,7 +35,7 @@ public class AnimationTopo extends Animation  {
 
 		for (ElkNode child : root.getChildren()) {
 			Integer pos = mapping.getEnd().getPosition(child);
-			if (pos!=null) {
+			if (pos != null) {
 				drawNode(child, graphic, frame);
 			}
 		}
@@ -45,13 +48,13 @@ public class AnimationTopo extends Animation  {
 				frame, lengthInMills);
 		int pos = mapping.getEnd().getPosition(node);
 		int size = root.getChildren().size();
-		if (pos>0) {
-			rect.setRect(10, 20.0*pos, 10, 10);			
+		if (pos >= 0) {
+			rect.setRect(SPACING, (NODE_SIZE + SPACING) * pos, NODE_SIZE, NODE_SIZE);
 		} else {
-			
-			rect.setRect(10, 20.0*(size-pos), 10, 10);
+
+			rect.setRect(SPACING, (NODE_SIZE + SPACING) * (size + pos), NODE_SIZE, NODE_SIZE);
 		}
-		
+
 		var color = getCurrent(mapping.getStart().getHighlight(node), mapping.getEnd().getHighlight(node),
 				graphic.getBackground(), frame, lengthInMills);
 
@@ -63,5 +66,19 @@ public class AnimationTopo extends Animation  {
 		subGraphic.dispose();
 	}
 
-	//TODO override getWith and getHeight to return correct values
+	@Override
+	public double getWidth() {
+		if (root.getChildren().isEmpty()) {
+			return 0;
+		}
+		return NODE_SIZE + 2 * SPACING;
+	}
+
+	@Override
+	public double getHeight() {
+		if (root.getChildren().isEmpty()) {
+			return 0;
+		}
+		return root.getChildren().size() * (NODE_SIZE + SPACING) + SPACING;
+	}
 }

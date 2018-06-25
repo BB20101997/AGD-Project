@@ -120,7 +120,12 @@ public class ViewUtil {
 		return new Color(resRed, resGreen, resBlue, resAlpha);
 	}
 
-	//TODO add comments
+	/**
+	 * @param graphics the Graphic object to draw onto
+	 * @param label the label for the node
+	 * @param node the nodes boundary to draw
+	 * @param fillColor the color to fill the node with or null
+	 * */
 	public static void drawNode(Graphics2D graphics,String label,Rectangle2D node,Color fillColor) {
 		
 		if(fillColor!=null) {
@@ -139,7 +144,12 @@ public class ViewUtil {
 		
 	}
 	
-	//TODO add commentd
+	/**
+	 * @param graphics the Graphic object to draw onto
+	 * @param segment the segments path to draw
+	 * @param headOrientation the orientation of the edges head (angle from the y-Axis) 
+	 * @param color the lines color or null to use the current color
+	 * */
 	public static void drawEdgeSection(Graphics2D graphics, Path2D segment,double headOrientation, Color color) {
 		if(color!=null) {
 			graphics.setColor(color);

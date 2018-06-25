@@ -79,7 +79,6 @@ public class AnimationTopo extends Animation {
 		if (root.getChildren().isEmpty()) {
 			return 0;
 		}
-		//return Double.MAX_VALUE;
 		return root.getChildren().size() * (NODE_SIZE + SPACING) + SPACING;
 	}
 }

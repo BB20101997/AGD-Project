@@ -28,8 +28,8 @@ public class CompoundAnimation implements IAnimation {
 	long totalLength = 0;
 	private double width;
 	private double height;
-	
-	public interface IAnimationFactory{
+
+	public interface IAnimationFactory {
 		public IAnimation createAnimation(ElkNode node, Pair<GraphState> states, int length);
 	}
 
@@ -52,9 +52,9 @@ public class CompoundAnimation implements IAnimation {
 	 *            passed mappings, each animation is length long
 	 */
 	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length) {
-		this(root,mappings,length,Animation::new);
+		this(root, mappings, length, Animation::new);
 	}
-	
+
 	/**
 	 * @param root
 	 *            the graph to animate
@@ -65,8 +65,11 @@ public class CompoundAnimation implements IAnimation {
 	 *
 	 *            Creates a CompoundAnimation containing equal long animation of the
 	 *            passed mappings, each animation is length long
+	 * 
+	 * @param factory
+	 *            the factory for the containing Animations
 	 */
-	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length,IAnimationFactory factory) {
+	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length, IAnimationFactory factory) {
 		if (mappings.size() == 1) {
 			// only one mapping
 			addAnimation(factory.createAnimation(root, new Pair<>(mappings.get(0), mappings.get(0)), length));

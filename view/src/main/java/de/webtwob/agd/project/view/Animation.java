@@ -39,6 +39,7 @@ public class Animation implements IAnimation {
 		lengthInMills = length;
 	}
 
+	@Override
 	public void generateFrame(long frame, Graphics2D graphic) {
 
 		for (ElkNode child : root.getChildren()) {
@@ -115,10 +116,12 @@ public class Animation implements IAnimation {
 		return getCurrent(mapping.getStart().getMapping(p), mapping.getEnd().getMapping(p), frame, lengthInMills);
 	}
 
+	@Override
 	public double getWidth() {
 		return Math.max(mapping.getStart().getMapping(root).getWidth(), mapping.getEnd().getMapping(root).getWidth());
 	}
 
+	@Override
 	public double getHeight() {
 		return Math.max(mapping.getStart().getMapping(root).getHeight(), mapping.getEnd().getMapping(root).getHeight());
 	}

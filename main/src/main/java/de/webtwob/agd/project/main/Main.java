@@ -15,7 +15,13 @@ import de.webtwob.agd.project.view.panel.MainPanel;
 public class Main {
 
 	/**
+	 * @param args the commandline Arguments
+	 * 
 	 * This is the beginning of everything
+	 * 
+	 * -file <file> the graph to load on startup
+	 * -debug <true|false> run with debugging settings
+	 * 
 	 */
 	public static void main(String[] args) {
 

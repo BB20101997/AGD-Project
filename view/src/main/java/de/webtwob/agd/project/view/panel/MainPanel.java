@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -25,7 +24,6 @@ import javax.swing.JSlider;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.ControllerModel;
-import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
@@ -47,15 +45,12 @@ public class MainPanel extends JPanel {
 	private PseudocodeView pseudocodeView;
 	private ControllPanel controllPanel;
 	private transient IAlgorithm algorithm;
-	private transient List<GraphState> states;
 	private transient IAnimation animation;
 	private transient IAnimation animationTopo;
 	private transient ControllerModel model;
 	private JSlider timeLine;
 	private transient ElkNode graph;
 
-	/**
-	 */
 	public MainPanel() {
 
 		setLayout(new GridBagLayout());
@@ -124,6 +119,9 @@ public class MainPanel extends JPanel {
 
 	}
 
+	/**
+	 * @param node the graph to animate
+	 * */
 	public void setGraph(ElkNode node) {
 		if (this.graph == node)
 			return;
@@ -157,7 +155,7 @@ public class MainPanel extends JPanel {
 		if (algorithm != null) {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
-				states = algorithm.getGraphStates(graph);
+				var states = algorithm.getGraphStates(graph);
 
 				animation = new CompoundAnimation(graph, states, 500);
 				model.addAnimation(animation);
@@ -189,6 +187,9 @@ public class MainPanel extends JPanel {
 		repaint();
 	}
 
+	/**
+	 * @param alg change the algorithm to this
+	 * */
 	public void setAlgorithm(IAlgorithm alg) {
 		if (algorithm != alg) {
 			algorithm = alg;
@@ -196,10 +197,16 @@ public class MainPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * @see ControllerModel#setLoopAction(LoopEnum)
+	 * */
 	public void setLoopType(LoopEnum item) {
 		model.setLoopAction(item);
 	}
 
+	/**
+	 * @return the current model
+	 * */
 	public ControllerModel getModel() {
 		return model;
 	}

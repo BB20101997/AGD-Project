@@ -3,6 +3,7 @@ group 'de.webtwob.agd.project'
 dependencies {
 
     api group: 'org.eclipse.elk', name: 'org.eclipse.elk.graph', version: '0.3.0'
+    implementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.core', version: '0.3.0'
     
     api project(":api")
 

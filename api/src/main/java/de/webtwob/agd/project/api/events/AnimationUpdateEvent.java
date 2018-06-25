@@ -8,6 +8,9 @@ public class AnimationUpdateEvent implements IAnimationEvent {
 		frame = newFrame;
 	}
 	
+	/**
+	 * @return the frame the animation is now at
+	 * */
 	public long getFrame() {
 		return frame;
 	}

@@ -2,6 +2,9 @@ package de.webtwob.agd.project.api.util;
 
 import java.util.function.Supplier;
 
+/**
+ * A simple Pair class with elements of equal Type
+ * */
 public class Pair<A> {
 
 	private A start;

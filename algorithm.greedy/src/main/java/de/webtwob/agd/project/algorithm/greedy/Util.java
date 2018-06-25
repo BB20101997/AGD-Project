@@ -74,10 +74,21 @@ public class Util {
 
 	}
 
+	/**
+	 * @param edge the edge to check
+	 * @return true if edge has exactly one source and one target
+	 * */
 	public static boolean isSimpleEdge(ElkEdge edge) {
 		return edge.getTargets().size() == 1 && edge.getSources().size() == 1;
 	}
 
+	/**
+	 * @param edge the edge to change
+	 * @param start the new source for edge
+	 * @param end the new target for edge
+	 * 
+	 * sets the source list to contain start and the target list to contain end
+	 * */
 	public static void replaceEnds(ElkEdge edge, ElkConnectableShape start, ElkConnectableShape end) {
 
 		edge.getSources().clear();

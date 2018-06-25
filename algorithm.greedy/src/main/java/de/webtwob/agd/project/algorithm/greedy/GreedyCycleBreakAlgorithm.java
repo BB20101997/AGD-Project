@@ -42,10 +42,14 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 		LinkedList<GraphState> steps = new LinkedList<>();
 
+		//generate the steps of applying the algorithm
 		getSteps(graph, steps);
 
+		//generate an animation from the steps
 		IAnimation anim = new CompoundAnimation(graph, steps, 500);
 
+		
+		//setup the JPanel
 		var animView = new AnimatedView(thread);
 		animView.setAnimation(anim);
 
@@ -66,6 +70,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	public String getPseudoCode() {
 		String lines = null;
 
+		//try to load the pseudocode from file
 		try {
 			var uri = getClass().getResource("de/webtwob/agd/project/algorithm/greedy/GreedyCycleBreakPseudoCode.html");
 

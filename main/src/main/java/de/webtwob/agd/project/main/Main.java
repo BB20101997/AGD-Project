@@ -14,6 +14,9 @@ import de.webtwob.agd.project.view.panel.MainPanel;
 
 public class Main {
 
+	/**
+	 * This is the beginning of everything
+	 * */
 	@SuppressWarnings("squid:S1066") // not collapsing if statement in case we want to add more commandline parameter
 	public static void main(String[] args) {
 

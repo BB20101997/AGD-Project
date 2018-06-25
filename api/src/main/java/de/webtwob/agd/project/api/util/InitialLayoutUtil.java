@@ -21,10 +21,16 @@ public class InitialLayoutUtil {
 		service.registerLayoutMetaDataProviders(new ForceMetaDataProvider());
 	}
 
+	/**
+	 * @param node the node who's algorithm property will be set to "org.eclipse.elk.force"
+	 * */
 	public static void setForceLayoutAlgorithm(@SuppressWarnings("exports") ElkNode node) {
 		node.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.force");
 	}
 
+	/**
+	 * @param node the graph to by layouted
+	 * */
 	public static void layout(ElkNode node) {
 		RecursiveGraphLayoutEngine rgle = new RecursiveGraphLayoutEngine();
 		rgle.layout(node, new BasicProgressMonitor());

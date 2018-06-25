@@ -19,6 +19,11 @@ public class GraphStateUtil {
 	private GraphStateUtil() {
 	}
 
+	/**
+	 * @param start the graph to start at
+	 * @param end the graph to end at
+	 *
+	 * */
 	@SuppressWarnings("exports")
 	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
 		var mapping = new Pair<>(GraphState::new);

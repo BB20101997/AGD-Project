@@ -12,7 +12,6 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
-//TODO finish commenting this class
 public class ControllerModel {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
@@ -63,6 +62,11 @@ public class ControllerModel {
 	 * The maximum value endAnimationAt may contain
 	 */
 	private volatile long maxEndAnimationAt = Long.MAX_VALUE;
+	
+	/**
+	 * Are we in debug mode?
+	 * */
+	private boolean debug;
 
 	/**
 	 * Start the animation thread
@@ -82,7 +86,7 @@ public class ControllerModel {
 	}
 
 	/**
-	 * Stop the animatio Thread
+	 * Stop the animation Thread
 	 * */
 	public void stop() {
 		if (syncThread != null) {
@@ -248,10 +252,18 @@ public class ControllerModel {
 		return endAction;
 	}
 
+	/**
+	 * @param end at the animation at this frame
+	 * 
+	 * Use this to end an animation early
+	 * */
 	public void setAnimationEnd(long end) {
 		endAnimationAt = Math.min(end, maxEndAnimationAt);
 	}
 
+	/**
+	 * @param animation the animation to add the the registered ones
+	 * */
 	public void addAnimation(IAnimation animation) {
 		if (animation == null) {
 			return;
@@ -260,6 +272,10 @@ public class ControllerModel {
 		updateMaxEnd();
 	}
 
+
+	/**
+	 * @param animation the animation to remove from the registered ones
+	 * */
 	public void removeAnimation(IAnimation animation) {
 		if (animation == null) {
 			return;
@@ -267,7 +283,18 @@ public class ControllerModel {
 		animations.remove(animation);
 		updateMaxEnd();
 	}
+	
+	/**
+	 * remove all registered Animations
+	 * */
+	public void removeAllAnimations() {
+		animations.clear();
+		updateMaxEnd();
+	}
 
+	/**
+	 * recalculate the index of the last frame of the shortest registered animation
+	 * */
 	public void updateMaxEnd() {
 		maxEndAnimationAt = animations.stream().mapToLong(IAnimation::getLength).min().orElse(Long.MAX_VALUE);
 		endAnimationAt = Math.min(endAnimationAt, maxEndAnimationAt);
@@ -294,6 +321,9 @@ public class ControllerModel {
 		}
 	}
 
+	/**
+	 * @return the index the animation will currently end at
+	 * */
 	public long getEndAnimationAt() {
 		return endAnimationAt;
 	}
@@ -318,6 +348,20 @@ public class ControllerModel {
 			speed = d;
 		}
 		fireEvent(new AnimationSpeedUpdateEvent(speed));
+	}
+
+	/**
+	 * @param debug what the debug mode flag should be set to
+	 * */
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+	
+	/**
+	 * @return if debug mode is set
+	 * */
+	public boolean getDebug() {
+		return debug;
 	}
 
 }

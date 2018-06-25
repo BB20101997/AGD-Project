@@ -29,6 +29,10 @@ public class CompoundAnimation implements IAnimation {
 	private double width;
 	private double height;
 
+	public interface IAnimationFactory {
+		public IAnimation createAnimation(ElkNode node, Pair<GraphState> states, int length);
+	}
+
 	/**
 	 * Creates an empty Compound Animation
 	 */
@@ -48,29 +52,33 @@ public class CompoundAnimation implements IAnimation {
 	 *            passed mappings, each animation is length long
 	 */
 	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length) {
-		if (mappings.size() == 1) {
-			// only one mapping
-			addAnimation(new Animation(root, new Pair<>(mappings.get(0), mappings.get(0)), length));
-		} else if (!mappings.isEmpty()) {
-			// more than one mapping
-			for (int i = 1; i < mappings.size(); i++) {
-				addAnimation(new Animation(root, new Pair<>(mappings.get(i - 1), mappings.get(i)), length));
-			}
-		}
+		this(root, mappings, length, Animation::new);
 	}
-	
-	public static CompoundAnimation compoundAnimationTopo(ElkNode root, List<GraphState> mappings, int length) {
-		CompoundAnimation comp = new CompoundAnimation();
+
+	/**
+	 * @param root
+	 *            the graph to animate
+	 * @param mappings
+	 *            a List of configurations for the graph
+	 * @param length
+	 *            the frames between each state
+	 *
+	 *            Creates a CompoundAnimation containing equal long animation of the
+	 *            passed mappings, each animation is length long
+	 * 
+	 * @param factory
+	 *            the factory for the containing Animations
+	 */
+	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length, IAnimationFactory factory) {
 		if (mappings.size() == 1) {
 			// only one mapping
-			comp.addAnimation(new AnimationTopo(root, new Pair<>(mappings.get(0), mappings.get(0)), length));
+			addAnimation(factory.createAnimation(root, new Pair<>(mappings.get(0), mappings.get(0)), length));
 		} else if (!mappings.isEmpty()) {
 			// more than one mapping
 			for (int i = 1; i < mappings.size(); i++) {
-				comp.addAnimation(new AnimationTopo(root, new Pair<>(mappings.get(i - 1), mappings.get(i)), length));
+				addAnimation(factory.createAnimation(root, new Pair<>(mappings.get(i - 1), mappings.get(i)), length));
 			}
 		}
-		return comp;
 	}
 
 	public void addAnimation(IAnimation anim) {

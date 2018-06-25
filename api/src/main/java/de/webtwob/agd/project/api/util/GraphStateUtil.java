@@ -20,10 +20,13 @@ public class GraphStateUtil {
 	}
 
 	/**
-	 * @param start the graph to start at
-	 * @param end the graph to end at
-	 *
-	 * */
+	 * @param start
+	 *            the graph to start at
+	 * @param end
+	 *            the graph to end at
+	 * @return a mapping of the graph start starting at the values of start and
+	 *         stopping at the values of end
+	 */
 	@SuppressWarnings("exports")
 	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
 		var mapping = new Pair<>(GraphState::new);

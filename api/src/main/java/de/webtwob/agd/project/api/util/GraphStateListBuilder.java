@@ -29,7 +29,7 @@ public class GraphStateListBuilder {
 	}
 
 	private int lastSink = 0;
-	private int lastSource = 0;
+	private int nextSource = 0;
 	private int depth = 0;
 
 	/**
@@ -152,7 +152,7 @@ public class GraphStateListBuilder {
 		 */
 		public GraphStateBuilder addSource(ElkNode node) {
 			highlight(node).as(SOURCE);
-			current.setPossition(node, ++lastSource);
+			current.setPossition(node, nextSource++);
 			return this;
 		}
 

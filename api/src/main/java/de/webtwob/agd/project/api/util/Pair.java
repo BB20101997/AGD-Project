@@ -3,6 +3,7 @@ package de.webtwob.agd.project.api.util;
 import java.util.function.Supplier;
 
 /**
+ * @param <A> the type of this pairs elements
  * A simple Pair class with elements of equal Type
  * */
 public class Pair<A> {

@@ -19,7 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 
+import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.graph.ElkNode;
+import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.enums.LoopEnum;
@@ -138,7 +140,7 @@ public class MainPanel extends JPanel {
 		redoAnimationPanel();
 	}
 
-	public void redoAnimationPanel() {
+	private void redoAnimationPanel() {
 		algorithmPanel.removeAll();
 		algorithmTopoPanel.removeAll();
 		if (model == null) {
@@ -194,6 +196,9 @@ public class MainPanel extends JPanel {
 		return model;
 	}
 
+	/**
+	 * @return a JMenuItem for saving the current animation to a gif
+	 * */
 	public JMenuItem getSaveMenuItem() {
 		var save = new JMenuItem("Save Animation");
 		save.addActionListener(e -> {

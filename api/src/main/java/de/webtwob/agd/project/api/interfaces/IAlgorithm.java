@@ -18,12 +18,16 @@ public interface IAlgorithm {
 	 * @param graph
 	 *            the graph to animate
 	 * 
-	 * @return a the new AnimationSyncThread for the generated Animation
+	 * @param syncThread the model to be used
+	 * @return an IAnimation 
 	 */
 	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
 	
 	IAnimation getAnimationPanelTopo(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
 	
+	/**
+	 * @return the pseudocode for this algorithm as a HTML String
+	 * */
 	String getPseudoCode();
 
 	/**

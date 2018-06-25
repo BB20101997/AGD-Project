@@ -19,6 +19,11 @@ public class GraphLoaderHelper {
 	private static final List<IGraphLoader> loader = ServiceLoader.load(IGraphLoader.class).stream()
 			.map(ServiceLoader.Provider::get).collect(Collectors.toList());
 
+	/**
+	 * @return if a graph was successfully loaded an optional containing said graph else an empty optional
+	 * 
+	 * Presents a JFileChooser Dialog to the user to choose a file and then tries to load said file
+	 * */
 	@SuppressWarnings("exports")
 	public static Optional<ElkNode> loadGraph() {
 		JFileChooser chooser = new JFileChooser(".");
@@ -35,6 +40,12 @@ public class GraphLoaderHelper {
 		return loadGraph(chooser.getSelectedFile());
 	}
 
+	/**
+	 * @param file the File to try to load
+	 * @return if a graph was successfully loaded an optional containing said graph else an empty optional
+	 * 
+	 * Tries to load the passed file
+	 * */
 	@SuppressWarnings("exports")
 	public static Optional<ElkNode> loadGraph(File file) {
 		if (file == null || file.isDirectory()) {

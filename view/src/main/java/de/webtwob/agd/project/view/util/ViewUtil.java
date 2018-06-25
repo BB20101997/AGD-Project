@@ -120,7 +120,7 @@ public class ViewUtil {
 		return new Color(resRed, resGreen, resBlue, resAlpha);
 	}
 
-	
+	//TODO add comments
 	public static void drawNode(Graphics2D graphics,String label,Rectangle2D node,Color fillColor) {
 		
 		if(fillColor!=null) {
@@ -139,6 +139,7 @@ public class ViewUtil {
 		
 	}
 	
+	//TODO add commentd
 	public static void drawEdgeSection(Graphics2D graphics, Path2D segment,double headOrientation, Color color) {
 		if(color!=null) {
 			graphics.setColor(color);
@@ -149,6 +150,11 @@ public class ViewUtil {
 		}
 	}
 	
+	/**
+	 * @param graphics the graphic to draw onto
+	 * @param endpoint the point where the point of the arrow should be
+	 * @param orientation the angle the arrow should point towards measured from the y-Axis 
+	 * */
 	public static void drawEdgeArrow(Graphics2D graphics,Point2D endpoint,double orientation) {
 		var head = new Path2D.Double();
 		head.moveTo(0, 0);

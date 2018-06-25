@@ -12,6 +12,7 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
+//TODO finish commenting this class
 public class ControllerModel {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
@@ -63,6 +64,9 @@ public class ControllerModel {
 	 */
 	private volatile long maxEndAnimationAt = Long.MAX_VALUE;
 
+	/**
+	 * Start the animation thread
+	 * */
 	public void start() {
 		if (syncThread == null) {
 			synchronized (this) {
@@ -77,6 +81,9 @@ public class ControllerModel {
 		}
 	}
 
+	/**
+	 * Stop the animatio Thread
+	 * */
 	public void stop() {
 		if (syncThread != null) {
 			synchronized (this) {
@@ -179,6 +186,9 @@ public class ControllerModel {
 		});
 	}
 
+	/**
+	 * @param aeh the EventHandler to add the the subscriber list
+	 * */
 	public void subscribeToAnimationEvent(IAnimationEventHandler aeh) {
 		if (aeh == null) {
 			return;
@@ -188,6 +198,9 @@ public class ControllerModel {
 		}
 	}
 
+	/**
+	 * @param eventHandler the EventHandler to remove from the subscriber list
+	 * */
 	public void unsubscribeFromAnimationEvent(IAnimationEventHandler eventHandler) {
 		if (eventHandler == null) {
 			return;
@@ -197,6 +210,9 @@ public class ControllerModel {
 		}
 	}
 
+	/**
+	 * @param frame the frame this should be set to
+	 * */
 	public void setFrame(long frame) {
 		if (this.frame != frame) {
 			subFrame = 0;
@@ -212,14 +228,22 @@ public class ControllerModel {
 		fireEvent(update);
 	}
 
+	/**@return the current frame
+	 * */
 	public long getFrame() {
 		return frame;
 	}
 
+	/**
+	 * @param loopAction the Action to perform at the end of the animation
+	 * */
 	public void setLoopAction(LoopEnum loopAction) {
 		endAction = loopAction;
 	}
 
+	/**
+	 * @return the current Action to be performed at the end of the animation
+	 * */
 	public LoopEnum getLoopAction() {
 		return endAction;
 	}
@@ -249,10 +273,16 @@ public class ControllerModel {
 		endAnimationAt = Math.min(endAnimationAt, maxEndAnimationAt);
 	}
 
+	/**
+	 * @return true if the animation is paused
+	 * */
 	public boolean isPaused() {
 		return paused;
 	}
 
+	/**
+	 * @param paused should this set the animation to be paused or resume
+	 * */
 	public void setPaused(boolean paused) {
 		if (this.paused && !paused) {
 			this.paused = paused;
@@ -268,10 +298,16 @@ public class ControllerModel {
 		return endAnimationAt;
 	}
 
+	/**
+	 * @return the animation playback speed not accounting for paused
+	 * */
 	public double getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * @param d the value to set the animation playback speed to
+	 * */
 	public void setSpeed(double d) {
 		if (speed == 0 && d != 0) {
 			speed = d;

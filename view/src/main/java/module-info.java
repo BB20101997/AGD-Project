@@ -6,6 +6,7 @@ module de.webtwob.agd.project.view {
 
 	//requires
 	//if this weren't an automatic module this would be transitive
+	requires org.eclipse.elk.core;
 	requires org.eclipse.elk.graph;
 	
 	// exports

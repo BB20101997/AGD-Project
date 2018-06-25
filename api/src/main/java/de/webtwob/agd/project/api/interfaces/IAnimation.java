@@ -14,6 +14,13 @@ public interface IAnimation {
 	 */
 	void generateFrame(long frame, Graphics2D graphic);
 
+	/**
+	 * @param frame the referenced frame
+	 * 
+	 * @return the @see GraphState that is mainly responsible for the Frame frame
+	 * 
+	 * Used by @see PseudocodeView to update the line highlight
+	 * */
 	GraphState getGraphStatesForFrame(long frame);
 
 	/**
@@ -21,8 +28,14 @@ public interface IAnimation {
 	 */
 	long getLength();
 
+	/**
+	 * @return the width of the animation
+	 * */
 	double getWidth();
 
+	/**
+	 * @return the height of the animation
+	 * */
 	double getHeight();
 
 }

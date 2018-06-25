@@ -8,6 +8,9 @@ public class AnimationSpeedUpdateEvent implements IAnimationEvent {
 		speed = newSpeed;
 	}
 	
+	/**
+	 * @return The new AnimationSpeed
+	 * */
 	public double getSpeed(){
 		return speed;
 	}

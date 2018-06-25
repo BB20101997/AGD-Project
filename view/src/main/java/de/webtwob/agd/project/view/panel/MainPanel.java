@@ -37,10 +37,12 @@ public class MainPanel extends JPanel {
 
 	// this will contain the algorithm specific animation layout
 	JPanel algorithmPanel;
+	JPanel algorithmTopoPanel;
 	PseudocodeView pseudocodeView;
 	ControllPanel controllPanel;
 	transient IAlgorithm algorithm;
 	transient IAnimation animation;
+	transient IAnimation animationTopo;
 	transient ControllerModel model;
 	transient Thread syncThread;
 	JSlider timeLine;
@@ -79,6 +81,19 @@ public class MainPanel extends JPanel {
 		constraints.fill = GridBagConstraints.BOTH;
 
 		add(algorithmPanel, constraints);
+		
+		algorithmTopoPanel = new JPanel();
+
+		constraints = new GridBagConstraints();
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 4;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+
+		add(algorithmTopoPanel, constraints);
 
 		timeLine = new JSlider();
 		timeLine.setMajorTickSpacing(500);
@@ -89,7 +104,7 @@ public class MainPanel extends JPanel {
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		constraints.gridwidth = 2;
+		constraints.gridwidth = 3;
 		constraints.gridheight = 1;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
@@ -101,7 +116,7 @@ public class MainPanel extends JPanel {
 		controllPanel.setMainPanel(this);
 
 		constraints = new GridBagConstraints();
-		constraints.gridx = 2;
+		constraints.gridx = 3;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 5;
@@ -125,6 +140,7 @@ public class MainPanel extends JPanel {
 
 	public void redoAnimationPanel() {
 		algorithmPanel.removeAll();
+		algorithmTopoPanel.removeAll();
 		if (model == null) {
 			model = new ControllerModel();
 			model.subscribeToAnimationEvent(event -> {
@@ -150,6 +166,7 @@ public class MainPanel extends JPanel {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
 				animation = algorithm.getAnimationPanel(algorithmPanel, graph, model);
+				animationTopo = algorithm.getAnimationPanelTopo(algorithmTopoPanel, graph, model);
 				model.addAnimation(animation);
 				pseudocodeView.setAnimation(animation);
 				timeLine.setMaximum((int) model.getEndAnimationAt());

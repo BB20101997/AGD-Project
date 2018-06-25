@@ -22,6 +22,8 @@ public interface IAlgorithm {
 	 */
 	IAnimation getAnimationPanel(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
 	
+	IAnimation getAnimationPanelTopo(JPanel panel, @SuppressWarnings("exports") ElkNode graph,ControllerModel syncThread);
+	
 	String getPseudoCode();
 
 	/**

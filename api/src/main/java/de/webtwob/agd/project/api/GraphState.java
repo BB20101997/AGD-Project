@@ -28,10 +28,12 @@ public class GraphState {
 		copy.elkBendPointMap.forEach((key, value) -> elkBendPointMap.put(key, (Double) value.clone()));
 		copy.elkSectionMap.forEach((key, value) -> elkSectionMap.put(key, (Line2D.Double) value.clone()));
 		copy.elkNodeMap.forEach((key, value) -> elkNodeMap.put(key, (Rectangle2D.Double) value.clone()));
-
+		copy.nodePositionsTopological.forEach((key, value) -> nodePositionsTopological.put(key, value));
+		
 		highlightMap.putAll(copy.highlightMap);
 		verbosity = copy.verbosity;
 		pseudoCodeLine = copy.pseudoCodeLine;
+		
 	}
 
 	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
@@ -94,7 +96,7 @@ public class GraphState {
 		this.nodePositionsTopological.put(node, i);
 	}
 	
-	public int getPosition(ElkNode node) {
+	public Integer getPosition(ElkNode node) {
 		return nodePositionsTopological.get(node);
 	}
 	

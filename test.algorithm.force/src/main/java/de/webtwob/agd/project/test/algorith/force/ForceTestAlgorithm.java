@@ -59,4 +59,10 @@ public class ForceTestAlgorithm implements IAlgorithm {
 		return "Test Algorithm, Force Directed";
 	}
 
+	@Override
+	public IAnimation getAnimationPanelTopo(JPanel panel, ElkNode graph, ControllerModel syncThread) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

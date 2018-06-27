@@ -120,8 +120,9 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param node the graph to animate
-	 * */
+	 * @param node
+	 *            the graph to animate
+	 */
 	public void setGraph(ElkNode node) {
 		if (this.graph == node)
 			return;
@@ -173,6 +174,8 @@ public class MainPanel extends JPanel {
 					var animTopoView = new AnimatedView(model);
 					animTopoView.setAnimation(animationTopo);
 					algorithmPanel.add(animTopoView, BorderLayout.EAST);
+				}else {
+					animationTopo = null;
 				}
 
 				repaint();
@@ -188,8 +191,9 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param alg change the algorithm to this
-	 * */
+	 * @param alg
+	 *            change the algorithm to this
+	 */
 	public void setAlgorithm(IAlgorithm alg) {
 		if (algorithm != alg) {
 			algorithm = alg;
@@ -198,16 +202,18 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param item the value to set the models' Action to be performed at the end of the animation
-	 *  @see ControllerModel#setLoopAction(LoopEnum)
-	 * */
+	 * @param item
+	 *            the value to set the models' Action to be performed at the end of
+	 *            the animation
+	 * @see ControllerModel#setLoopAction(LoopEnum)
+	 */
 	public void setLoopType(LoopEnum item) {
 		model.setLoopAction(item);
 	}
 
 	/**
 	 * @return the current model
-	 * */
+	 */
 	public ControllerModel getModel() {
 		return model;
 	}
@@ -297,8 +303,8 @@ public class MainPanel extends JPanel {
 				var animWidth = animation.getWidth() * scale;
 				var animHeight = (int) (animation.getHeight() * scale);
 
-				var topoScale = (double) animHeight / animationTopo.getHeight();
-				var topoWidth = animationTopo.getWidth() * topoScale;
+				var topoScale = animationTopo!=null?(double) animHeight / animationTopo.getHeight():1;
+				var topoWidth = animationTopo!=null?animationTopo.getWidth() * topoScale:0;
 
 				var totalWidth = (int) Math.ceil(animWidth + topoWidth);
 
@@ -309,47 +315,76 @@ public class MainPanel extends JPanel {
 					interval = 500;
 					scale = 1;
 				}
+
 				BufferedImage frameImage;
+				Graphics2D canvis;
+				Graphics2D animCanvis;
 				// draw and save every interval's frame
 				for (long frame = 0; frame < animation.getLength(); frame += interval) {
 					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
 
-					var canvis = frameImage.createGraphics();
+					canvis = frameImage.createGraphics();
 					canvis.fillRect(0, 0, totalWidth, animHeight);
 					canvis.setBackground(Color.WHITE);
 					canvis.setColor(Color.BLACK);
 
-					var animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
 					animCanvis.scale(scale, scale);
 					animation.generateFrame(frame, animCanvis);
 
-					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
-					topoCanvis.scale(topoScale, topoScale);
+					if (animationTopo != null) {
+						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+						topoCanvis.scale(topoScale, topoScale);
 
-					animationTopo.generateFrame(frame, topoCanvis);
-
+						animationTopo.generateFrame(frame, topoCanvis);
+					}
 					canvis.dispose();
 
 					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
 					progressBar.setValue((int) (frame / 100));
 				}
 
+				// last frame not currently in animation
+				if ((animation.getLength() - 1) % interval != 0) {
+					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
+
+					canvis = frameImage.createGraphics();
+					canvis.fillRect(0, 0, totalWidth, animHeight);
+					canvis.setBackground(Color.WHITE);
+					canvis.setColor(Color.BLACK);
+
+					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+					animCanvis.scale(scale, scale);
+					animation.generateFrame(animation.getLength() - 1, animCanvis);
+
+					if (animationTopo != null) {
+						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+						topoCanvis.scale(topoScale, topoScale);
+
+						animationTopo.generateFrame(animation.getLength() - 1, topoCanvis);
+					}
+					
+					canvis.dispose();
+
+					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
+				}
+
 				/*
 				 * end writhing animation and cleanup resources
-				 * */
+				 */
 				writer.endWriteSequence();
 				writer.reset();
 				writer.dispose();
 
 				/*
 				 * make sure file is actually flushed and close it
-				 * */
+				 */
 				stream.flush();
 				stream.close();
-				
+
 				/*
 				 * complete progressbar
-				 * */
+				 */
 				progressBar.setValue(progressBar.getMaximum());
 				JOptionPane.showMessageDialog(this, "Animation saving completed!", "Completed saving Animation!",
 						JOptionPane.PLAIN_MESSAGE);

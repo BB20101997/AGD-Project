@@ -252,9 +252,11 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param file the file to save the Animation into
-	 * @param the progressBar to keep updated
-	 * */
+	 * @param file
+	 *            the file to save the Animation into
+	 * @param progressBar
+	 *            to be kept updated
+	 */
 	private void saveAnimation(File file, JProgressBar progressBar) {
 
 		var thread = new Thread(() -> {
@@ -285,36 +287,35 @@ public class MainPanel extends JPanel {
 
 				/*
 				 * start writing animation
-				 * */
+				 */
 				writer.prepareWriteSequence(null);
 
 				progressBar.setMaximum((int) (animation.getLength() / 100));
 
 				var scale = Math.sqrt(10);
-				
+
 				var animWidth = animation.getWidth() * scale;
 				var animHeight = (int) (animation.getHeight() * scale);
 
-				var topoWidth = animationTopo.getWidth();
-				var topoHeight = (int) animationTopo.getHeight();
+				var topoScale = (double) animHeight / animationTopo.getHeight();
+				var topoWidth = animationTopo.getWidth() * topoScale;
 
 				var totalWidth = (int) Math.ceil(animWidth + topoWidth);
-				var totalHeight = Math.max(animHeight, topoHeight);
 
 				var interval = 100;
-				
-				if(model.getDebug()) {
-					//speed up gif generation by lowering the frame count and the resolution
+
+				if (model.getDebug()) {
+					// speed up gif generation by lowering the frame count and the resolution
 					interval = 500;
 					scale = 1;
 				}
-				
-				//draw and save every interval's frame
+				BufferedImage frameImage;
+				// draw and save every interval's frame
 				for (long frame = 0; frame < animation.getLength(); frame += interval) {
-					BufferedImage frameImage = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_INT_RGB);
+					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
 
 					var canvis = frameImage.createGraphics();
-					canvis.fillRect(0, 0, totalHeight, totalWidth);
+					canvis.fillRect(0, 0, totalWidth, animHeight);
 					canvis.setBackground(Color.WHITE);
 					canvis.setColor(Color.BLACK);
 
@@ -322,9 +323,9 @@ public class MainPanel extends JPanel {
 					animCanvis.scale(scale, scale);
 					animation.generateFrame(frame, animCanvis);
 
-					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0 , (int) topoWidth,
-							topoHeight);
-					
+					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+					topoCanvis.scale(topoScale, topoScale);
+
 					animationTopo.generateFrame(frame, topoCanvis);
 
 					canvis.dispose();

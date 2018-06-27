@@ -1,26 +1,18 @@
 package de.webtwob.agd.project.view;
 
-import java.awt.AWTEvent;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Point2D;
-
-import javax.swing.JComponent;
-
-import org.eclipse.elk.graph.ElkNode;
-
 import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.api.util.Pair;
+import org.eclipse.elk.graph.ElkNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Point2D;
 
 public class AnimatedView extends JComponent {
 
@@ -29,13 +21,19 @@ public class AnimatedView extends JComponent {
 	 */
 	private static final long serialVersionUID = -6226316608311632721L;
 
+	/**
+	 * if true scale won't be changed by scrolling and origin won't be changed by
+	 * dragging
+	 */
+	private boolean fixed = false;
+
 	// variables determining the position and size of animation
 	private volatile double scale = 1;
 	private volatile Point2D.Double origin = new Point2D.Double(0, 0);
 
 	private transient volatile IAnimation animation;
 
-	private transient ControllerModel model = new ControllerModel();
+	private transient ControllerModel model;
 
 	public AnimatedView(ControllerModel syncThread) {
 		setDoubleBuffered(true);
@@ -43,7 +41,7 @@ public class AnimatedView extends JComponent {
 
 		model = syncThread;
 
-		model.subscribeToAnimationEvent(e->this.repaint());
+		model.subscribeToAnimationEvent(e -> this.repaint());
 
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 
@@ -54,6 +52,9 @@ public class AnimatedView extends JComponent {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
+				if (fixed) {
+					return;
+				}
 				/*
 				 * increase/decrease by smaller amounts
 				 */
@@ -66,12 +67,18 @@ public class AnimatedView extends JComponent {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if (fixed) {
+					return;
+				}
 				mouseClick.setLocation(e.getPoint());
 				oldOrigin.setLocation(origin);
 			}
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
+				if (fixed) {
+					return;
+				}
 				origin = new Point2D.Double(oldOrigin.getX() + e.getX() - mouseClick.getX(),
 						oldOrigin.getY() + e.getY() - mouseClick.getY());
 				repaint();
@@ -82,6 +89,10 @@ public class AnimatedView extends JComponent {
 		addMouseWheelListener(adapter);
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
+	}
+
+	public void setFixed(boolean fixed) {
+		this.fixed = fixed;
 	}
 
 	public AnimatedView() {
@@ -96,14 +107,13 @@ public class AnimatedView extends JComponent {
 	}
 
 	/**
-	 *
 	 * @param graph
 	 *            the graph that shall be animated
 	 * @param mapping
 	 *            the mappings for the end and starting configuration of the graph
 	 * @param length
 	 *            how many frames long shall the animation be at speed 1
-	 *
+	 *            <p>
 	 *            If length is less or equal to 0 DEFAULT_ANIMATIN_LENGTH will be
 	 *            used instead of length
 	 */
@@ -120,8 +130,11 @@ public class AnimatedView extends JComponent {
 		model.removeAnimation(this.animation);
 		this.animation = animation;
 		model.addAnimation(this.animation);
-		if(animation!=null) {
-			setPreferredSize(new Dimension((int)Math.ceil(animation.getWidth()), (int)Math.ceil(animation.getHeight())));
+		if (animation != null) {
+			var minDim = new Dimension((int) Math.ceil(animation.getWidth()), (int) Math.ceil(animation.getHeight()));
+			setMinimumSize(minDim);
+			var prefDim = getPreferredSize();
+			setPreferredSize(new Dimension((int)Math.max(minDim.getWidth(), prefDim.getWidth()),(int)Math.max(minDim.getHeight(), prefDim.getHeight())));
 		}
 	}
 
@@ -133,8 +146,9 @@ public class AnimatedView extends JComponent {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(getForeground());
 
-		if (animation == null)
+		if (animation == null) {
 			return;
+		}
 		Graphics2D graphic = (Graphics2D) g.create();
 
 		graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

@@ -120,8 +120,9 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param node the graph to animate
-	 * */
+	 * @param node
+	 *            the graph to animate
+	 */
 	public void setGraph(ElkNode node) {
 		if (this.graph == node)
 			return;
@@ -172,7 +173,10 @@ public class MainPanel extends JPanel {
 					model.addAnimation(animationTopo);
 					var animTopoView = new AnimatedView(model);
 					animTopoView.setAnimation(animationTopo);
+					animTopoView.setFixed(true);
 					algorithmPanel.add(animTopoView, BorderLayout.EAST);
+				}else {
+					animationTopo = null;
 				}
 
 				repaint();
@@ -188,8 +192,9 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param alg change the algorithm to this
-	 * */
+	 * @param alg
+	 *            change the algorithm to this
+	 */
 	public void setAlgorithm(IAlgorithm alg) {
 		if (algorithm != alg) {
 			algorithm = alg;
@@ -198,16 +203,18 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param item the value to set the models' Action to be performed at the end of the animation
-	 *  @see ControllerModel#setLoopAction(LoopEnum)
-	 * */
+	 * @param item
+	 *            the value to set the models' Action to be performed at the end of
+	 *            the animation
+	 * @see ControllerModel#setLoopAction(LoopEnum)
+	 */
 	public void setLoopType(LoopEnum item) {
 		model.setLoopAction(item);
 	}
 
 	/**
 	 * @return the current model
-	 * */
+	 */
 	public ControllerModel getModel() {
 		return model;
 	}
@@ -252,9 +259,11 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param file the file to save the Animation into
-	 * @param the progressBar to keep updated
-	 * */
+	 * @param file
+	 *            the file to save the Animation into
+	 * @param progressBar
+	 *            to be kept updated
+	 */
 	private void saveAnimation(File file, JProgressBar progressBar) {
 
 		var thread = new Thread(() -> {
@@ -285,70 +294,98 @@ public class MainPanel extends JPanel {
 
 				/*
 				 * start writing animation
-				 * */
+				 */
 				writer.prepareWriteSequence(null);
 
 				progressBar.setMaximum((int) (animation.getLength() / 100));
 
 				var scale = Math.sqrt(10);
-				
+
 				var animWidth = animation.getWidth() * scale;
 				var animHeight = (int) (animation.getHeight() * scale);
 
-				var topoWidth = animationTopo.getWidth();
-				var topoHeight = (int) animationTopo.getHeight();
+				var topoScale = animationTopo!=null?(double) animHeight / animationTopo.getHeight():1;
+				var topoWidth = animationTopo!=null?animationTopo.getWidth() * topoScale:0;
 
 				var totalWidth = (int) Math.ceil(animWidth + topoWidth);
-				var totalHeight = Math.max(animHeight, topoHeight);
 
 				var interval = 100;
-				
-				if(model.getDebug()) {
-					//speed up gif generation by lowering the frame count and the resolution
+
+				if (model.getDebug()) {
+					// speed up gif generation by lowering the frame count and the resolution
 					interval = 500;
 					scale = 1;
 				}
-				
-				//draw and save every interval's frame
-				for (long frame = 0; frame < animation.getLength(); frame += interval) {
-					BufferedImage frameImage = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_INT_RGB);
 
-					var canvis = frameImage.createGraphics();
-					canvis.fillRect(0, 0, totalHeight, totalWidth);
+				BufferedImage frameImage;
+				Graphics2D canvis;
+				Graphics2D animCanvis;
+				// draw and save every interval's frame
+				for (long frame = 0; frame < animation.getLength(); frame += interval) {
+					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
+
+					canvis = frameImage.createGraphics();
+					canvis.fillRect(0, 0, totalWidth, animHeight);
 					canvis.setBackground(Color.WHITE);
 					canvis.setColor(Color.BLACK);
 
-					var animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
 					animCanvis.scale(scale, scale);
 					animation.generateFrame(frame, animCanvis);
 
-					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0 , (int) topoWidth,
-							topoHeight);
-					
-					animationTopo.generateFrame(frame, topoCanvis);
+					if (animationTopo != null) {
+						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+						topoCanvis.scale(topoScale, topoScale);
 
+						animationTopo.generateFrame(frame, topoCanvis);
+					}
 					canvis.dispose();
 
 					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
 					progressBar.setValue((int) (frame / 100));
 				}
 
+				// last frame not currently in animation
+				if ((animation.getLength() - 1) % interval != 0) {
+					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
+
+					canvis = frameImage.createGraphics();
+					canvis.fillRect(0, 0, totalWidth, animHeight);
+					canvis.setBackground(Color.WHITE);
+					canvis.setColor(Color.BLACK);
+
+					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+					animCanvis.scale(scale, scale);
+					animation.generateFrame(animation.getLength() - 1, animCanvis);
+
+					if (animationTopo != null) {
+						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+						topoCanvis.scale(topoScale, topoScale);
+
+						animationTopo.generateFrame(animation.getLength() - 1, topoCanvis);
+					}
+					
+					canvis.dispose();
+
+					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
+				}
+
 				/*
 				 * end writhing animation and cleanup resources
-				 * */
+				 */
 				writer.endWriteSequence();
 				writer.reset();
 				writer.dispose();
 
 				/*
 				 * make sure file is actually flushed and close it
-				 * */
+				 */
 				stream.flush();
 				stream.close();
-				
+
 				/*
 				 * complete progressbar
-				 * */
+				 */
 				progressBar.setValue(progressBar.getMaximum());
 				JOptionPane.showMessageDialog(this, "Animation saving completed!", "Completed saving Animation!",
 						JOptionPane.PLAIN_MESSAGE);

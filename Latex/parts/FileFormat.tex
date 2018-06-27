@@ -1,0 +1,50 @@
+\section{File Formats}
+
+We provide two implementations of the IGraphLoader service
+which handles loading an ElkGraph from a File.
+
+\subsection{\basemodule[.file.json]}
+
+This module provides the IGraphLoader service for Json Files using the ElkJson Format which is documented \underline{\href{https://www.eclipse.org/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html}{here}}.
+
+\subsection{\basemodule[.file.toml]}
+
+This module provides the IGraphLoader service for v0.4.0 Toml Files.
+
+The root Toml Object/Table represents the root node which
+has the same requirements as any other node.
+
+\paragraph{Node Fields}
+\begin{tabular}{|c|c|c|}
+\hline 
+Field Name & Type & Default/Required \\ 
+\hline 
+id & String & Required \\ 
+\hline 
+width & double & Default 0.0 \\ 
+\hline 
+height & double & Default 0.0 \\ 
+\hline 
+children & Array of Tables(Nodes) & Empty Array \\ 
+\hline 
+edges & Array of Tables(Edges) & Empty Array \\ 
+\hline 
+\end{tabular} 
+
+\paragraph{Edge Fields}
+\begin{tabular}{|c|c|c|}
+\hline 
+Field Name & Type & Default/Required \\ 
+\hline 
+id & String & Required \\ 
+\hline 
+targets & Array of Strings & Required Not Empty \\ 
+\hline 
+sources & Array of Strings & Required Not Empty \\ 
+\hline 
+\end{tabular} 
+
+The Strings in an Edges targets and sources field are the ids of Nodes.
+
+\paragraph{}
+All fields not listed here are ignored.

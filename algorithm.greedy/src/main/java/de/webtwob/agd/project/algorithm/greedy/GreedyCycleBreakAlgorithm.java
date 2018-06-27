@@ -29,6 +29,8 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			// apply the force layout algorithm to get an initial layout
 			InitialLayoutUtil.setForceLayoutAlgorithm(graph);
 			InitialLayoutUtil.layout(graph);
+		}else {
+			Util.routeEdges(graph);
 		}
 		
 		getSteps(graph, list);

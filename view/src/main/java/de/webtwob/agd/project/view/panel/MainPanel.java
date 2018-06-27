@@ -173,6 +173,7 @@ public class MainPanel extends JPanel {
 					model.addAnimation(animationTopo);
 					var animTopoView = new AnimatedView(model);
 					animTopoView.setAnimation(animationTopo);
+					animTopoView.setFixed(true);
 					algorithmPanel.add(animTopoView, BorderLayout.EAST);
 				}else {
 					animationTopo = null;

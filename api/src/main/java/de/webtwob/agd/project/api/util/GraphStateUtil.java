@@ -27,7 +27,6 @@ public class GraphStateUtil {
 	 * @return a mapping of the graph start starting at the values of start and
 	 *         stopping at the values of end
 	 */
-	@SuppressWarnings("exports")
 	public static Pair<GraphState> createMapping(ElkNode start, ElkNode end) {
 		var mapping = new Pair<>(GraphState::new);
 
@@ -97,7 +96,7 @@ public class GraphStateUtil {
 	 *            Save the current state of the Graph in the start part of the
 	 *            mapping
 	 */
-	public static void saveState(@SuppressWarnings("exports") ElkNode graph, GraphState state) {
+	public static void saveState(ElkNode graph, GraphState state) {
 		var nodeMapping = state.getMapping(graph);
 
 		nodeMapping.setFrame(new Rectangle2D.Double(graph.getX(), graph.getY(), graph.getWidth(), graph.getHeight()));

@@ -9,7 +9,6 @@ import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
-@SuppressWarnings("exports")
 public class Util {
 
 	private Util() {

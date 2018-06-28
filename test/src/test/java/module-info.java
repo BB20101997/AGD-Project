@@ -1,3 +1,4 @@
+@SuppressWarnings("module")
 module de.webtwob.agd.project.test {
 	requires junit;
 	requires java.desktop;

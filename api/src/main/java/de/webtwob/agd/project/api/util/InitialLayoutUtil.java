@@ -24,7 +24,7 @@ public class InitialLayoutUtil {
 	/**
 	 * @param node the node who's algorithm property will be set to "org.eclipse.elk.force"
 	 * */
-	public static void setForceLayoutAlgorithm(@SuppressWarnings("exports") ElkNode node) {
+	public static void setForceLayoutAlgorithm( ElkNode node) {
 		node.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.force");
 	}
 

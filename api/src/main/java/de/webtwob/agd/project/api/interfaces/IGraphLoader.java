@@ -13,7 +13,6 @@ public interface IGraphLoader {
 	 * @param file the File to try and load
 	 * @return if the loading was successful return the graph wrapped in an optional else an empty optional
 	 * */
-	@SuppressWarnings("exports")
 	Optional<ElkNode> loadGraphFromFile(File file);
 
 	/**

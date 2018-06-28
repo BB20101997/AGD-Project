@@ -137,10 +137,8 @@ public class TOMLGraphLoader implements IGraphLoader {
 
 		node.setIdentifier(id);
 
-		//TODO add to doc
 		node.setProperty(CoreOptions.NO_LAYOUT, toml.getBoolean("no_layout", false));
 		
-		//TODO add to doc
 		node.setLocation(toml.getDouble("x", 0.0), toml.getDouble("y",0.0));
 		
 		node.setWidth(toml.getDouble(WIDTH, 0.0));

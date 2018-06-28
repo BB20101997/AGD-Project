@@ -32,7 +32,6 @@ public class Animation implements IAnimation {
 	 * @param length
 	 *            in frames
 	 */
-	@SuppressWarnings("exports")
 	public Animation(ElkNode root, Pair<GraphState> mapping, int length) {
 		this.root = root;
 		this.mapping = mapping;

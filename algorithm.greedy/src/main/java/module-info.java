@@ -3,6 +3,7 @@ import de.webtwob.agd.project.algorithm.greedy.GreedyCycleBreakAlgorithm;
 /**
  * Created by BB20101997 on 31. Mai. 2018.
  */
+@SuppressWarnings("module")
 module de.webtwob.agd.project.algorithm.greedy {
 
 	requires org.eclipse.elk.graph;

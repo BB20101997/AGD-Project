@@ -1,6 +1,5 @@
 package de.webtwob.agd.project.view.panel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -13,6 +12,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.ImageWriter;
+import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 
 import org.eclipse.elk.graph.ElkNode;
 
@@ -41,7 +42,7 @@ public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	// this will contain the algorithm specific animation layout
-	private JPanel algorithmPanel;
+	private JSplitPane algorithmPanel;
 	private PseudocodeView pseudocodeView;
 	private ControllPanel controllPanel;
 	private transient IAlgorithm algorithm;
@@ -59,21 +60,21 @@ public class MainPanel extends JPanel {
 
 		pseudocodeView = new PseudocodeView();
 
+		algorithmPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		algorithmPanel.setBorder(BorderFactory.createEmptyBorder());
+		algorithmPanel.setResizeWeight(1);
+		algorithmPanel.setOneTouchExpandable(true);
+
+		var splitePane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		splitePane.setBorder(BorderFactory.createEmptyBorder());
+		splitePane.setResizeWeight(0);
+		splitePane.setOneTouchExpandable(true);
+
+		splitePane.setLeftComponent(pseudocodeView);
+		splitePane.setRightComponent(algorithmPanel);
+
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 1;
-		constraints.weightx = 0;
-		constraints.weighty = 0;
-		constraints.fill = GridBagConstraints.BOTH;
-
-		add(pseudocodeView, constraints);
-
-		algorithmPanel = new JPanel();
-
-		constraints = new GridBagConstraints();
-		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
@@ -81,7 +82,7 @@ public class MainPanel extends JPanel {
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.BOTH;
 
-		add(algorithmPanel, constraints);
+		add(splitePane, constraints);
 
 		timeLine = new JSlider();
 		timeLine.setMajorTickSpacing(500);
@@ -92,7 +93,7 @@ public class MainPanel extends JPanel {
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridwidth = 2;
+		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
@@ -104,7 +105,7 @@ public class MainPanel extends JPanel {
 		controllPanel.setMainPanel(this);
 
 		constraints = new GridBagConstraints();
-		constraints.gridx = 2;
+		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 2;
@@ -131,7 +132,8 @@ public class MainPanel extends JPanel {
 	}
 
 	private void redoAnimationPanel() {
-		algorithmPanel.removeAll();
+		algorithmPanel.setLeftComponent(null);
+		algorithmPanel.setRightComponent(null);
 
 		if (model == null) {
 			model = new ControllerModel();
@@ -164,8 +166,7 @@ public class MainPanel extends JPanel {
 
 				var animView = new AnimatedView(model);
 				animView.setAnimation(animation);
-				algorithmPanel.setLayout(new BorderLayout());
-				algorithmPanel.add(animView, BorderLayout.CENTER);
+				algorithmPanel.add(animView, JSplitPane.LEFT);
 				algorithmPanel.setBackground(Color.red);
 
 				if (algorithm.animationTopology()) {
@@ -174,7 +175,10 @@ public class MainPanel extends JPanel {
 					var animTopoView = new AnimatedView(model);
 					animTopoView.setAnimation(animationTopo);
 					animTopoView.setFixed(true);
-					algorithmPanel.add(animTopoView, BorderLayout.EAST);
+					algorithmPanel.add(animTopoView, JSplitPane.RIGHT);
+					var ratio = animationTopo.getWidth() / animationTopo.getHeight();
+					algorithmPanel.setDividerLocation(
+							(int) (algorithmPanel.getMaximumDividerLocation() - ratio * algorithmPanel.getHeight()));
 				}else {
 					animationTopo = null;
 				}

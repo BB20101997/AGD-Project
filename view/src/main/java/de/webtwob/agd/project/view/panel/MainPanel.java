@@ -121,8 +121,7 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param node
-	 *            the graph to animate
+	 * @param node the graph to animate
 	 */
 	public void setGraph(ElkNode node) {
 		if (this.graph == node)
@@ -130,11 +129,8 @@ public class MainPanel extends JPanel {
 		this.graph = node;
 		redoAnimationPanel();
 	}
-
-	private void redoAnimationPanel() {
-		algorithmPanel.setLeftComponent(null);
-		algorithmPanel.setRightComponent(null);
-
+	
+	private void initModel() {
 		if (model == null) {
 			model = new ControllerModel();
 			model.subscribeToAnimationEvent(event -> {
@@ -149,8 +145,17 @@ public class MainPanel extends JPanel {
 			controllPanel.setModel(model);
 			model.start();
 		}
+	}
+
+	private void redoAnimationPanel() {
+		algorithmPanel.setLeftComponent(null);
+		algorithmPanel.setRightComponent(null);
+
+		initModel();
 
 		model.removeAllAnimations();
+		//make sure to not stop early
+		model.setAnimationEnd(Long.MAX_VALUE);
 		model.setPaused(true);
 		model.setFrame(0);
 		timeLine.setValue(0);
@@ -196,8 +201,7 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param alg
-	 *            change the algorithm to this
+	 * @param alg change the algorithm to this
 	 */
 	public void setAlgorithm(IAlgorithm alg) {
 		if (algorithm != alg) {
@@ -207,9 +211,8 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * @param item
-	 *            the value to set the models' Action to be performed at the end of
-	 *            the animation
+	 * @param item the value to set the models' Action to be performed at the end of
+	 *             the animation
 	 * @see ControllerModel#setLoopAction(LoopEnum)
 	 */
 	public void setLoopType(LoopEnum item) {
@@ -245,7 +248,7 @@ public class MainPanel extends JPanel {
 				var dialog = new JDialog();
 				var progressBar = new JProgressBar();
 				dialog.add(progressBar);
-				saveAnimation(choose.getSelectedFile(), progressBar);
+
 				dialog.setTitle("Animation saving Progress");
 				dialog.pack();
 				dialog.setLocationRelativeTo(this);
@@ -257,150 +260,147 @@ public class MainPanel extends JPanel {
 						dialog.dispose();
 					}
 				});
+
+				var thread = new Thread(() -> saveAnimation(choose.getSelectedFile(), progressBar));
+				thread.setName("Animation Save Thread!");
+				thread.setDaemon(true);
+				thread.start();
 			}
 		});
 		return save;
 	}
 
 	/**
-	 * @param file
-	 *            the file to save the Animation into
-	 * @param progressBar
-	 *            to be kept updated
+	 * @param file        the file to save the Animation into
+	 * @param progressBar to be kept updated
 	 */
 	private void saveAnimation(File file, JProgressBar progressBar) {
 
-		var thread = new Thread(() -> {
+		try {
+			var imageio = ImageIO
+					.getImageWriters(ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB), "gif");
 
-			try {
-				var imageio = ImageIO.getImageWriters(
-						ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB), "gif");
+			ImageWriter writer = null;
 
-				ImageWriter writer = null;
-
-				while (imageio.hasNext()) {
-					ImageWriter tmp = imageio.next();
-					if (tmp.canWriteSequence()) {
-						writer = tmp;
-						break;
-					}
+			while (imageio.hasNext()) {
+				ImageWriter tmp = imageio.next();
+				if (tmp.canWriteSequence()) {
+					writer = tmp;
+					break;
 				}
-
-				if (writer == null) {
-					JOptionPane.showMessageDialog(this, "No ImageWriter for gif found!", "Error saving Animation!",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-
-				var stream = ImageIO.createImageOutputStream(file);
-
-				writer.setOutput(stream);
-
-				/*
-				 * start writing animation
-				 */
-				writer.prepareWriteSequence(null);
-
-				progressBar.setMaximum((int) (animation.getLength() / 100));
-
-				var scale = Math.sqrt(10);
-
-				var animWidth = animation.getWidth() * scale;
-				var animHeight = (int) (animation.getHeight() * scale);
-
-				var topoScale = animationTopo!=null?(double) animHeight / animationTopo.getHeight():1;
-				var topoWidth = animationTopo!=null?animationTopo.getWidth() * topoScale:0;
-
-				var totalWidth = (int) Math.ceil(animWidth + topoWidth);
-
-				var interval = 100;
-
-				if (model.getDebug()) {
-					// speed up gif generation by lowering the frame count and the resolution
-					interval = 500;
-					scale = 1;
-				}
-
-				BufferedImage frameImage;
-				Graphics2D canvis;
-				Graphics2D animCanvis;
-				// draw and save every interval's frame
-				for (long frame = 0; frame < animation.getLength(); frame += interval) {
-					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
-
-					canvis = frameImage.createGraphics();
-					canvis.fillRect(0, 0, totalWidth, animHeight);
-					canvis.setBackground(Color.WHITE);
-					canvis.setColor(Color.BLACK);
-
-					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
-					animCanvis.scale(scale, scale);
-					animation.generateFrame(frame, animCanvis);
-
-					if (animationTopo != null) {
-						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
-						topoCanvis.scale(topoScale, topoScale);
-
-						animationTopo.generateFrame(frame, topoCanvis);
-					}
-					canvis.dispose();
-
-					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
-					progressBar.setValue((int) (frame / 100));
-				}
-
-				// last frame not currently in animation
-				if ((animation.getLength() - 1) % interval != 0) {
-					frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
-
-					canvis = frameImage.createGraphics();
-					canvis.fillRect(0, 0, totalWidth, animHeight);
-					canvis.setBackground(Color.WHITE);
-					canvis.setColor(Color.BLACK);
-
-					animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
-					animCanvis.scale(scale, scale);
-					animation.generateFrame(animation.getLength() - 1, animCanvis);
-
-					if (animationTopo != null) {
-						var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
-						topoCanvis.scale(topoScale, topoScale);
-
-						animationTopo.generateFrame(animation.getLength() - 1, topoCanvis);
-					}
-					
-					canvis.dispose();
-
-					writer.writeToSequence(new IIOImage(frameImage, null, null), null);
-				}
-
-				/*
-				 * end writhing animation and cleanup resources
-				 */
-				writer.endWriteSequence();
-				writer.reset();
-				writer.dispose();
-
-				/*
-				 * make sure file is actually flushed and close it
-				 */
-				stream.flush();
-				stream.close();
-
-				/*
-				 * complete progressbar
-				 */
-				progressBar.setValue(progressBar.getMaximum());
-				JOptionPane.showMessageDialog(this, "Animation saving completed!", "Completed saving Animation!",
-						JOptionPane.PLAIN_MESSAGE);
-			} catch (IOException io) {
-				JOptionPane.showMessageDialog(this, "IOException while saving Animation!", "Error saving Animation!",
-						JOptionPane.ERROR_MESSAGE);
 			}
-		});
-		thread.setName("Animation Save Thread!");
-		thread.setDaemon(true);
-		thread.start();
+
+			if (writer == null) {
+				JOptionPane.showMessageDialog(this, "No ImageWriter for gif found!", "Error saving Animation!",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			var stream = ImageIO.createImageOutputStream(file);
+
+			writer.setOutput(stream);
+
+			/*
+			 * start writing animation
+			 */
+			writer.prepareWriteSequence(null);
+
+			progressBar.setMaximum((int) (animation.getLength() / 100));
+
+			var scale = Math.sqrt(10);
+
+			var animWidth = animation.getWidth() * scale;
+			var animHeight = (int) (animation.getHeight() * scale);
+
+			var topoScale = animationTopo != null ? (double) animHeight / animationTopo.getHeight() : 1;
+			var topoWidth = animationTopo != null ? animationTopo.getWidth() * topoScale : 0;
+
+			var totalWidth = (int) Math.ceil(animWidth + topoWidth);
+
+			var interval = 100;
+
+			if (model.getDebug()) {
+				// speed up gif generation by lowering the frame count and the resolution
+				interval = 500;
+				scale = 1;
+			}
+
+			BufferedImage frameImage;
+			Graphics2D canvis;
+			Graphics2D animCanvis;
+			// draw and save every interval's frame
+			for (long frame = 0; frame < animation.getLength(); frame += interval) {
+				frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
+
+				canvis = frameImage.createGraphics();
+				canvis.fillRect(0, 0, totalWidth, animHeight);
+				canvis.setBackground(Color.WHITE);
+				canvis.setColor(Color.BLACK);
+
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis.scale(scale, scale);
+				animation.generateFrame(frame, animCanvis);
+
+				if (animationTopo != null) {
+					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+					topoCanvis.scale(topoScale, topoScale);
+
+					animationTopo.generateFrame(frame, topoCanvis);
+				}
+				canvis.dispose();
+
+				writer.writeToSequence(new IIOImage(frameImage, null, null), null);
+				progressBar.setValue((int) (frame / 100));
+			}
+
+			// last frame not currently in animation
+			if ((animation.getLength() - 1) % interval != 0) {
+				frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
+
+				canvis = frameImage.createGraphics();
+				canvis.fillRect(0, 0, totalWidth, animHeight);
+				canvis.setBackground(Color.WHITE);
+				canvis.setColor(Color.BLACK);
+
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis.scale(scale, scale);
+				animation.generateFrame(animation.getLength() - 1, animCanvis);
+
+				if (animationTopo != null) {
+					var topoCanvis = (Graphics2D) canvis.create((int) animWidth, 0, (int) topoWidth, animHeight);
+					topoCanvis.scale(topoScale, topoScale);
+
+					animationTopo.generateFrame(animation.getLength() - 1, topoCanvis);
+				}
+
+				canvis.dispose();
+
+				writer.writeToSequence(new IIOImage(frameImage, null, null), null);
+			}
+
+			/*
+			 * end writhing animation and cleanup resources
+			 */
+			writer.endWriteSequence();
+			writer.reset();
+			writer.dispose();
+
+			/*
+			 * make sure file is actually flushed and close it
+			 */
+			stream.flush();
+			stream.close();
+
+			/*
+			 * complete progressbar
+			 */
+			progressBar.setValue(progressBar.getMaximum());
+			JOptionPane.showMessageDialog(this, "Animation saving completed!", "Completed saving Animation!",
+					JOptionPane.PLAIN_MESSAGE);
+		} catch (IOException io) {
+			JOptionPane.showMessageDialog(this, "IOException while saving Animation!", "Error saving Animation!",
+					JOptionPane.ERROR_MESSAGE);
+		}
 
 	}
 

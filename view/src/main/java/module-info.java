@@ -1,3 +1,4 @@
+@SuppressWarnings("module")
 module de.webtwob.agd.project.view {
 
 	//requires transitive

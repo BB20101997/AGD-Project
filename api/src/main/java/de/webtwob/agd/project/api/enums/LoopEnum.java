@@ -5,7 +5,7 @@ import de.webtwob.agd.project.api.ControllerModel;
 public enum LoopEnum {
 	/**
 	 * Stop at the end of the animation
-	 * */
+	 */
 	STOP {
 		@Override
 		public void handle(ControllerModel syncThread) {
@@ -20,7 +20,7 @@ public enum LoopEnum {
 	},
 	/**
 	 * Start over at the end of the animation
-	 * */
+	 */
 	LOOP {
 		@Override
 		public void handle(ControllerModel syncThread) {
@@ -33,18 +33,25 @@ public enum LoopEnum {
 	},
 	/**
 	 * Reverse the direction at the end of the animation
-	 * */
+	 */
 	REVERSE {
 		@Override
 		public void handle(ControllerModel syncThread) {
-			syncThread.setSpeed(syncThread.getSpeed() * -1);
+			if (syncThread.getFrame() < 0) {
+				syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
+				syncThread.setFrame(0);
+			} else {
+				syncThread.setSpeed(-Math.abs(syncThread.getSpeed()));
+				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
+			}
 		}
 	};
 
 	/**
 	 * @param syncThread the model to operate on
 	 * 
-	 * Performs the action to be performed at the end of the animation
-	 * */
+	 *                   Performs the action to be performed at the end of the
+	 *                   animation
+	 */
 	public abstract void handle(ControllerModel syncThread);
 }

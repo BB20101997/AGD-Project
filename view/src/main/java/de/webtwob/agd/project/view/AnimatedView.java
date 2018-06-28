@@ -100,7 +100,6 @@ public class AnimatedView extends JComponent {
 		model.start();
 	}
 
-	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setGraph(ElkNode eg) {
 		setAnimation(new Animation(eg, GraphStateUtil.createMapping(eg, eg), 2));
 		repaint();
@@ -117,7 +116,6 @@ public class AnimatedView extends JComponent {
 	 *            If length is less or equal to 0 DEFAULT_ANIMATIN_LENGTH will be
 	 *            used instead of length
 	 */
-	@SuppressWarnings("exports") // don't export automatic modules
 	public void animateGraph(ElkNode graph, Pair<GraphState> mapping, int length) {
 		setAnimation(new Animation(graph, mapping, length));
 	}

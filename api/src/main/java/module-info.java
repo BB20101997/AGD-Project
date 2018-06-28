@@ -1,3 +1,4 @@
+@SuppressWarnings("module")
 module de.webtwob.agd.project.api {
 
 	requires transitive java.desktop;

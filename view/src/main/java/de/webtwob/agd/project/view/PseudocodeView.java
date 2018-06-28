@@ -47,7 +47,6 @@ public class PseudocodeView extends JTextPane {
 		frameSync.start();
 	}
 
-	@SuppressWarnings("exports") // automatic modules should not be exported
 	public void setCode(String codeLines) {
 		this.setContentType("text/html");
 		try {

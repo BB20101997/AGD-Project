@@ -1,0 +1,419 @@
+#based on https://en.wikipedia.org/wiki/Directed_acyclic_graph#/media/File:Graph_Condensation.svg
+
+id = "root" 
+width = 340.0
+height = 220.0
+
+no_layout = true
+
+[[children]] 
+    id = "n1tl"
+    x = 10.0
+    y = 10.0
+    width = 20.0 
+    height = 20.0
+    
+[[children]] 
+    id = "n1tr"
+    x = 70.0
+    y = 10.0
+    width = 20.0 
+    height = 20.0
+    
+[[children]] 
+    id = "n1bl"
+    x = 10.0
+    y = 70.0
+    width = 20.0 
+    height = 20.0
+    
+
+[[children]] 
+    id = "n1br"
+    x = 70.0
+    y = 70.0
+    width = 20.0 
+    height = 20.0
+    
+    
+[[children]] 
+    id = "n1cc"
+    x = 40.0
+    y = 40.0
+    width = 20.0 
+    height = 20.0
+    
+[[children]] 
+    id = "n2"
+    x = 160.0
+    y = 40.0
+    width = 20.0
+    height = 20.0
+
+[[children]] 
+    id = "n3tl"
+    x = 250.0
+    y = 10.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n3tr"
+    x = 310.0
+    y = 10.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n3bc"
+    x = 280.0
+    y = 70.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n4tl"
+    x = 10.0
+    y = 130.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n4tr"
+    x = 70.0
+    y = 130.0
+    width = 20.0
+    height = 20.0
+
+[[children]] 
+    id = "n4bl"
+    x = 10.0
+    y = 190.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n4br"
+    x = 70.0
+    y = 190.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n5tr"
+    x = 190.0
+    y = 130.0
+    width = 20.0
+    height = 20.0
+    
+[[children]] 
+    id = "n5bl"
+    x = 130.0
+    y = 190.0
+    width = 20.0
+    height = 20.0
+    
+    
+[[children]] 
+    id = "n6"
+    x = 280.0
+    y = 160.0
+    width = 20.0
+    height = 20.0
+    
+[[edges]] 
+    id = "e1_1"
+    
+    sources = [
+        "n1tl",
+    ]
+
+    targets = [
+        "n1cc" 
+    ]
+    
+[[edges]] 
+    id = "e2_1"
+    
+    sources = [
+        "n1cc",
+    ]
+
+    targets = [
+        "n1tr" 
+    ]
+    
+[[edges]] 
+    id = "e3_1"
+    
+    sources = [
+        "n1cc",
+    ]
+
+    targets = [
+        "n1br" 
+    ]
+    
+[[edges]] 
+    id = "e4_1"
+    
+    sources = [
+        "n1tr",
+    ]
+
+    targets = [
+        "n1tl" 
+    ]
+    
+[[edges]] 
+    id = "e5_1"
+    
+    sources = [
+        "n1br",
+    ]
+
+    targets = [
+        "n1bl" 
+    ]
+    
+[[edges]] 
+    id = "e6_1"
+    
+    sources = [
+        "n1bl",
+    ]
+
+    targets = [
+        "n1cc" 
+    ]
+    
+[[edges]] 
+    id = "e1_1-2"
+    
+    sources = [
+        "n1tr",
+    ]
+
+    targets = [
+        "n2" 
+    ]
+    
+[[edges]] 
+    id = "e2_1-2"
+    
+    sources = [
+        "n1br",
+    ]
+
+    targets = [
+        "n2" 
+    ]
+
+[[edges]] 
+    id = "e1_2-3"
+    
+    sources = [
+        "n2",
+    ]
+
+    targets = [
+        "n3tl" 
+    ]
+
+[[edges]] 
+    id = "e2_2-3"
+    
+    sources = [
+        "n2",
+    ]
+
+    targets = [
+        "n3bc" 
+    ]
+
+[[edges]] 
+    id = "e1_3"
+    
+    sources = [
+        "n3tl",
+    ]
+
+    targets = [
+        "n3tr" 
+    ]
+
+[[edges]] 
+    id = "e2_3"
+    
+    sources = [
+        "n3tr",
+    ]
+
+    targets = [
+        "n3bc" 
+    ]
+
+[[edges]] 
+    id = "e3_3"
+    
+    sources = [
+        "n3bc",
+    ]
+
+    targets = [
+        "n3tl" 
+    ]
+
+[[edges]] 
+    id = "e1_1-4"
+    
+    sources = [
+        "n1bl",
+    ]
+
+    targets = [
+        "n4tl" 
+    ]
+
+[[edges]] 
+    id = "e2_1-4"
+    
+    sources = [
+        "n1br",
+    ]
+
+    targets = [
+        "n4tr" 
+    ]
+
+[[edges]] 
+    id = "e1_4"
+    
+    sources = [
+        "n4tl",
+    ]
+
+    targets = [
+        "n4tr" 
+    ]
+
+[[edges]] 
+    id = "e2_4"
+    
+    sources = [
+        "n4tr",
+    ]
+
+    targets = [
+        "n4br" 
+    ]
+
+[[edges]] 
+    id = "e3_4"
+    
+    sources = [
+        "n4br",
+    ]
+
+    targets = [
+        "n4bl" 
+    ]
+
+[[edges]] 
+    id = "e4_4"
+    
+    sources = [
+        "n4bl",
+    ]
+
+    targets = [
+        "n4tl" 
+    ]
+
+[[edges]] 
+    id = "e5_4"
+    
+    sources = [
+        "n4tr",
+    ]
+
+    targets = [
+        "n4bl" 
+    ]
+
+[[edges]] 
+    id = "e1_2-5"
+    
+    sources = [
+        "n2",
+    ]
+
+    targets = [
+        "n5tr" 
+    ]
+
+[[edges]] 
+    id = "e1_4-5"
+    
+    sources = [
+        "n4br",
+    ]
+
+    targets = [
+        "n5tr" 
+    ]
+
+[[edges]] 
+    id = "e1_5"
+    
+    sources = [
+        "n5tr",
+    ]
+
+    targets = [
+        "n5bl" 
+    ]
+
+[[edges]] 
+    id = "e2_5"
+    
+    sources = [
+        "n5bl",
+    ]
+
+    targets = [
+        "n5tr" 
+    ]
+
+[[edges]] 
+    id = "e1_3-6"
+    
+    sources = [
+        "n3tr",
+    ]
+
+    targets = [
+        "n6" 
+    ]
+
+[[edges]] 
+    id = "e2_3-6"
+    
+    sources = [
+        "n3bc",
+    ]
+
+    targets = [
+        "n6" 
+    ]
+
+[[edges]] 
+    id = "e1_5-6"
+    
+    sources = [
+        "n5tr",
+    ]
+
+    targets = [
+        "n6" 
+    ]

@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
@@ -136,6 +137,10 @@ public class TOMLGraphLoader implements IGraphLoader {
 
 		node.setIdentifier(id);
 
+		node.setProperty(CoreOptions.NO_LAYOUT, toml.getBoolean("no_layout", false));
+		
+		node.setLocation(toml.getDouble("x", 0.0), toml.getDouble("y",0.0));
+		
 		node.setWidth(toml.getDouble(WIDTH, 0.0));
 		node.setHeight(toml.getDouble(HEIGHT, 0.0));
 

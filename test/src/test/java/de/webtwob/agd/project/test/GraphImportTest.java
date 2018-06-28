@@ -15,7 +15,6 @@ import de.webtwob.agd.project.file.toml.TOMLGraphLoader;
 /**
  * Created by BB20101997 on 31. Mai. 2018.
  */
-@SuppressWarnings("unused")
 public class GraphImportTest {
 
 	@Test

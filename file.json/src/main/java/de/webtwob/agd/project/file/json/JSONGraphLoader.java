@@ -27,7 +27,6 @@ public class JSONGraphLoader implements IGraphLoader {
 		// more constructors
 	}
 
-	@SuppressWarnings("exports")
 	@Override
 	public Optional<ElkNode> loadGraphFromFile(File file) {
 		if (file.exists() && file.isFile() && file.canRead()) {

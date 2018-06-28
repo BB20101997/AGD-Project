@@ -24,7 +24,6 @@ public class GraphLoaderHelper {
 	 * 
 	 * Presents a JFileChooser Dialog to the user to choose a file and then tries to load said file
 	 * */
-	@SuppressWarnings("exports")
 	public static Optional<ElkNode> loadGraph() {
 		JFileChooser chooser = new JFileChooser(".");
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -46,7 +45,6 @@ public class GraphLoaderHelper {
 	 * 
 	 * Tries to load the passed file
 	 * */
-	@SuppressWarnings("exports")
 	public static Optional<ElkNode> loadGraph(File file) {
 		if (file == null || file.isDirectory()) {
 			return Optional.empty();

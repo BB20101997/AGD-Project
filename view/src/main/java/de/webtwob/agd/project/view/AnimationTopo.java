@@ -25,7 +25,6 @@ public class AnimationTopo extends Animation {
 	 * @param length
 	 *            in frames
 	 */
-	@SuppressWarnings("exports")
 	public AnimationTopo(ElkNode root, Pair<GraphState> mapping, int length) {
 		super(root, mapping, length);
 	}

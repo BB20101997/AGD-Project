@@ -48,17 +48,14 @@ public class GraphState {
 
 	private IVerbosity verbosity = VerbosityEnum.OFF;
 
-	@SuppressWarnings("exports")
 	public Rectangle2D.Double getMapping(ElkNode node) {
 		return elkNodeMap.computeIfAbsent(node, key -> new Rectangle2D.Double());
 	}
 
-	@SuppressWarnings("exports")
 	public Line2D.Double getMapping(ElkEdgeSection sect) {
 		return elkSectionMap.computeIfAbsent(sect, key -> new Line2D.Double());
 	}
 
-	@SuppressWarnings("exports")
 	public Point2D.Double getMapping(ElkBendPoint bend) {
 		return elkBendPointMap.computeIfAbsent(bend, key -> new Point2D.Double());
 	}

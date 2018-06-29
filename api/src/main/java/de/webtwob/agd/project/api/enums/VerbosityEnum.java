@@ -74,13 +74,4 @@ public enum VerbosityEnum implements IVerbosity {
 		return name;
 	}
 
-	/**
-	 * @return True if the animation should stop at the beginning of this step
-	 * @param verbos
-	 *            the IVerbosity object to compare to
-	 */
-	public boolean shouldStop(IVerbosity verbos) {
-		return verbos.getLevel() <= level;
-	}
-
 }

@@ -1,6 +1,7 @@
 package de.webtwob.agd.project.api.interfaces;
 
 import java.awt.Graphics2D;
+import java.util.OptionalLong;
 
 import de.webtwob.agd.project.api.GraphState;
 
@@ -37,5 +38,13 @@ public interface IAnimation {
 	 * @return the height of the animation
 	 * */
 	double getHeight();
+	
+	/**
+	 * @param frame the frame to start at7
+	 * @param forward if true seach forward from frame, else seach backwards
+	 * @param verbosity the maximum verbosity
+	 * @return the next frame to stop at strictly after frame, of  at most verbosity 
+	 * */
+	OptionalLong nextStep(long frame,boolean forward ,IVerbosity verbosity);
 
 }

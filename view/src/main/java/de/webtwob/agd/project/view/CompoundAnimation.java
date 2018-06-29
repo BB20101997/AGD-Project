@@ -3,12 +3,15 @@ package de.webtwob.agd.project.view;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalLong;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.interfaces.IVerbosity;
 import de.webtwob.agd.project.api.util.Pair;
 
 public class CompoundAnimation implements IAnimation {
@@ -41,33 +44,26 @@ public class CompoundAnimation implements IAnimation {
 	}
 
 	/**
-	 * @param root
-	 *            the graph to animate
-	 * @param mappings
-	 *            a List of configurations for the graph
-	 * @param length
-	 *            the frames between each state
+	 * @param root     the graph to animate
+	 * @param mappings a List of configurations for the graph
+	 * @param length   the frames between each state
 	 *
-	 *            Creates a CompoundAnimation containing equal long animation of the
-	 *            passed mappings, each animation is length long
+	 *                 Creates a CompoundAnimation containing equal long animation
+	 *                 of the passed mappings, each animation is length long
 	 */
 	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length) {
 		this(root, mappings, length, Animation::new);
 	}
 
 	/**
-	 * @param root
-	 *            the graph to animate
-	 * @param mappings
-	 *            a List of configurations for the graph
-	 * @param length
-	 *            the frames between each state
+	 * @param root     the graph to animate
+	 * @param mappings a List of configurations for the graph
+	 * @param length   the frames between each state
 	 *
-	 *            Creates a CompoundAnimation containing equal long animation of the
-	 *            passed mappings, each animation is length long
+	 *                 Creates a CompoundAnimation containing equal long animation
+	 *                 of the passed mappings, each animation is length long
 	 * 
-	 * @param factory
-	 *            the factory for the containing Animations
+	 * @param factory  the factory for the containing Animations
 	 */
 	public CompoundAnimation(ElkNode root, List<GraphState> mappings, int length, IAnimationFactory factory) {
 		if (mappings.size() == 1) {
@@ -144,6 +140,29 @@ public class CompoundAnimation implements IAnimation {
 			return animation.getGraphStatesForFrame(frame - start);
 		}
 		return null;
+	}
+
+	@Override
+	public OptionalLong nextStep(long frame, boolean forward, IVerbosity verbosity) {
+		LongStream stream;
+		if(forward) {
+			stream = LongStream.range(0, animationList.size()) //need a LongStream for the flatMap
+					.dropWhile(index->animationEnds.get((int)index)<frame);
+					
+		}else {
+			stream = LongStream.iterate(animationList.size()-1L, l->l>=0, l->l-1) //need a LongStream for the flatMap
+					.dropWhile(index->animationStarts.get((int)index)>=frame);
+					
+		}
+		
+		return stream.flatMap(i-> this.nextStepForIndex((int)i, frame, forward, verbosity).stream())
+				.findFirst();
+		
+	}
+	
+	private OptionalLong nextStepForIndex(int i, long frame, boolean forward, IVerbosity verbosity) {
+		var offset = animationStarts.get(i);
+		return animationList.get(i).nextStep(frame-offset, forward, verbosity).stream().map(l->l+offset).findAny();
 	}
 
 }

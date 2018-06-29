@@ -107,6 +107,11 @@ public class GraphStateListBuilder {
 		return this;
 	}
 
+	public GraphStateListBuilder startDoWhileLoop() {
+		depth++;
+		return this;
+	}
+	
 	public class GraphStateBuilder {
 		private GraphState current;
 

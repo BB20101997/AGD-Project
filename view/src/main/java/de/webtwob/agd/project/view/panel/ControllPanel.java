@@ -44,6 +44,8 @@ public class ControllPanel extends JPanel {
 	private JButton play;
 	private JButton reversedPlay;
 	private JButton pause;
+	private JButton stepForward;
+	private JButton stepBackward;
 	private JFormattedTextField speedField;
 
 	private transient IAnimationEventHandler speedUpdate = e -> {
@@ -65,11 +67,10 @@ public class ControllPanel extends JPanel {
 		loopChoise = new JComboBox<>(LoopEnum.values());
 		loopChoise.setSelectedItem(LoopEnum.LOOP);
 
+		stepForward = new JButton("\u23ED");
+		stepBackward = new JButton("\u23EE");
 		reversedPlay = new JButton("\u23F4");
-
 		play = new JButton("\u23F5");
-		play.setMinimumSize(new Dimension(100, 100));
-
 		pause = new JButton("\u23F8");
 
 		speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
@@ -89,9 +90,11 @@ public class ControllPanel extends JPanel {
 		loopChoiseBox.add(new JLabel("After Animation:"));
 		loopChoiseBox.add(loopChoise);
 
+		actionBox.add(stepBackward);
 		actionBox.add(reversedPlay);
-		actionBox.add(play);
 		actionBox.add(pause);
+		actionBox.add(play);
+		actionBox.add(stepForward);
 
 		speedBox.add(new JLabel("Speed:"));
 		speedBox.add(speedField);
@@ -103,10 +106,14 @@ public class ControllPanel extends JPanel {
 		add(actionBox);
 
 		// add ActionListeners
+		
+		stepForward.addActionListener(event -> syncThread.step(true));
+		stepBackward.addActionListener(event -> syncThread.step(false));
 
 		reversedPlay.addActionListener(event -> {
 			if (syncThread != null) {
 				syncThread.setSpeed(-Math.abs(mainPanel.getModel().getSpeed()));
+				syncThread.playContinuosly();
 				syncThread.setPaused(false);
 
 			}
@@ -115,6 +122,7 @@ public class ControllPanel extends JPanel {
 		play.addActionListener(event -> {
 			if (syncThread != null) {
 				syncThread.setSpeed(Math.abs(mainPanel.getModel().getSpeed()));
+				syncThread.playContinuosly();
 				syncThread.setPaused(false);
 			}
 		});
@@ -153,5 +161,7 @@ public class ControllPanel extends JPanel {
 			loopChoise.setSelectedItem(syncThread.getLoopAction());
 		}
 	}
+	
+	
 
 }

@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
 
+/**
+ * A JComponent for displaying IAnimations
+ * */
 public class AnimatedView extends JComponent {
 
 	/**
@@ -35,6 +38,9 @@ public class AnimatedView extends JComponent {
 
 	private transient ControllerModel model;
 
+	/**
+	 * @param syncThread the ControllerModel to be used by this AnmatedView
+	 */
 	public AnimatedView(ControllerModel syncThread) {
 		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
@@ -91,15 +97,25 @@ public class AnimatedView extends JComponent {
 		addMouseMotionListener(adapter);
 	}
 
+	/**
+	 * @param fixed should this not be zoom-able and pan-able
+	 */
 	public void setFixed(boolean fixed) {
 		this.fixed = fixed;
 	}
 
+	/**
+	 * New AnimatedView with a new ControllerModel
+	 * TODO can we remove this?
+	 */
 	public AnimatedView() {
 		this(new ControllerModel());
 		model.start();
 	}
 
+	/**
+	 * @param eg the graph to create a still Animation for
+	 */
 	public void setGraph(ElkNode eg) {
 		setAnimation(new Animation(eg, GraphStateUtil.createMapping(eg, eg), 2));
 		repaint();

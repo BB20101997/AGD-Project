@@ -15,6 +15,9 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
+/**
+ * A JTextPane pre-configured for displaying Pseudocode
+ */
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PseudocodeView extends JTextPane {
 	/**
@@ -28,6 +31,9 @@ public class PseudocodeView extends JTextPane {
 	private transient ControllerModel frameSync = new ControllerModel();
 	private transient IAnimation animation;
 
+	/**
+	 *  Create new default PseudoCodeView
+	 */
 	public PseudocodeView() {
 		setDoubleBuffered(true);
 		this.setContentType("text/html");
@@ -35,6 +41,11 @@ public class PseudocodeView extends JTextPane {
 		setEditable(false);
 	}
 
+	/**
+	 * @param codeLines the codeLines to be shown
+	 * @param syncThread the syncThread to be used
+	 * @param animation the animation to be used 
+	 */
 	public PseudocodeView(String codeLines, ControllerModel syncThread, IAnimation animation) {
 		this();
 		setText(codeLines);
@@ -42,11 +53,18 @@ public class PseudocodeView extends JTextPane {
 		setModel(syncThread);
 	}
 
+	/**
+	 * @param codeLines the codeLines to be shown
+	 * @param animation the animation to be used 
+	 */
 	public PseudocodeView(String codeLines, IAnimation animation) {
 		this(codeLines, new ControllerModel(), animation);
 		frameSync.start();
 	}
 
+	/**
+	 * @param codeLines the new codeLines to be used
+	 */
 	public void setCode(String codeLines) {
 		this.setContentType("text/html");
 		try {
@@ -58,6 +76,9 @@ public class PseudocodeView extends JTextPane {
 		repaint();
 	}
 
+	/**
+	 * @param animation change the used Animation
+	 */
 	public void setAnimation(IAnimation animation) {
 		if (frameSync != null) {
 			frameSync.removeAnimation(this.animation);
@@ -66,6 +87,10 @@ public class PseudocodeView extends JTextPane {
 		this.animation = animation;
 	}
 
+	
+	/**
+	 * @param thread change the model to be used
+ 	 */
 	public void setModel(ControllerModel thread) {
 		if (frameSync != null) {
 			frameSync.removeAnimation(animation);

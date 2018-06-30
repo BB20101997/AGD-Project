@@ -18,19 +18,14 @@ import org.eclipse.elk.graph.util.ElkGraphUtil;
 import com.moandjiezana.toml.Toml;
 
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
+import static de.webtwob.agd.project.file.toml.util.TOMLConstants.*;
 
+/**
+ * An Implementation of the IGraphLoader Service for loading a Graph from Toml files
+ */
 public class TOMLGraphLoader implements IGraphLoader {
 
-	public static final String ID = "id";
-
-	public static final String CHILDREN = "children";
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
-	public static final String EDGES = "edges";
-
-	public static final String SOURCES = "sources";
-	public static final String TARGETS = "targets";
-
+	
 	@Override
 	public Optional<ElkNode> loadGraphFromFile(File file) {
 		Toml toml = new Toml().read(file);
@@ -137,7 +132,7 @@ public class TOMLGraphLoader implements IGraphLoader {
 
 		node.setIdentifier(id);
 
-		node.setProperty(CoreOptions.NO_LAYOUT, toml.getBoolean("no_layout", false));
+		node.setProperty(CoreOptions.NO_LAYOUT, toml.getBoolean(NO_LAYOUT, false));
 		
 		node.setLocation(toml.getDouble("x", 0.0), toml.getDouble("y",0.0));
 		

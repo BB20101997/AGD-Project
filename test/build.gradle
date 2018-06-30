@@ -9,7 +9,11 @@ tasks.withType(Test) {
 
 dependencies {
     // Use JUnit 4 test framework
-    testImplementation 'junit:junit:4.12'
+    //testImplementation 'junit:junit:4.12'
+    
+    //Use Junit 5/Jupiter
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api' , version: '5.2.0'
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine' , version: '5.2.0'
 
     testImplementation group: 'org.eclipse.elk', name: 'org.eclipse.elk.alg.force' , version: '0.3.0'
     
@@ -28,9 +32,10 @@ dependencies {
 }
 
 tasks.withType(Test) {
+	useJUnitPlatform() //enable JUnit 5 support
+	
     doFirst {
-        jvmArgs('--module-path', classpath.asPath)
-        jvmArgs('--add-modules',"ALL-MODULE-PATH")
-        jvmArgs('--add-reads','de.webtwob.agd.project.test=junit')
+       jvmArgs('--module-path', classpath.asPath)
+       jvmArgs('--add-modules',"ALL-MODULE-PATH")
     }
 }

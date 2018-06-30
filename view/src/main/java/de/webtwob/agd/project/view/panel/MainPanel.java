@@ -34,6 +34,9 @@ import de.webtwob.agd.project.view.AnimationTopo;
 import de.webtwob.agd.project.view.CompoundAnimation;
 import de.webtwob.agd.project.view.PseudocodeView;
 
+/**
+ * This is for assembling the UI
+ */
 public class MainPanel extends JPanel {
 
 	/**
@@ -52,6 +55,9 @@ public class MainPanel extends JPanel {
 	private JSlider timeLine;
 	private transient ElkNode graph;
 
+	/**
+	 * This is the JavaDoc Comment for the No-Parameter Constructor
+	 */
 	public MainPanel() {
 
 		setLayout(new GridBagLayout());

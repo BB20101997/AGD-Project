@@ -19,6 +19,9 @@ import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 
+/**
+ * An Implementation for the IAlgorithm Service presenting Greedy Cycle Break  
+ */
 public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 	@Override

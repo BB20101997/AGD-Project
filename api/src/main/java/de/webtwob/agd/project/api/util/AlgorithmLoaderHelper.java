@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 
+/**
+ * A helper class for using the IAlgorthim Service
+ * */
 public class AlgorithmLoaderHelper {
 	
 	private AlgorithmLoaderHelper() {}

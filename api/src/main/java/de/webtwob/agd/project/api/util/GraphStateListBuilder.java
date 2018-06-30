@@ -15,14 +15,32 @@ import de.webtwob.agd.project.api.GraphState;
  */
 public class GraphStateListBuilder {
 
+	/**
+	 * A helper Interface for setting a Nodes Color
+	 * */
 	@FunctionalInterface
 	public interface In {
+		/**
+		 * @param color the Color to use
+		 * 
+		 * @return the GraphStateBuilder that created this
+		 * */
 		GraphStateBuilder in(Color color);
 
+		/**
+		 * @param color the Color to use
+		 * 
+		 * @return the GraphStateBuilder that created this
+		 * */
 		default GraphStateBuilder as(Color color) {
 			return in(color);
 		}
 
+		/**
+		 * use the Color {@link Color#BLUE}
+		 * 
+		 * @return the GraphStateBuilder that created this
+		 * */
 		default GraphStateBuilder active() {
 			return in(Color.BLUE);
 		}
@@ -83,6 +101,8 @@ public class GraphStateListBuilder {
 
 	/**
 	 * Decreases the depth by one
+	 * 
+	 * @return this
 	 */
 	public GraphStateListBuilder endIf() {
 		return decreaseDepth();
@@ -90,6 +110,8 @@ public class GraphStateListBuilder {
 
 	/**
 	 * Decreases the depth by one
+	 * 
+	 * @return this
 	 */
 	public GraphStateListBuilder endLoop() {
 		return decreaseDepth();
@@ -97,6 +119,8 @@ public class GraphStateListBuilder {
 
 	/**
 	 * Decreases the depth by one
+	 * 
+	 * @return this
 	 */
 	public GraphStateListBuilder endFunction() {
 		return decreaseDepth();
@@ -107,11 +131,19 @@ public class GraphStateListBuilder {
 		return this;
 	}
 
+	/**
+	 * Increases the depth by one
+	 * 
+	 * @return this
+	 */
 	public GraphStateListBuilder startDoWhileLoop() {
 		depth++;
 		return this;
 	}
-	
+
+	/**
+	 * A Builder for GraphState Objects
+	 * */
 	public class GraphStateBuilder {
 		private GraphState current;
 
@@ -136,6 +168,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param node
 		 *            the object to no longer highlight
+		 * @return this
 		 */
 		public GraphStateBuilder unhighlight(Object node) {
 			current.setHighlight(node, null);
@@ -145,6 +178,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param node
 		 *            the node who's state to update
+		 * @return this
 		 */
 		public GraphStateBuilder updateNode(ElkNode node) {
 			GraphStateUtil.saveState(node, current);
@@ -154,6 +188,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param node
 		 *            the node to highlight as a source and set the Position
+		 * @return this
 		 */
 		public GraphStateBuilder addSource(ElkNode node) {
 			highlight(node).as(SOURCE);
@@ -164,6 +199,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param node
 		 *            the node to highlight as a sink and set the Position
+		 * @return this
 		 */
 		public GraphStateBuilder addSink(ElkNode node) {
 			highlight(node).as(SINK);
@@ -174,6 +210,7 @@ public class GraphStateListBuilder {
 		/**
 		 * @param edge
 		 *            the edge who's state to update
+		 * @return this
 		 */
 		public GraphStateBuilder updateEdge(ElkEdge edge) {
 			GraphStateUtil.saveState(edge, current);
@@ -182,6 +219,8 @@ public class GraphStateListBuilder {
 
 		/**
 		 * Increases the depth by 1
+		 * 
+		 * @return this
 		 */
 		public GraphStateBuilder starteIf() {
 			return increaseDepth();
@@ -189,6 +228,8 @@ public class GraphStateListBuilder {
 
 		/**
 		 * Increases the depth by 1
+		 * 
+		 * @return this
 		 */
 		public GraphStateBuilder starteLoop() {
 			return increaseDepth();
@@ -196,6 +237,8 @@ public class GraphStateListBuilder {
 
 		/**
 		 * Increases the depth by 1
+		 * 
+		 * @return this
 		 */
 		public GraphStateBuilder starteFunction() {
 			return increaseDepth();

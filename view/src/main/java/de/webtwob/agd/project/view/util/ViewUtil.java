@@ -6,6 +6,9 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * A Utility Class for drawing graph elements to Graphic objects and calculating the current value for transitions
+ */
 public class ViewUtil {
 
 	private ViewUtil() {

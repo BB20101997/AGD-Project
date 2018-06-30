@@ -19,6 +19,9 @@ import de.webtwob.agd.project.api.interfaces.IVerbosity;
 import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.view.util.ViewUtil;
 
+/**
+ * An Animation between two GraphSatets
+ */
 public class Animation implements IAnimation {
 
 	protected final long lengthInMills;

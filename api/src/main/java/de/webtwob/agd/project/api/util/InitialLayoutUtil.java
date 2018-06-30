@@ -7,6 +7,9 @@ import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.elk.graph.ElkNode;
 
+/**
+ * A Helper Class for initially layouting a graph
+ */
 public class InitialLayoutUtil {
 
 	private InitialLayoutUtil() {

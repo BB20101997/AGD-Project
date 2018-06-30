@@ -11,6 +11,9 @@ import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.view.util.ViewUtil;
 
+/**
+ * An animation between two GraphStates animating the order of nodes based on the position mapping
+ * */
 public class AnimationTopo extends Animation {
 
 	private static final double NODE_SIZE = 60;

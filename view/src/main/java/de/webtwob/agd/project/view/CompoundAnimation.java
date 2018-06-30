@@ -14,6 +14,9 @@ import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IVerbosity;
 import de.webtwob.agd.project.api.util.Pair;
 
+/**
+ * An Animation for concatenating IAnimations
+ * */
 public class CompoundAnimation implements IAnimation {
 
 	List<IAnimation> animationList = new ArrayList<>();
@@ -32,7 +35,16 @@ public class CompoundAnimation implements IAnimation {
 	private double width;
 	private double height;
 
+	/**
+	 *  A Factory for IAnimation Obejct
+	 */
 	public interface IAnimationFactory {
+		/**
+		 * @param node the root node of the graph to be animated
+		 * @param states the start and end state for the animation
+		 * @param length the length in milliseconds at speed 1
+		 * @return the resulting IAnimation
+		 */
 		public IAnimation createAnimation(ElkNode node, Pair<GraphState> states, int length);
 	}
 
@@ -77,6 +89,9 @@ public class CompoundAnimation implements IAnimation {
 		}
 	}
 
+	/**
+	 * @param anim the animation to add at the end
+	 */
 	public void addAnimation(IAnimation anim) {
 		animationList.add(anim);
 		// add new start and end

@@ -1,5 +1,8 @@
 package de.webtwob.agd.project.api.interfaces;
 
+/**
+ * An interface for representing the Verbosity Level
+ */
 public interface IVerbosity {
 	/**
 	 * @return the verbosity level

@@ -15,6 +15,7 @@ import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.view.AnimatedView;
 
+@SuppressWarnings("javadoc")
 public class ShowAnAnimatedGraph {
 
 	public static void main(String[] args) {

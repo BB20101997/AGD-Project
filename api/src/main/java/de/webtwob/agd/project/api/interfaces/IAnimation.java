@@ -5,6 +5,9 @@ import java.util.OptionalLong;
 
 import de.webtwob.agd.project.api.GraphState;
 
+/**
+ * An Interface for Animations
+ */
 public interface IAnimation {
 
 	/**

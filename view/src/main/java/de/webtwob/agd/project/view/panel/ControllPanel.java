@@ -21,6 +21,9 @@ import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 import de.webtwob.agd.project.api.util.AlgorithmLoaderHelper;
 
+/**
+ * The JPanel holding the ANimation Controlls
+ */
 public class ControllPanel extends JPanel {
 
 	/**
@@ -54,6 +57,9 @@ public class ControllPanel extends JPanel {
 		}
 	};
 
+	/**
+	 * Createt new Controll Panel
+	 */
 	public ControllPanel() {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -144,6 +150,9 @@ public class ControllPanel extends JPanel {
 
 	}
 
+	/**
+	 * @param mainPanel the main Panel to inform about changes //TODO we should probably replace this by an Observer Pattern
+	 */
 	public void setMainPanel(MainPanel mainPanel) {
 		this.mainPanel = mainPanel;
 		if (mainPanel != null && !algorithms.isEmpty()) {
@@ -151,6 +160,10 @@ public class ControllPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * @param thread the model to be used from now on
+	 * 
+	 * */
 	public void setModel(ControllerModel thread) {
 		if (syncThread != null) {
 			syncThread.unsubscribeFromAnimationEvent(speedUpdate);

@@ -13,6 +13,9 @@ import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
+/**
+ * Store the current ANimation Properties and update the current frame index
+ */
 public class ControllerModel {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
@@ -373,10 +376,17 @@ public class ControllerModel {
 		return debug;
 	}
 
+	/**
+	 * Unsets the setp flag
+	 */
 	public void playContinuosly() {
 		step = false;
 	}
 
+	/**
+	 * @param forward do a step forward or backward //TODO make this an Enum/don't do two things
+	 * This sets the step flag and the direction of playback 
+	 */
 	public void step(boolean forward) {
 		setSpeed(Math.abs(speed) * (forward ? 1 : -1));
 		step = true;

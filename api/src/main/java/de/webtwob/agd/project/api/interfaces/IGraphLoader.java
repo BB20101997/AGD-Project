@@ -7,6 +7,9 @@ import javax.swing.filechooser.FileFilter;
 
 import org.eclipse.elk.graph.ElkNode;
 
+/**
+ * The Interface for the IGraphLoader Service for loading Graphs from File
+ */
 public interface IGraphLoader {
 
 	/**

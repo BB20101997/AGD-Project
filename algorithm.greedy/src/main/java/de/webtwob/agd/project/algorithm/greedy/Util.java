@@ -9,6 +9,9 @@ import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
+/**
+ *  A Utility Class for Cycle Breaking
+ */
 public class Util {
 
 	private Util() {
@@ -102,6 +105,9 @@ public class Util {
 		edge.getTargets().add(end);
 	}
 
+	/**
+	 * @param node the node who's edges shall be routed
+	 */
 	public static void routeEdges(ElkNode node) {
 		node.getContainedEdges().forEach(Util::routeEdge);
 	}

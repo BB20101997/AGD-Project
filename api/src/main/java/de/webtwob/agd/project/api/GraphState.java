@@ -15,8 +15,14 @@ import org.eclipse.elk.graph.ElkNode;
 import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.interfaces.IVerbosity;
 
+/**
+ * Stores the necessary GraphStates to create an Animation
+ */
 public class GraphState {
 
+	/**
+	 * Create a new GraphState Object
+	 */
 	public GraphState() {
 	}
 
@@ -48,22 +54,44 @@ public class GraphState {
 
 	private IVerbosity verbosity = VerbosityEnum.OFF;
 
+	/**
+	 * @param node the Node to retrieve the mapping for
+	 * @return the stored mapping for the node or a new mapping
+	 */
 	public Rectangle2D.Double getMapping(ElkNode node) {
 		return elkNodeMap.computeIfAbsent(node, key -> new Rectangle2D.Double());
 	}
 
+	/**
+	 * @param sect the Section to retrieve the mapping for
+	 * @return the stored mapping for the section or a new mapping
+	 */
 	public Line2D.Double getMapping(ElkEdgeSection sect) {
 		return elkSectionMap.computeIfAbsent(sect, key -> new Line2D.Double());
 	}
 
+	/**
+	 * @param bend the bend point to retrieve the mapping for
+	 * @return the stored mapping for the bend point or a new mapping
+	 */
 	public Point2D.Double getMapping(ElkBendPoint bend) {
 		return elkBendPointMap.computeIfAbsent(bend, key -> new Point2D.Double());
 	}
 
+	/**
+	 * @param obj the object to retrieve the highlight for
+	 * @return the Color obj should be highlighted in or null if not set
+	 */
 	public Color getHighlight(Object obj) {
 		return highlightMap.get(obj);
 	}
 
+	/**
+	 * @param obj the object to store the highlight for
+	 * @param col the Color obj should be highlighted in or null to unset
+	 * 
+	 * If obj is null this is a noop
+	 */
 	public void setHighlight(Object obj, Color col) {
 		if (obj == null)
 			return;
@@ -73,26 +101,47 @@ public class GraphState {
 		highlightMap.put(obj, col);
 	}
 
+	/**
+	 * @return the verbosity set for this GrapState
+	 */
 	public IVerbosity getVerbosity() {
 		return verbosity;
 	}
 
+	/**
+	 * @param verbosity the verbosity to be set for this GraphState
+	 */
 	public void setVerbosity(IVerbosity verbosity) {
 		this.verbosity = verbosity;
 	}
 
+	/**
+	 * @return the identifier for the line in the pseudocode set for this GraphState
+	 */
 	public String getPseudoCodeLine() {
 		return pseudoCodeLine;
 	}
 
+	/**
+	 * @param pseudoCodeLine the identifier for the line in the pseudocode to be set for this GraphState
+	 */
 	public void setPseudoCodeLine(String pseudoCodeLine) {
 		this.pseudoCodeLine = pseudoCodeLine;
 	}
 	
+	/**
+	 * @param node  the node to set the position for
+	 * @param i the position 0 indexed, negative values index from the end
+	 * 
+	 * */
 	public void setPossition(ElkNode node, Integer i) {
 		this.nodePositionsTopological.put(node, i);
 	}
 	
+	/**
+	 * @param node the node for which to retrieve the position @see {@link GraphState#setPossition(ElkNode, Integer)}
+	 * @return the index //TODO why is this an Integer and not an int, null? Use OptionalInt
+	 */
 	public Integer getPosition(ElkNode node) {
 		return nodePositionsTopological.get(node);
 	}

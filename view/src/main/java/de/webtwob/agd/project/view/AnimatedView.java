@@ -61,6 +61,7 @@ public class AnimatedView extends JComponent {
 				if (fixed) {
 					return;
 				}
+				var oldScale = scale;
 				/*
 				 * increase/decrease by smaller amounts
 				 */
@@ -68,6 +69,13 @@ public class AnimatedView extends JComponent {
 				if (scale < 1) {
 					scale = 1;
 				}
+				
+				var scaleFactor = scale/oldScale;
+								
+				//update the origin so that the same point is under the mouse before and after zooming
+				origin.setLocation(e.getPoint().getX()-(e.getPoint().getX()-origin.getX())*scaleFactor,e.getPoint().getY()-(e.getPoint().getY()-origin.getY())*scaleFactor);
+				//this makes zooming and drag and drop simultaneous behave better
+				oldOrigin.setLocation(e.getPoint().getX()-(e.getPoint().getX()-oldOrigin.getX())*scaleFactor,e.getPoint().getY()-(e.getPoint().getY()-oldOrigin.getY())*scaleFactor);		
 				repaint();
 			}
 

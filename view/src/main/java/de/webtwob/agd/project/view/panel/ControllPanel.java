@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.enums.Direction;
 import de.webtwob.agd.project.api.enums.LoopEnum;
+import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
@@ -45,6 +46,8 @@ public class ControllPanel extends JPanel {
 
 	private JComboBox<String> algChoise;
 	private JComboBox<LoopEnum> loopChoise;
+	private JComboBox<VerbosityEnum> verbosChoise;
+
 	private JButton play;
 	private JButton reversedPlay;
 	private JButton pause;
@@ -74,6 +77,10 @@ public class ControllPanel extends JPanel {
 		loopChoise = new JComboBox<>(LoopEnum.values());
 		loopChoise.setSelectedItem(LoopEnum.LOOP);
 
+		verbosChoise = new JComboBox<>(VerbosityEnum.values());
+		verbosChoise.setSelectedItem(VerbosityEnum.OFF);
+
+		
 		stepForward = new JButton("\u23ED");
 		stepBackward = new JButton("\u23EE");
 		reversedPlay = new JButton("\u23F4");
@@ -87,6 +94,7 @@ public class ControllPanel extends JPanel {
 		// create boxes
 		var algBox = Box.createHorizontalBox();
 		var loopChoiseBox = Box.createHorizontalBox();
+		var verbosChoiseBox = Box.createHorizontalBox();
 		var actionBox = Box.createHorizontalBox();
 		var speedBox = Box.createHorizontalBox();
 
@@ -96,6 +104,9 @@ public class ControllPanel extends JPanel {
 
 		loopChoiseBox.add(new JLabel("After Animation:"));
 		loopChoiseBox.add(loopChoise);
+		
+		verbosChoiseBox.add(new JLabel("Verbosity:"));
+		verbosChoiseBox.add(verbosChoise);
 
 		actionBox.add(stepBackward);
 		actionBox.add(reversedPlay);
@@ -109,6 +120,7 @@ public class ControllPanel extends JPanel {
 		// add boxes to panel
 		add(algBox);
 		add(loopChoiseBox);
+		add(verbosChoiseBox);
 		add(speedBox);
 		add(actionBox);
 
@@ -137,8 +149,11 @@ public class ControllPanel extends JPanel {
 				model.setDirection(Direction.PAUSE);
 			}
 		});
-
+		
+		
 		loopChoise.addItemListener(event -> model.setLoopAction((LoopEnum) event.getItem()));
+		
+		verbosChoise.addItemListener(event -> model.setVerbosity((VerbosityEnum) event.getItem()));
 
 		algChoise.addItemListener(event -> mainPanel.setAlgorithm(algorithms.get(event.getItem())));
 

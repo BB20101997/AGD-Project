@@ -24,12 +24,14 @@ public class ControllerModel {
 
 	private volatile Thread syncThread;
 	private volatile Direction dir = Direction.FORWARD;
+	private volatile VerbosityEnum verbosity = VerbosityEnum.OFF;
 
 	// should the thread terminate
 	private volatile boolean stop = false;
 
 	private volatile boolean step = false;
 	private volatile long nextStepStop;
+	
 
 	/**
 	 * The frame that should currently be displayed
@@ -385,11 +387,15 @@ public class ControllerModel {
 		}
 		this.dir = dir;
 		step = true;
-		nextStepStop = animations.get(0).nextStep(frame, dir == Direction.FORWARD, VerbosityEnum.DEPTH_2)
+		nextStepStop = animations.get(0).nextStep(frame, dir == Direction.FORWARD, verbosity)
 				.orElse(dir == Direction.FORWARD ? animations.get(0).getLength() - 1 : 0);
 		synchronized (this) {
 			notifyAll();
 		}
+	}
+
+	public void setVerbosity(VerbosityEnum item) {
+		verbosity = item;
 	}
 
 }

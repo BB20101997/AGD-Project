@@ -12,7 +12,7 @@ public enum LoopEnum {
 	STOP {
 		@Override
 		public void handle(ControllerModel syncThread) {
-			syncThread.setPaused(true);
+			syncThread.setDirection(Direction.PAUSE);
 			if (syncThread.getFrame() > 0) {
 				syncThread.setFrame(syncThread.getEndAnimationAt() - 1);
 
@@ -39,13 +39,13 @@ public enum LoopEnum {
 	 */
 	REVERSE {
 		@Override
-		public void handle(ControllerModel syncThread) {
-			if (syncThread.getFrame() < 0) {
-				syncThread.setSpeed(Math.abs(syncThread.getSpeed()));
-				syncThread.setFrame(0);
+		public void handle(ControllerModel model) {
+			if (model.getFrame() < 0) {
+				model.setDirection(Direction.FORWARD);
+				model.setFrame(0);
 			} else {
-				syncThread.setSpeed(-Math.abs(syncThread.getSpeed()));
-				syncThread.setFrame(syncThread.getEndAnimationAt()-1);
+				model.setDirection(Direction.BACKWARD);
+				model.setFrame(model.getEndAnimationAt()-1);
 			}
 		}
 	};

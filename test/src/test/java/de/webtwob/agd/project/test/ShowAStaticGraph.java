@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import de.webtwob.agd.project.api.ControllerModel;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.view.AnimatedView;
 
@@ -15,7 +16,8 @@ public class ShowAStaticGraph {
 
 	public static void main(String[] args) {
 
-		AnimatedView sgv = new AnimatedView();
+		var model = new ControllerModel();
+		AnimatedView sgv = new AnimatedView(model);
 		sgv.setMinimumSize(new Dimension(400, 400));
 		sgv.setPreferredSize(new Dimension(400, 400));
 		GraphLoaderHelper.loadGraph(new File("src/test/resources/staticTest.json")).ifPresent(sgv::setGraph);

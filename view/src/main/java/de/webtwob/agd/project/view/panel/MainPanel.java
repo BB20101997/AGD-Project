@@ -25,7 +25,7 @@ import javax.swing.JSplitPane;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.ControllerModel;
-import de.webtwob.agd.project.api.enums.LoopEnum;
+import de.webtwob.agd.project.api.enums.Direction;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
@@ -162,7 +162,8 @@ public class MainPanel extends JPanel {
 		model.removeAllAnimations();
 		//make sure to not stop early
 		model.setAnimationEnd(Long.MAX_VALUE);
-		model.setPaused(true);
+		var oldDir = model.getDirection();
+		model.setDirection(Direction.PAUSE);
 		model.setFrame(0);
 		timeLine.setValue(0);
 
@@ -197,11 +198,10 @@ public class MainPanel extends JPanel {
 				repaint();
 
 				timeLine.setMaximum((int) model.getEndAnimationAt());
-				model.setPaused(false);
+				model.setDirection(oldDir);
 			}
 		}
 
-		model.setSpeed(Math.abs(model.getSpeed()));
 		revalidate();
 		repaint();
 	}
@@ -213,16 +213,8 @@ public class MainPanel extends JPanel {
 		if (algorithm != alg) {
 			algorithm = alg;
 			redoAnimationPanel();
+			model.setDirection(Direction.FORWARD);
 		}
-	}
-
-	/**
-	 * @param item the value to set the models' Action to be performed at the end of
-	 *             the animation
-	 * @see ControllerModel#setLoopAction(LoopEnum)
-	 */
-	public void setLoopType(LoopEnum item) {
-		model.setLoopAction(item);
 	}
 
 	/**
@@ -283,8 +275,9 @@ public class MainPanel extends JPanel {
 	private void saveAnimation(File file, JProgressBar progressBar) {
 
 		try {
+			ImageIO.setUseCache(false);
 			var imageio = ImageIO
-					.getImageWriters(ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB), "gif");
+					.getImageWriters(ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_BYTE_INDEXED), "gif");
 
 			ImageWriter writer = null;
 
@@ -331,12 +324,12 @@ public class MainPanel extends JPanel {
 				scale = 1;
 			}
 
-			BufferedImage frameImage;
+			//TYPE_BYTE_INDEXED improves io performance
+			BufferedImage frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_BYTE_INDEXED);
 			Graphics2D canvis;
 			Graphics2D animCanvis;
 			// draw and save every interval's frame
 			for (long frame = 0; frame < animation.getLength(); frame += interval) {
-				frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
 
 				canvis = frameImage.createGraphics();
 				canvis.fillRect(0, 0, totalWidth, animHeight);
@@ -361,7 +354,6 @@ public class MainPanel extends JPanel {
 
 			// last frame not currently in animation
 			if ((animation.getLength() - 1) % interval != 0) {
-				frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_INT_RGB);
 
 				canvis = frameImage.createGraphics();
 				canvis.fillRect(0, 0, totalWidth, animHeight);

@@ -21,10 +21,11 @@ import de.webtwob.agd.project.api.interfaces.IGraphLoader;
  */
 public class JSONGraphLoader implements IGraphLoader {
 
+	/** 
+	 *  The default Constructor used by the ServiceLoader to create a new Instance
+	 */
 	public JSONGraphLoader() {
-		// this constructor needs to exist for ServiceLoader
-		// we added it explicitly to make sure it is there in case we add
-		// more constructors
+		//since we have no other constructers this would not be nessesarcy be just to be save this is here anyway
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 
+@SuppressWarnings("javadoc")
 public class ForceTestAlgorithm implements IAlgorithm {
 
 	@Override

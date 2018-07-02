@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.view.AnimatedView;
 
+@SuppressWarnings("javadoc")
 public class ShowAStaticGraph {
 
 	public static void main(String[] args) {

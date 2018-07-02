@@ -19,6 +19,9 @@ import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.util.GraphStateListBuilder;
 import de.webtwob.agd.project.api.util.InitialLayoutUtil;
 
+/**
+ * An Implementation for the IAlgorithm Service presenting Greedy Cycle Break  
+ */
 public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 	@Override
@@ -96,47 +99,9 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 
 			findSources(stateBuilder, children, sourceList);
 			findSinks(stateBuilder, children, sinkList);
-
-			// find edge with max in-degree to out-degree difference
-			ElkNode maxNode = null;
-			int maxDiff = Integer.MIN_VALUE;
-			if (children.isEmpty()) {
-				stateBuilder.atLine("for_each_remaining");
-			}
-
-			ElkNode lastNode = null;
-			for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
-
-				ElkNode currentNode = iter.next();
-
-				stateBuilder.atLine("for_each_remaining").starteLoop().unhighlight(lastNode).highlight(currentNode)
-						.active();
-
-				int curVal = currentNode.getOutgoingEdges().size() - currentNode.getIncomingEdges().size();
-
-				stateBuilder.atLine("is_new_max").starteIf();
-				if (curVal > maxDiff) {
-					stateBuilder.atLine("set_max").unhighlight(maxNode).highlight(currentNode).in(Color.RED);
-					maxDiff = curVal;
-					maxNode = currentNode;
-					lastNode = null;
-				} else {
-					lastNode = currentNode;
-				}
-				stateBuilder.endIf().endLoop();
-			}
-
-			stateBuilder.atLine("end_for_each_remaining").unhighlight(lastNode);
-
-			// if we still had nodes add the one with max out to in diff to source list
-			if (maxNode != null) {
-				stateBuilder.atLine("has_max_node").starteIf();
-				sourceList.addLast(maxNode);
-				children.remove(maxNode);
-				stateBuilder.atLine("max_as_source").addSource(maxNode);
-				stateBuilder.endIf();
-			}
-
+			findBestSource(stateBuilder, children, sourceList);
+			
+			stateBuilder.endLoop();
 		}
 
 		stateBuilder.atLine("no_children_left");
@@ -148,12 +113,60 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		steps.addAll(stateBuilder.getList());
 	}
 
+	/**
+	 * @param stateBuilder
+	 * @param children
+	 * @param sourceList
+	 */
+	private static void findBestSource(GraphStateListBuilder stateBuilder, List<ElkNode> children, LinkedList<ElkNode> sourceList) {
+		
+		// find edge with max in-degree to out-degree difference
+		ElkNode maxNode = null;
+		int maxDiff = Integer.MIN_VALUE;
+		if (children.isEmpty()) {
+			stateBuilder.atLine("for_each_remaining");
+		}
+
+		ElkNode lastNode = null;
+		for (Iterator<ElkNode> iter = children.iterator(); iter.hasNext();) {
+
+			ElkNode currentNode = iter.next();
+
+			stateBuilder.atLine("for_each_remaining").starteLoop().unhighlight(lastNode).highlight(currentNode)
+					.active();
+
+			int curVal = currentNode.getOutgoingEdges().size() - currentNode.getIncomingEdges().size();
+
+			stateBuilder.atLine("is_new_max").starteIf();
+			if (curVal > maxDiff) {
+				stateBuilder.atLine("set_max").unhighlight(maxNode).highlight(currentNode).in(Color.RED);
+				maxDiff = curVal;
+				maxNode = currentNode;
+				lastNode = null;
+			} else {
+				lastNode = currentNode;
+			}
+			stateBuilder.endIf().endLoop();
+		}
+
+		stateBuilder.atLine("end_for_each_remaining").unhighlight(lastNode);
+
+		// if we still had nodes add the one with max out to in diff to source list
+		if (maxNode != null) {
+			stateBuilder.atLine("has_max_node").starteIf();
+			sourceList.addLast(maxNode);
+			children.remove(maxNode);
+			stateBuilder.atLine("max_as_source").addSource(maxNode);
+			stateBuilder.endIf();
+		}
+	}
+	
 	private static void findSinks(GraphStateListBuilder stateBuilder, List<ElkNode> children,
 			LinkedList<ElkNode> sinkList) {
 		boolean found;
 		// sort out sink
 		do {
-			stateBuilder.atLine("do_sink_found").starteLoop();
+			stateBuilder.startDoWhileLoop().atLine("do_sink_found");
 			found = false;
 
 			if (children.isEmpty()) {
@@ -194,7 +207,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 		boolean found;
 		// sort out source
 		do {
-			stateBuilder.atLine("do_source_found").starteLoop();
+			stateBuilder.startDoWhileLoop().atLine("do_source_found");
 
 			found = false;
 

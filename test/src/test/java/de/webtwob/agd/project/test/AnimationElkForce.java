@@ -20,6 +20,7 @@ import de.webtwob.agd.project.view.AnimatedView;
 import de.webtwob.agd.project.view.Animation;
 import de.webtwob.agd.project.view.CompoundAnimation;
 
+@SuppressWarnings("javadoc")
 public class AnimationElkForce {
 
 	public static void main(String[] args) {

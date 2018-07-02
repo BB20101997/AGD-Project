@@ -13,6 +13,9 @@ import de.webtwob.agd.project.api.GraphState;
 public interface IAlgorithm {
 
 
+	/**
+	 * @return does this IAlgoritm include ordered nodes
+	 */
 	boolean animationTopology();
 	
 	/**

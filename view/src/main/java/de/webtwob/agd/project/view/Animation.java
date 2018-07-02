@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.OptionalLong;
 
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
@@ -14,9 +15,13 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.interfaces.IVerbosity;
 import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.view.util.ViewUtil;
 
+/**
+ * An Animation between two GraphSatets
+ */
 public class Animation implements IAnimation {
 
 	protected final long lengthInMills;
@@ -25,12 +30,9 @@ public class Animation implements IAnimation {
 
 	/**
 	 *
-	 * @param root
-	 *            the graph to be animated
-	 * @param mapping
-	 *            the start and end state for the aimation
-	 * @param length
-	 *            in frames
+	 * @param root    the graph to be animated
+	 * @param mapping the start and end state for the aimation
+	 * @param length  in frames
 	 */
 	public Animation(ElkNode root, Pair<GraphState> mapping, int length) {
 		this.root = root;
@@ -107,8 +109,8 @@ public class Animation implements IAnimation {
 
 		var color = getCurrent(mapping.getStart().getHighlight(s), mapping.getEnd().getHighlight(s), g.getColor(),
 				frame, lengthInMills);
-		
-		ViewUtil.drawEdgeSection((Graphics2D) g.create(), path, Math.atan2(diff.getX(),-diff.getY()), color);
+
+		ViewUtil.drawEdgeSection((Graphics2D) g.create(), path, Math.atan2(diff.getX(), -diff.getY()), color);
 	}
 
 	private Point2D getBendPoint(ElkBendPoint p, long frame) {
@@ -132,10 +134,22 @@ public class Animation implements IAnimation {
 
 	@Override
 	public GraphState getGraphStatesForFrame(long frame) {
-		if(frame<lengthInMills/2) {
+		if (frame < lengthInMills / 2) {
 			return mapping.getStart();
-		}else {
+		} else {
 			return mapping.getEnd();
+		}
+	}
+
+	@Override
+	public OptionalLong nextStep(long frame, boolean forward, IVerbosity verbosity) {
+		if(!verbosity.shouldStop(mapping.getStart().getVerbosity())) {
+			return OptionalLong.empty();
+		}
+		if (forward ? frame < 0 : frame > 0) {
+			return OptionalLong.of(0);
+		} else {
+			return OptionalLong.empty();
 		}
 	}
 

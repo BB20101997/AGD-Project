@@ -6,12 +6,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.webtwob.agd.project.api.enums.LoopEnum;
+import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.events.IAnimationEvent;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
+/**
+ * Store the current ANimation Properties and update the current frame index
+ */
 public class ControllerModel {
 
 	List<IAnimationEventHandler> handlerList = new LinkedList<>();
@@ -21,6 +25,9 @@ public class ControllerModel {
 
 	// should the thread terminate
 	private volatile boolean stop = false;
+
+	private volatile boolean step = false;
+	private volatile long nextStepStop;
 
 	/**
 	 * The frame that should currently be displayed
@@ -62,15 +69,15 @@ public class ControllerModel {
 	 * The maximum value endAnimationAt may contain
 	 */
 	private volatile long maxEndAnimationAt = Long.MAX_VALUE;
-	
+
 	/**
 	 * Are we in debug mode?
-	 * */
+	 */
 	private boolean debug;
 
 	/**
 	 * Start the animation thread
-	 * */
+	 */
 	public void start() {
 		if (syncThread == null) {
 			synchronized (this) {
@@ -87,7 +94,7 @@ public class ControllerModel {
 
 	/**
 	 * Stop the animation Thread
-	 * */
+	 */
 	public void stop() {
 		if (syncThread != null) {
 			synchronized (this) {
@@ -107,7 +114,7 @@ public class ControllerModel {
 		}
 	}
 
-	@SuppressWarnings("squid:S3776")//this method is a bit too complex
+	@SuppressWarnings("squid:S3776") // this method is a bit too complex
 	private void run() {
 
 		long start = System.currentTimeMillis();
@@ -122,6 +129,11 @@ public class ControllerModel {
 
 				// set start to current time
 				start = System.currentTimeMillis();
+
+				if (step && (speed > 0 ? frame >= nextStepStop : frame <= nextStepStop)) {
+					frame = nextStepStop;
+					paused = true;
+				}
 
 				// have we reached the end of the Animation
 				if (getFrame() < startAnimationAt || getFrame() > endAnimationAt) {
@@ -192,7 +204,7 @@ public class ControllerModel {
 
 	/**
 	 * @param aeh the EventHandler to add the the subscriber list
-	 * */
+	 */
 	public void subscribeToAnimationEvent(IAnimationEventHandler aeh) {
 		if (aeh == null) {
 			return;
@@ -204,7 +216,7 @@ public class ControllerModel {
 
 	/**
 	 * @param eventHandler the EventHandler to remove from the subscriber list
-	 * */
+	 */
 	public void unsubscribeFromAnimationEvent(IAnimationEventHandler eventHandler) {
 		if (eventHandler == null) {
 			return;
@@ -216,7 +228,7 @@ public class ControllerModel {
 
 	/**
 	 * @param frame the frame this should be set to
-	 * */
+	 */
 	public void setFrame(long frame) {
 		if (this.frame != frame) {
 			subFrame = 0;
@@ -232,22 +244,23 @@ public class ControllerModel {
 		fireEvent(update);
 	}
 
-	/**@return the current frame
-	 * */
+	/**
+	 * @return the current frame
+	 */
 	public long getFrame() {
 		return frame;
 	}
 
 	/**
 	 * @param loopAction the Action to perform at the end of the animation
-	 * */
+	 */
 	public void setLoopAction(LoopEnum loopAction) {
 		endAction = loopAction;
 	}
 
 	/**
 	 * @return the current Action to be performed at the end of the animation
-	 * */
+	 */
 	public LoopEnum getLoopAction() {
 		return endAction;
 	}
@@ -255,15 +268,15 @@ public class ControllerModel {
 	/**
 	 * @param end at the animation at this frame
 	 * 
-	 * Use this to end an animation early
-	 * */
+	 *            Use this to end an animation early
+	 */
 	public void setAnimationEnd(long end) {
 		endAnimationAt = Math.min(end, maxEndAnimationAt);
 	}
 
 	/**
 	 * @param animation the animation to add the the registered ones
-	 * */
+	 */
 	public void addAnimation(IAnimation animation) {
 		if (animation == null) {
 			return;
@@ -272,10 +285,9 @@ public class ControllerModel {
 		updateMaxEnd();
 	}
 
-
 	/**
 	 * @param animation the animation to remove from the registered ones
-	 * */
+	 */
 	public void removeAnimation(IAnimation animation) {
 		if (animation == null) {
 			return;
@@ -283,10 +295,10 @@ public class ControllerModel {
 		animations.remove(animation);
 		updateMaxEnd();
 	}
-	
+
 	/**
 	 * remove all registered Animations
-	 * */
+	 */
 	public void removeAllAnimations() {
 		animations.clear();
 		updateMaxEnd();
@@ -294,7 +306,7 @@ public class ControllerModel {
 
 	/**
 	 * recalculate the index of the last frame of the shortest registered animation
-	 * */
+	 */
 	public void updateMaxEnd() {
 		maxEndAnimationAt = animations.stream().mapToLong(IAnimation::getLength).min().orElse(Long.MAX_VALUE);
 		endAnimationAt = Math.min(endAnimationAt, maxEndAnimationAt);
@@ -302,14 +314,14 @@ public class ControllerModel {
 
 	/**
 	 * @return true if the animation is paused
-	 * */
+	 */
 	public boolean isPaused() {
 		return paused;
 	}
 
 	/**
 	 * @param paused should this set the animation to be paused or resume
-	 * */
+	 */
 	public void setPaused(boolean paused) {
 		if (this.paused && !paused) {
 			this.paused = paused;
@@ -323,21 +335,21 @@ public class ControllerModel {
 
 	/**
 	 * @return the index the animation will currently end at
-	 * */
+	 */
 	public long getEndAnimationAt() {
 		return endAnimationAt;
 	}
 
 	/**
 	 * @return the animation playback speed not accounting for paused
-	 * */
+	 */
 	public double getSpeed() {
 		return speed;
 	}
 
 	/**
 	 * @param d the value to set the animation playback speed to
-	 * */
+	 */
 	public void setSpeed(double d) {
 		if (speed == 0 && d != 0) {
 			speed = d;
@@ -352,16 +364,38 @@ public class ControllerModel {
 
 	/**
 	 * @param debug what the debug mode flag should be set to
-	 * */
+	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
-	
+
 	/**
 	 * @return if debug mode is set
-	 * */
+	 */
 	public boolean getDebug() {
 		return debug;
+	}
+
+	/**
+	 * Unsets the setp flag
+	 */
+	public void playContinuosly() {
+		step = false;
+	}
+
+	/**
+	 * @param forward do a step forward or backward //TODO make this an Enum/don't do two things
+	 * This sets the step flag and the direction of playback 
+	 */
+	public void step(boolean forward) {
+		setSpeed(Math.abs(speed) * (forward ? 1 : -1));
+		step = true;
+		nextStepStop = animations.get(0).nextStep(frame, forward, VerbosityEnum.DEPTH_2)
+				.orElse(forward ? animations.get(0).getLength() - 1 : 0);
+		paused = false;
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 }

@@ -1,6 +1,6 @@
 @SuppressWarnings("module")
 module de.webtwob.agd.project.test {
-	requires junit;
+	requires org.junit.jupiter.api;
 	requires java.desktop;
 	requires java.base;
 
@@ -12,5 +12,5 @@ module de.webtwob.agd.project.test {
 	requires de.webtwob.agd.project.file.toml;
 	requires de.webtwob.agd.project.view;
 	
-	opens de.webtwob.agd.project.test to junit;
+	opens de.webtwob.agd.project.test to org.junit.platform.commons; 
 }

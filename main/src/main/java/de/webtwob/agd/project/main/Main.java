@@ -12,6 +12,9 @@ import javax.swing.WindowConstants;
 import de.webtwob.agd.project.api.util.GraphLoaderHelper;
 import de.webtwob.agd.project.view.panel.MainPanel;
 
+/**
+ * We need to start somewhere and that is here
+ */
 public class Main {
 
 	/**

@@ -2,6 +2,9 @@ package de.webtwob.agd.project.api.enums;
 
 import de.webtwob.agd.project.api.ControllerModel;
 
+/**
+ * The options for what should happen at the end of an Animation
+ */
 public enum LoopEnum {
 	/**
 	 * Stop at the end of the animation

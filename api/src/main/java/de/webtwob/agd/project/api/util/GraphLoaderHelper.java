@@ -12,6 +12,9 @@ import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.interfaces.IGraphLoader;
 
+/**
+ * A Helper Class for using the IGraphLoader Service
+ */
 public class GraphLoaderHelper {
 	
 	private GraphLoaderHelper() {}

@@ -7,6 +7,7 @@ import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalInt;
 
 import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdgeSection;
@@ -140,10 +141,10 @@ public class GraphState {
 	
 	/**
 	 * @param node the node for which to retrieve the position @see {@link GraphState#setPossition(ElkNode, Integer)}
-	 * @return the index //TODO why is this an Integer and not an int, null? Use OptionalInt
 	 */
-	public Integer getPosition(ElkNode node) {
-		return nodePositionsTopological.get(node);
+	public OptionalInt getPosition(ElkNode node) {
+		var res = nodePositionsTopological.get(node);
+		return res == null ? OptionalInt.empty():OptionalInt.of(res);
 	}
 	
 	

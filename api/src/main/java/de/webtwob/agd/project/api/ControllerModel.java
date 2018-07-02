@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.webtwob.agd.project.api.enums.Direction;
 import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.enums.VerbosityEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
@@ -22,6 +23,7 @@ public class ControllerModel {
 	List<IAnimation> animations = new LinkedList<>();
 
 	private volatile Thread syncThread;
+	private volatile Direction dir = Direction.FORWARD;
 
 	// should the thread terminate
 	private volatile boolean stop = false;
@@ -43,8 +45,6 @@ public class ControllerModel {
 	 * Frames per Millisecond
 	 */
 	private volatile double speed = 1;
-
-	private volatile boolean paused = false;
 
 	/**
 	 * Represents the action to perform when the animation reaches the end e.g.
@@ -121,9 +121,9 @@ public class ControllerModel {
 		long end = start;
 
 		while (!stop) {
-			if (speed != 0 && !paused) {
+			if (speed * dir.multiplyier != 0) {
 				// update current frame
-				subFrame += (end - start) * speed;
+				subFrame += (end - start) * speed * dir.multiplyier;
 				frame += (long) subFrame;
 				subFrame %= 1; // yes, this actually does something since subFrame is a double
 
@@ -132,7 +132,7 @@ public class ControllerModel {
 
 				if (step && (speed > 0 ? frame >= nextStepStop : frame <= nextStepStop)) {
 					frame = nextStepStop;
-					paused = true;
+					dir = Direction.PAUSE;
 				}
 
 				// have we reached the end of the Animation
@@ -147,7 +147,7 @@ public class ControllerModel {
 				start = end;
 				subFrame = 0;
 				synchronized (this) {
-					while (speed == 0 || paused) {
+					while (speed * dir.multiplyier == 0) {
 						try {
 							wait();
 						} catch (InterruptedException e) {
@@ -316,20 +316,17 @@ public class ControllerModel {
 	 * @return true if the animation is paused
 	 */
 	public boolean isPaused() {
-		return paused;
+		return dir == Direction.PAUSE;
 	}
 
-	/**
-	 * @param paused should this set the animation to be paused or resume
-	 */
-	public void setPaused(boolean paused) {
-		if (this.paused && !paused) {
-			this.paused = paused;
-			synchronized (this) {
-				notifyAll();
-			}
-		} else {
-			this.paused = paused;
+	public Direction getDirection() {
+		return dir;
+	}
+
+	public void setDirection(Direction dir) {
+		this.dir = dir;
+		synchronized (this) {
+			notifyAll();
 		}
 	}
 
@@ -344,20 +341,16 @@ public class ControllerModel {
 	 * @return the animation playback speed not accounting for paused
 	 */
 	public double getSpeed() {
-		return speed;
+		return speed * dir.multiplyier;
 	}
 
 	/**
 	 * @param d the value to set the animation playback speed to
 	 */
 	public void setSpeed(double d) {
-		if (speed == 0 && d != 0) {
-			speed = d;
-			synchronized (this) {
-				notifyAll();
-			}
-		} else {
-			speed = d;
+		speed = Math.abs(d);
+		synchronized (this) {
+			notifyAll();
 		}
 		fireEvent(new AnimationSpeedUpdateEvent(speed));
 	}
@@ -377,22 +370,23 @@ public class ControllerModel {
 	}
 
 	/**
-	 * Unsets the setp flag
+	 * Unsets the step flag
 	 */
 	public void playContinuosly() {
 		step = false;
 	}
 
 	/**
-	 * @param forward do a step forward or backward //TODO make this an Enum/don't do two things
-	 * This sets the step flag and the direction of playback 
+	 * This sets the step flag and the direction of playback
 	 */
-	public void step(boolean forward) {
-		setSpeed(Math.abs(speed) * (forward ? 1 : -1));
+	public void step(Direction dir) {
+		if (dir == Direction.PAUSE||dir == null) {
+			throw new IllegalArgumentException("null or PAUSE are not valid Directions for step!");
+		}
+		this.dir = dir;
 		step = true;
-		nextStepStop = animations.get(0).nextStep(frame, forward, VerbosityEnum.DEPTH_2)
-				.orElse(forward ? animations.get(0).getLength() - 1 : 0);
-		paused = false;
+		nextStepStop = animations.get(0).nextStep(frame, dir == Direction.FORWARD, VerbosityEnum.DEPTH_2)
+				.orElse(dir == Direction.FORWARD ? animations.get(0).getLength() - 1 : 0);
 		synchronized (this) {
 			notifyAll();
 		}

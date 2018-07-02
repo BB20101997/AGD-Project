@@ -112,14 +112,6 @@ public class AnimatedView extends JComponent {
 		this.fixed = fixed;
 	}
 
-	/**
-	 * New AnimatedView with a new ControllerModel
-	 * TODO can we remove this?
-	 */
-	public AnimatedView() {
-		this(new ControllerModel());
-		model.start();
-	}
 
 	/**
 	 * @param eg the graph to create a still Animation for

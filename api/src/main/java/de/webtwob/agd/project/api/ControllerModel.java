@@ -132,7 +132,7 @@ public class ControllerModel {
 				// set start to current time
 				start = System.currentTimeMillis();
 
-				if (step && (speed > 0 ? frame >= nextStepStop : frame <= nextStepStop)) {
+				if (step && (Direction.FORWARD == dir ? frame >= nextStepStop : frame <= nextStepStop)) {
 					frame = nextStepStop;
 					dir = Direction.PAUSE;
 				}

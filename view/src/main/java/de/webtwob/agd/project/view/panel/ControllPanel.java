@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.enums.Direction;
 import de.webtwob.agd.project.api.enums.LoopEnum;
 import de.webtwob.agd.project.api.events.AnimationSpeedUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
@@ -33,7 +34,7 @@ public class ControllPanel extends JPanel {
 
 	private static Map<String, IAlgorithm> algorithms = new HashMap<>();
 
-	private transient ControllerModel syncThread;
+	private transient ControllerModel model;
 
 	static {
 		// load all algorithms into the algorithm map
@@ -81,7 +82,7 @@ public class ControllPanel extends JPanel {
 
 		speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
 		speedField.setValue(1);
-		speedField.addActionListener(e -> mainPanel.getModel().setSpeed(Double.parseDouble(speedField.getText())));
+		speedField.addActionListener(e -> model.setSpeed(Double.parseDouble(speedField.getText())));
 
 		// create boxes
 		var algBox = Box.createHorizontalBox();
@@ -113,33 +114,31 @@ public class ControllPanel extends JPanel {
 
 		// add ActionListeners
 		
-		stepForward.addActionListener(event -> syncThread.step(true));
-		stepBackward.addActionListener(event -> syncThread.step(false));
+		stepForward.addActionListener(event -> model.step(Direction.FORWARD));
+		stepBackward.addActionListener(event -> model.step(Direction.BACKWARD));
 
 		reversedPlay.addActionListener(event -> {
-			if (syncThread != null) {
-				syncThread.setSpeed(-Math.abs(mainPanel.getModel().getSpeed()));
-				syncThread.playContinuosly();
-				syncThread.setPaused(false);
+			if (model != null) {
+				model.playContinuosly();
+				model.setDirection(Direction.BACKWARD);
 
 			}
 		});
 
 		play.addActionListener(event -> {
-			if (syncThread != null) {
-				syncThread.setSpeed(Math.abs(mainPanel.getModel().getSpeed()));
-				syncThread.playContinuosly();
-				syncThread.setPaused(false);
+			if (model != null) {
+				model.playContinuosly();
+				model.setDirection(Direction.FORWARD);
 			}
 		});
 
 		pause.addActionListener(event -> {
-			if (syncThread != null) {
-				syncThread.setPaused(true);
+			if (model != null) {
+				model.setDirection(Direction.PAUSE);
 			}
 		});
 
-		loopChoise.addItemListener(event -> mainPanel.setLoopType((LoopEnum) event.getItem()));
+		loopChoise.addItemListener(event -> model.setLoopAction((LoopEnum) event.getItem()));
 
 		algChoise.addItemListener(event -> mainPanel.setAlgorithm(algorithms.get(event.getItem())));
 
@@ -149,9 +148,10 @@ public class ControllPanel extends JPanel {
 		}
 
 	}
+	
 
 	/**
-	 * @param mainPanel the main Panel to inform about changes //TODO we should probably replace this by an Observer Pattern
+	 * @param mainPanel the main Panel to inform about changes 
 	 */
 	public void setMainPanel(MainPanel mainPanel) {
 		this.mainPanel = mainPanel;
@@ -165,13 +165,13 @@ public class ControllPanel extends JPanel {
 	 * 
 	 * */
 	public void setModel(ControllerModel thread) {
-		if (syncThread != null) {
-			syncThread.unsubscribeFromAnimationEvent(speedUpdate);
+		if (model != null) {
+			model.unsubscribeFromAnimationEvent(speedUpdate);
 		}
-		syncThread = thread;
-		if (syncThread != null) {
-			syncThread.subscribeToAnimationEvent(speedUpdate);
-			loopChoise.setSelectedItem(syncThread.getLoopAction());
+		model = thread;
+		if (model != null) {
+			model.subscribeToAnimationEvent(speedUpdate);
+			loopChoise.setSelectedItem(model.getLoopAction());
 		}
 	}
 	

@@ -12,8 +12,9 @@ import de.webtwob.agd.project.api.util.Pair;
 import de.webtwob.agd.project.view.util.ViewUtil;
 
 /**
- * An animation between two GraphStates animating the order of nodes based on the position mapping
- * */
+ * An animation between two GraphStates animating the order of nodes based on
+ * the position mapping
+ */
 public class AnimationTopo extends Animation {
 
 	private static final double NODE_SIZE = 60;
@@ -21,12 +22,9 @@ public class AnimationTopo extends Animation {
 
 	/**
 	 *
-	 * @param root
-	 *            the graph to be animated
-	 * @param mapping
-	 *            the start and end state for the aimation
-	 * @param length
-	 *            in frames
+	 * @param root    the graph to be animated
+	 * @param mapping the start and end state for the aimation
+	 * @param length  in frames
 	 */
 	public AnimationTopo(ElkNode root, Pair<GraphState> mapping, int length) {
 		super(root, mapping, length);
@@ -36,19 +34,14 @@ public class AnimationTopo extends Animation {
 	public void generateFrame(long frame, Graphics2D graphic) {
 
 		for (ElkNode child : root.getChildren()) {
-			Integer pos = mapping.getEnd().getPosition(child);
-			if (pos != null) {
-				drawNode(child, graphic, frame);
-			}
+			mapping.getEnd().getPosition(child).ifPresent(pos -> drawNode(child, graphic, frame, pos));
 		}
 	}
 
-	@Override
-	protected void drawNode(ElkNode node, Graphics2D graphic, long frame) {
+	protected void drawNode(ElkNode node, Graphics2D graphic, long frame, int pos) {
 
 		Rectangle2D.Double rect = getCurrent(mapping.getStart().getMapping(node), mapping.getEnd().getMapping(node),
 				frame, lengthInMills);
-		int pos = mapping.getEnd().getPosition(node);
 		int size = root.getChildren().size();
 		if (pos >= 0) {
 			rect.setRect(SPACING, SPACING + (NODE_SIZE + SPACING) * pos, NODE_SIZE, NODE_SIZE);

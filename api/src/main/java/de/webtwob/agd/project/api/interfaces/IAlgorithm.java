@@ -35,6 +35,12 @@ public interface IAlgorithm {
 	 * */
 	List<GraphState> getGraphStates(ElkNode graph);
 	
+	/**
+	 * @param graph the graph to reset
+	 * @param start the initial state before this algorithm was applied, befor calling {@link IAlgorithm#getGraphStates(ElkNode)}
+	 * @param end the last state in the List returned by {@link IAlgorithm#getGraphStates(ElkNode)}
+	 * 
+	 * */
 	default void resetGraph(ElkNode graph, GraphState start, GraphState end) {
 		
 		start.applyToNode(graph);

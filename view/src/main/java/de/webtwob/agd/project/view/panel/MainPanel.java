@@ -322,7 +322,7 @@ public class MainPanel extends JPanel {
 			var animWidth = animation.getWidth() * scale;
 			var animHeight = (int) (animation.getHeight() * scale);
 
-			var topoScale = animationTopo != null ? (double) animHeight / animationTopo.getHeight() : 1;
+			var topoScale = animationTopo != null ? animHeight / animationTopo.getHeight() : 1;
 			var topoWidth = animationTopo != null ? animationTopo.getWidth() * topoScale : 0;
 
 			var totalWidth = (int) Math.ceil(animWidth + topoWidth);
@@ -347,7 +347,7 @@ public class MainPanel extends JPanel {
 				canvis.setBackground(Color.WHITE);
 				canvis.setColor(Color.BLACK);
 
-				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, animHeight);
 				animCanvis.scale(scale, scale);
 				animation.generateFrame(frame, animCanvis);
 
@@ -371,7 +371,7 @@ public class MainPanel extends JPanel {
 				canvis.setBackground(Color.WHITE);
 				canvis.setColor(Color.BLACK);
 
-				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, animHeight);
 				animCanvis.scale(scale, scale);
 				animation.generateFrame(animation.getLength() - 1, animCanvis);
 

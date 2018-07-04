@@ -31,7 +31,7 @@ public class Animation implements IAnimation {
 	/**
 	 *
 	 * @param root    the graph to be animated
-	 * @param mapping the start and end state for the aimation
+	 * @param mapping the start and end state for the animation
 	 * @param length  in frames
 	 */
 	public Animation(ElkNode root, Pair<GraphState> mapping, int length) {

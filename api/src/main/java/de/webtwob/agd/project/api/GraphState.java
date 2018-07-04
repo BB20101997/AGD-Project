@@ -146,7 +146,38 @@ public class GraphState {
 		var res = nodePositionsTopological.get(node);
 		return res == null ? OptionalInt.empty():OptionalInt.of(res);
 	}
-	
-	
 
+	public void applyToNode(ElkNode graph) {
+		var nodeMap = getMapping(graph);
+		graph.setLocation(nodeMap.getX(), nodeMap.getY());
+		graph.setDimensions(nodeMap.getWidth(), nodeMap.getHeight());
+		
+		for(var child:graph.getChildren()) {
+			applyToNode(child);
+		}
+		for(var edge:graph.getContainedEdges()) {
+			for(var section:edge.getSections()) {
+				applyToSection(section);
+			}
+		}
+			
+	}
+
+	private void applyToSection(ElkEdgeSection section) {
+		var sectionMap = getMapping(section);
+		
+		section.setStartLocation(sectionMap.getX1(), sectionMap.getY1());
+		section.setEndLocation(sectionMap.getX2(), sectionMap.getY2());
+		
+		for(var bendpoint:section.getBendPoints()) {
+			applyToBendPoint(bendpoint);
+		}
+	}
+
+	private void applyToBendPoint(ElkBendPoint bendpoint) {
+		var bendMap = getMapping(bendpoint);
+		
+		bendpoint.set(bendMap.getX(), bendMap.getY());
+	}
+	
 }

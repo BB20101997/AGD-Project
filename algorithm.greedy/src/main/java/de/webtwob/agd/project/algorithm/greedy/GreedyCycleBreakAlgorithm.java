@@ -23,6 +23,8 @@ import de.webtwob.agd.project.api.util.InitialLayoutUtil;
  * An Implementation for the IAlgorithm Service presenting Greedy Cycle Break  
  */
 public class GreedyCycleBreakAlgorithm implements IAlgorithm {
+	
+	private static final Color REVERSED = Color.GREEN;
 
 	@Override
 	public List<GraphState> getGraphStates(ElkNode graph) {
@@ -266,7 +268,7 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 			stateBuilder.atLine("needs_to_be_reversed").starteIf();
 			if (combinedList.indexOf(Util.getSource(edge)) > combinedList.indexOf(Util.getTarget(edge))) {
 				Util.reverseEdge(edge);
-				stateBuilder.atLine("reverse_edge").updateEdge(edge).highlight(edge).in(Color.GREEN);
+				stateBuilder.atLine("reverse_edge").updateEdge(edge).highlight(edge).as(REVERSED);
 				lastEdge = null;
 			} else {
 				lastEdge = edge;
@@ -280,6 +282,16 @@ public class GreedyCycleBreakAlgorithm implements IAlgorithm {
 	@Override
 	public boolean animationTopology() {
 		return true;
+	}
+	
+	@Override
+	public void resetGraph(ElkNode graph, GraphState start, GraphState end) {
+		for(var edge : graph.getContainedEdges()) {
+			if(end.getHighlight(edge)==REVERSED) {
+				Util.reverseEdge(edge);
+			}
+		}
+		IAlgorithm.super.resetGraph(graph,start,end);
 	}
 
 }

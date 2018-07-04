@@ -34,5 +34,11 @@ public interface IAlgorithm {
 	 * @return List of graph states for this graph and algorithm
 	 * */
 	List<GraphState> getGraphStates(ElkNode graph);
+	
+	default void resetGraph(ElkNode graph, GraphState start, GraphState end) {
+		
+		start.applyToNode(graph);
+		
+	}
 
 }

@@ -1,66 +1,76 @@
 <style>
-    code.source {
+    .source {
         background-color: aqua;
     }
-    code.sink {
+    .sink {
         background-color: #D3D3D3;
     }
-    code.active {
-        color: #00008B;
+    .active {
+        //background-color: blue;
+        //color: white;
+        color: #0000CD;
+    }
+    .max {
+    	//background-color: red;
+    	color: red;
+    }
+    .reverse {
+    	background-color: lime;
+    	//color: lime;
     }
 </style>
 <pre>
 
 <code id="the_start"> </code><br />
 children = graph.getChildren()<br />
-<code class="source">sources</code> = new List()<br />
-<code class="sink">sinks</code> = new List()<br />
+<font class="source">sources</font> = new List()<br />
+<font class="sink">sinks</font> = new List()<br />
 <br />
 <code id="while_has_children"> while(!children.isEmpty){</code><br />
   <code id="do_source_found">do{</code><br />
     found = false<br />
-    <code id="for_each_child_source">for(<code class="active">child</code> : children){</code><br />
-      <code id="is_source">if(child.isSource()){</code><br />
-        children.remove(child)<br />
+    <code id="for_each_child_source">for(<font class="active">child</font> : children){</code><br />
+      <code id="is_source">if(<font class="active">child</font>.isSource()){</code><br />
+        children.remove(<font class="active">child</font>)<br />
         found = true<br /> 
-        <code id="mark_source">sources.addLast(child)</code><br />
+        <code id="mark_source"><font class="source">sources</font>.addLast(<font class="active">child</font>)</code><br />
       <code id="line12">}</code><br />
     <code id="line13">}</code><br />
   <code id="while_source_found">}while(found)</code><br />
   <br />
   <code id="do_sink_found">do{</code><br />
     found = false<br />
-    <code id="for_each_child_sink">for(<code class="active">child</code> : children){</code><br />
-      <code id="is_sink">if(child.isSink()){</code><br />
-        children.remove(child)<br />
+    <code id="for_each_child_sink">for(<font class="active">child</font> : children){</code><br />
+      <code id="is_sink">if(<font class="active">child</font>.isSink()){</code><br />
+        children.remove(<font class="active">child</font>)<br />
         found = true<br />
-        <code id="mark_sink">sinks.addFirst(child)</cod><br />
+        <code id="mark_sink"><font class="sink">sinks</font>.addFirst(<font class="active">child</font>)</cod><br />
       }<br />
     }<br />
    <code id="while_sink_found">}while(found)</code><br />
   <br />
-  maxNode = null<br />
+  <font class="max">maxNode</font> = null<br />
   maxDiff = Integer.MIN_VAL<br />
   <br />
-  <code id="for_each_remaining">for(child : children){</code><br />
-    diff = child.outDegree - child.inDegree<br />
+  <code id="for_each_remaining">for(<font class="active">child</font> : children){</code><br />
+    diff = <font class="active">child</font>.outDegree - <font class="active">child</font>.inDegree<br />
     <code id="is_new_max">if(maxDiff&lt;diff){</code><br />
       maxDiff = diff;<br />
-      <code id="set_max">maxNode = child;</code><br />
+      <code id="set_max"><font class="max">maxNode</font> = <font class="active">child</font>;</code><br />
     }<br />
   <code id="end_for_each_remaining">}</code><br />
   <br />
-  if(maxNode!=null){<br />
-    children.remove(maxNode)<br />
-    <code id="max_as_source">sources.addLast(maxNode)</code><br />
+  if(<font class="max">maxNode</font>!=null){<br />
+    children.remove(<font class="max">maxNode</font>)<br />
+    <code id="max_as_source"><font class="source">sources</font>.addLast(<font class="max">maxNode</font>)</code><br />
   }<br />
 <code id ="no_children_left">}</code><br />
 <br />
-combined = sources + sinks<br />
+combined = <font class="source">sources</font> + <font class="sink">sinks</font><br />
 <br />
-<code id="for_each_edge">for(edge : graph.getEdges()){</code><br />
+<code id="for_each_edge">for(<font class="active">edge</font> : graph.getEdges()){</code><br />
   <code id="needs_to_be_reversed">if(combined.indexOf(edge.source) > combined.indexOf(edge.target)){</code><br />
-    <code id="reverse_edge">edge.reverse()</code><br />
+    <code id="reverse_edge"><font class="active">edge</font>.<font class="reverse">reverse()</font></code><br />
   }<br />
 <code id="for_each_edge_end">}</code><br />
 <code id="the_end"> </code><br />

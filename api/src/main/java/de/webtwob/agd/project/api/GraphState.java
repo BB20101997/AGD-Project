@@ -28,19 +28,18 @@ public class GraphState {
 	}
 
 	/**
-	 * @param copy
-	 *            the GraphState to copy Copy Constructor
+	 * @param copy the GraphState to copy Copy Constructor
 	 */
 	public GraphState(GraphState copy) {
 		copy.elkBendPointMap.forEach((key, value) -> elkBendPointMap.put(key, (Double) value.clone()));
 		copy.elkSectionMap.forEach((key, value) -> elkSectionMap.put(key, (Line2D.Double) value.clone()));
 		copy.elkNodeMap.forEach((key, value) -> elkNodeMap.put(key, (Rectangle2D.Double) value.clone()));
 		copy.nodePositionsTopological.forEach((key, value) -> nodePositionsTopological.put(key, value));
-		
+
 		highlightMap.putAll(copy.highlightMap);
 		verbosity = copy.verbosity;
 		pseudoCodeLine = copy.pseudoCodeLine;
-		
+
 	}
 
 	private Map<ElkNode, Rectangle2D.Double> elkNodeMap = new HashMap<>();
@@ -51,7 +50,6 @@ public class GraphState {
 	private Map<Object, Color> highlightMap = new HashMap<>();
 
 	private String pseudoCodeLine = "line0";
-	
 
 	private IVerbosity verbosity = VerbosityEnum.OFF;
 
@@ -91,7 +89,7 @@ public class GraphState {
 	 * @param obj the object to store the highlight for
 	 * @param col the Color obj should be highlighted in or null to unset
 	 * 
-	 * If obj is null this is a noop
+	 *            If obj is null this is a noop
 	 */
 	public void setHighlight(Object obj, Color col) {
 		if (obj == null)
@@ -124,29 +122,74 @@ public class GraphState {
 	}
 
 	/**
-	 * @param pseudoCodeLine the identifier for the line in the pseudocode to be set for this GraphState
+	 * @param pseudoCodeLine the identifier for the line in the pseudocode to be set
+	 *                       for this GraphState
 	 */
 	public void setPseudoCodeLine(String pseudoCodeLine) {
 		this.pseudoCodeLine = pseudoCodeLine;
 	}
-	
+
 	/**
-	 * @param node  the node to set the position for
-	 * @param i the position 0 indexed, negative values index from the end
+	 * @param node the node to set the position for
+	 * @param i    the position 0 indexed, negative values index from the end
 	 * 
-	 * */
+	 */
 	public void setPossition(ElkNode node, Integer i) {
 		this.nodePositionsTopological.put(node, i);
 	}
-	
+
 	/**
-	 * @param node the node for which to retrieve the position @see {@link GraphState#setPossition(ElkNode, Integer)}
+	 * @param node the node for which to retrieve the position @see
+	 *             {@link GraphState#setPossition(ElkNode, Integer)}
+	 * @return an Optionaly that if present contains the nodes Position in the order
 	 */
 	public OptionalInt getPosition(ElkNode node) {
 		var res = nodePositionsTopological.get(node);
-		return res == null ? OptionalInt.empty():OptionalInt.of(res);
+		return res == null ? OptionalInt.empty() : OptionalInt.of(res);
 	}
-	
-	
+
+	/**
+	 * @param graph the Graph this GraphState shall be applied to Apply the saved
+	 *              Positions of the graph to the graph
+	 */
+	public void applyToNode(ElkNode graph) {
+		var nodeMap = getMapping(graph);
+
+		if (nodeMap != null) {
+			graph.setLocation(nodeMap.getX(), nodeMap.getY());
+			graph.setDimensions(nodeMap.getWidth(), nodeMap.getHeight());
+		}
+
+		for (var child : graph.getChildren()) {
+			applyToNode(child);
+		}
+		for (var edge : graph.getContainedEdges()) {
+			for (var section : edge.getSections()) {
+				applyToSection(section);
+			}
+		}
+
+	}
+
+	private void applyToSection(ElkEdgeSection section) {
+		var sectionMap = getMapping(section);
+
+		if (sectionMap != null) {
+			section.setStartLocation(sectionMap.getX1(), sectionMap.getY1());
+			section.setEndLocation(sectionMap.getX2(), sectionMap.getY2());
+		}
+
+		for (var bendpoint : section.getBendPoints()) {
+			applyToBendPoint(bendpoint);
+		}
+	}
+
+	private void applyToBendPoint(ElkBendPoint bendpoint) {
+		var bendMap = getMapping(bendpoint);
+
+		if (bendMap != null) {
+			bendpoint.set(bendMap.getX(), bendMap.getY());
+		}
+	}
 
 }

@@ -72,7 +72,7 @@ public class ControllPanel extends JPanel {
 		// setup elements
 		algChoise = new JComboBox<>(algorithms.keySet().toArray(new String[0]));
 		algChoise.setPreferredSize(
-				new Dimension(algChoise.getPreferredSize().width, (int) algChoise.getMinimumSize().height));
+				new Dimension(algChoise.getPreferredSize().width, algChoise.getMinimumSize().height));
 
 		loopChoise = new JComboBox<>(LoopEnum.values());
 		loopChoise.setSelectedItem(LoopEnum.LOOP);

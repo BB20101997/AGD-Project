@@ -321,10 +321,16 @@ public class ControllerModel {
 		return dir == Direction.PAUSE;
 	}
 
+	/**
+	 * @return the Direction the animation is currently playing in
+	 * */
 	public Direction getDirection() {
 		return dir;
 	}
 
+	/**
+	 * @param dir the Direction the animation shall play in
+	 * */
 	public void setDirection(Direction dir) {
 		this.dir = dir;
 		synchronized (this) {
@@ -380,6 +386,8 @@ public class ControllerModel {
 
 	/**
 	 * This sets the step flag and the direction of playback
+	 * @param dir the Direction to take the step in
+	 * @throws IllegalArgumentException if dir is null or {@link Direction#PAUSE}
 	 */
 	public void step(Direction dir) {
 		if (dir == Direction.PAUSE||dir == null) {
@@ -394,6 +402,9 @@ public class ControllerModel {
 		}
 	}
 
+	/**
+	 * @param item set the Verbosity for the steps
+	 * */
 	public void setVerbosity(VerbosityEnum item) {
 		verbosity = item;
 	}

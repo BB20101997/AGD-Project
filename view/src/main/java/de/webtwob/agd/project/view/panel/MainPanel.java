@@ -25,10 +25,12 @@ import javax.swing.JSplitPane;
 import org.eclipse.elk.graph.ElkNode;
 
 import de.webtwob.agd.project.api.ControllerModel;
+import de.webtwob.agd.project.api.GraphState;
 import de.webtwob.agd.project.api.enums.Direction;
 import de.webtwob.agd.project.api.events.AnimationUpdateEvent;
 import de.webtwob.agd.project.api.interfaces.IAlgorithm;
 import de.webtwob.agd.project.api.interfaces.IAnimation;
+import de.webtwob.agd.project.api.util.GraphStateUtil;
 import de.webtwob.agd.project.view.AnimatedView;
 import de.webtwob.agd.project.view.AnimationTopo;
 import de.webtwob.agd.project.view.CompoundAnimation;
@@ -133,9 +135,10 @@ public class MainPanel extends JPanel {
 		if (this.graph == node)
 			return;
 		this.graph = node;
+
 		redoAnimationPanel();
 	}
-	
+
 	private void initModel() {
 		if (model == null) {
 			model = new ControllerModel();
@@ -160,7 +163,7 @@ public class MainPanel extends JPanel {
 		initModel();
 
 		model.removeAllAnimations();
-		//make sure to not stop early
+		// make sure to not stop early
 		model.setAnimationEnd(Long.MAX_VALUE);
 		var oldDir = model.getDirection();
 		model.setDirection(Direction.PAUSE);
@@ -170,7 +173,15 @@ public class MainPanel extends JPanel {
 		if (algorithm != null) {
 			pseudocodeView.setText(algorithm.getPseudoCode());
 			if (graph != null) {
+				//save starting state of graph
+				var start = new GraphState();
+				GraphStateUtil.saveState(graph, start);
+				
+				//apply current algorithm to graph
 				var states = algorithm.getGraphStates(graph);
+				
+				//reset Graph
+				algorithm.resetGraph(graph, start, states.get(states.size()-1));
 
 				animation = new CompoundAnimation(graph, states, 500);
 				model.addAnimation(animation);
@@ -191,7 +202,7 @@ public class MainPanel extends JPanel {
 					var ratio = animationTopo.getWidth() / animationTopo.getHeight();
 					algorithmPanel.setDividerLocation(
 							(int) (algorithmPanel.getMaximumDividerLocation() - ratio * algorithmPanel.getHeight()));
-				}else {
+				} else {
 					animationTopo = null;
 				}
 
@@ -276,8 +287,8 @@ public class MainPanel extends JPanel {
 
 		try {
 			ImageIO.setUseCache(false);
-			var imageio = ImageIO
-					.getImageWriters(ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_BYTE_INDEXED), "gif");
+			var imageio = ImageIO.getImageWriters(
+					ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_BYTE_INDEXED), "gif");
 
 			ImageWriter writer = null;
 
@@ -311,7 +322,7 @@ public class MainPanel extends JPanel {
 			var animWidth = animation.getWidth() * scale;
 			var animHeight = (int) (animation.getHeight() * scale);
 
-			var topoScale = animationTopo != null ? (double) animHeight / animationTopo.getHeight() : 1;
+			var topoScale = animationTopo != null ? animHeight / animationTopo.getHeight() : 1;
 			var topoWidth = animationTopo != null ? animationTopo.getWidth() * topoScale : 0;
 
 			var totalWidth = (int) Math.ceil(animWidth + topoWidth);
@@ -324,7 +335,7 @@ public class MainPanel extends JPanel {
 				scale = 1;
 			}
 
-			//TYPE_BYTE_INDEXED improves io performance
+			// TYPE_BYTE_INDEXED improves io performance
 			BufferedImage frameImage = new BufferedImage(totalWidth, animHeight, BufferedImage.TYPE_BYTE_INDEXED);
 			Graphics2D canvis;
 			Graphics2D animCanvis;
@@ -336,7 +347,7 @@ public class MainPanel extends JPanel {
 				canvis.setBackground(Color.WHITE);
 				canvis.setColor(Color.BLACK);
 
-				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, animHeight);
 				animCanvis.scale(scale, scale);
 				animation.generateFrame(frame, animCanvis);
 
@@ -360,7 +371,7 @@ public class MainPanel extends JPanel {
 				canvis.setBackground(Color.WHITE);
 				canvis.setColor(Color.BLACK);
 
-				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, (int) animHeight);
+				animCanvis = (Graphics2D) canvis.create(0, 0, (int) animWidth, animHeight);
 				animCanvis.scale(scale, scale);
 				animation.generateFrame(animation.getLength() - 1, animCanvis);
 

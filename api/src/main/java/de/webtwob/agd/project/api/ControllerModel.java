@@ -15,7 +15,7 @@ import de.webtwob.agd.project.api.interfaces.IAnimation;
 import de.webtwob.agd.project.api.interfaces.IAnimationEventHandler;
 
 /**
- * Store the current ANimation Properties and update the current frame index
+ * Store the current Animation Properties and update the current frame index
  */
 public class ControllerModel {
 

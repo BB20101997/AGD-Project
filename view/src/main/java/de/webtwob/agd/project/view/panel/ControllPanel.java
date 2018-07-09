@@ -1,8 +1,9 @@
 package de.webtwob.agd.project.view.panel;
 
 import java.awt.Dimension;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -87,9 +88,11 @@ public class ControllPanel extends JPanel {
 		play = new JButton("\u23F5");
 		pause = new JButton("\u23F8");
 
-		speedField = new JFormattedTextField(NumberFormat.getNumberInstance());
+		var format = DecimalFormat.getInstance(Locale.ENGLISH);
+		format.setParseIntegerOnly(false);
+		
+		speedField = new JFormattedTextField(format);
 		speedField.setValue(1);
-		speedField.addActionListener(e -> model.setSpeed(Double.parseDouble(speedField.getText())));
 
 		// create boxes
 		var algBox = Box.createHorizontalBox();
@@ -125,6 +128,12 @@ public class ControllPanel extends JPanel {
 		add(actionBox);
 
 		// add ActionListeners
+
+		speedField.addActionListener(e -> {
+			var speed = Double.parseDouble(speedField.getText());
+			model.setSpeed(speed);
+			
+		});
 		
 		stepForward.addActionListener(event -> model.step(Direction.FORWARD));
 		stepBackward.addActionListener(event -> model.step(Direction.BACKWARD));
